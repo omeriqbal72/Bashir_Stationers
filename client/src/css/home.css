@@ -1,0 +1,14 @@
+.home-main {
+    width: 100%;
+    height: auto;
+    background-color: black;
+    color: white;
+}
+
+.home-main-up {
+    display: flex;
+    align-items: center;
+    background-color: grey;
+    margin: 2rem 2rem 2rem 2rem;
+    color: white;
+}
