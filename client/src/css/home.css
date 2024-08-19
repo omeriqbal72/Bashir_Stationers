@@ -1,14 +1,16 @@
 .home-main {
     width: 100%;
+    background-color: var(--background-color);
     height: auto;
-    background-color: black;
-    color: white;
+    overflow: hidden;
 }
 
-.home-main-up {
-    display: flex;
-    align-items: center;
-    background-color: grey;
-    margin: 2rem 2rem 2rem 2rem;
-    color: white;
-}
+.home-main-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the div without stretching */
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
