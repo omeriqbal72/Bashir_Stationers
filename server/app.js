@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
 require("dotenv").config();
+const routes = require("./routes/authRoutes")
+
 
 const app = express();
 
@@ -21,7 +23,7 @@ mongoose.connect(mongoURI)
 //   res.send('Hello from Express!');
 // });
 
-const routes = require("./routes/authRoutes")
+
 app.use("/" , routes)
 
 const port = process.env.PORT || 8080;
