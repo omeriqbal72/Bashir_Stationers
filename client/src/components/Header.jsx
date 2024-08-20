@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../css/header.css';
 import '../css/shopdropdown.css';
 import DropdownCategories from './DropDownCategories.jsx';
@@ -28,88 +28,108 @@ const Header = () => {
 
 
   return (
-    <header className="header-main">
-      <div className='header-main-section-1'>
-        <div className="logo">
-          <h1>Bashir Stationers</h1>
+    <>
+      <header className="header-main">
+        <div className='header-main-section-1'>
+          <div className="logo">
+            <h1>Bashir Stationers</h1>
+          </div>
+          <div className="search-bar">
+            <input type="text" placeholder="Search..." />
+            <button type="submit">
+              <FontAwesomeIcon icon={faSearch} />
+            </button>
+          </div>
+          <div className="actions">
+            <button>Login/Register</button>
+            <button className="heart-icon">❤️</button>
+            <button className="cart-icon">🛒</button>
+          </div>
         </div>
-        <div className="search-bar">
-          <input type="text" placeholder="Search..." />
-          <button type="submit">
-            <FontAwesomeIcon icon={faSearch} />
-          </button>
-        </div>
-        <div className="actions">
-          <button>Login/Register</button>
-          <button className="heart-icon">❤️</button>
-          <button className="cart-icon">🛒</button>
-        </div>
-      </div>
-      <div className='header-main-section-2'>
-        <DropdownCategories />
-        <nav>
-          <ul>
-            <li>Home</li>
-            <li
-          className="navbar-item shop-item"
-          onMouseEnter={() => setDropdownVisible(true)}
-        >
-          Shop
-          {isDropdownVisible && (
-            <div
-              className="dropdown-menu"
-              onMouseLeave={() => setDropdownVisible(false)}
-              ref={dropdownRef}
-            >
-              <div className="dropdown-grid">
-                <div className="dropdown-column">
-                  <h4>Mossery Kits</h4>
-                  <ul>
-                    <li>Art Kits</li>
-                    <li>Journaling Kit</li>
-                  </ul>
-                </div>
-                <div className="dropdown-column">
-                  <h4>Planners</h4>
-                  <ul>
-                    <li>2025 Planners</li>
-                    <li>2025 Planner Refills</li>
-                    <li>2024 Planner Refills</li>
-                    <li>2024 Digital Planner</li>
-                    <li>Undated Planners</li>
-                    <li>Twinbooks (Planner + Notebook)</li>
-                  </ul>
-                </div>
-                <div className="dropdown-column">
-                  <h4>Sketchbooks</h4>
-                  <ul>
-                    <li>Threadbound Sketchbooks</li>
-                    <li>Wirebound Sketchbooks</li>
-                  </ul>
-                </div>
-                <div className="dropdown-column">
-                  <h4>Notebooks</h4>
-                  <ul>
-                    <li>Threadbound Notebooks</li>
-                    <li>Wirebound Notebooks</li>
-                    <li>Self-Care Journals</li>
-                    <li>Journaling Kit</li>
-                    <li>Mossery Introspect</li>
-                  </ul>
-                </div>
-                {/* Add more columns as needed */}
-              </div>
-            </div>
-          )}
-        </li>
-            <li>Products</li>
-            <li>About</li>
-            <li>Contact</li>
-          </ul>
-        </nav>
-      </div>
+      </header>
 
-    </header>
+      <div className='header-main-section-2'>
+        <div className='header-main-section2-dropdown'>
+          <DropdownCategories />
+        </div>
+        <div className='header-main-section2-nav'>
+          <nav>
+            <ul>
+              <li>Home</li>
+              <li
+                className="navbar-item shop-item"
+                onMouseEnter={() => setDropdownVisible(true)}
+              >
+                Shop
+                {isDropdownVisible && (
+                  <div
+                    className="dropdown-menu"
+                    onMouseLeave={() => setDropdownVisible(false)}
+                    ref={dropdownRef}
+                  >
+                    <div className="dropdown-grid">
+
+                      <div className="dropdown-column">
+                        <h4>Planners</h4>
+                        <ul>
+                          <li>2025 Planners</li>
+                          <li>2025 Planner Refills</li>
+                          <li>2024 Planner Refills</li>
+                          <li>2024 Digital Planner</li>
+                          <li>Undated Planners</li>
+                          <li>Twinbooks (Planner + Notebook)</li>
+                        </ul>
+                      </div>
+                      <div className="dropdown-column">
+                        <h4>Sketchbooks</h4>
+                        <ul>
+                          <li>Threadbound Sketchbooks</li>
+                          <li>Wirebound Sketchbooks</li>
+                        </ul>
+                      </div>
+                      <div className="dropdown-column">
+                        <h4>Notebooks</h4>
+                        <ul>
+                          <li>Threadbound Notebooks</li>
+                          <li>Wirebound Notebooks</li>
+                          <li>Self-Care Journals</li>
+                          <li>Journaling Kit</li>
+                          <li>Mossery Introspect</li>
+                        </ul>
+                      </div>
+                      <div className="dropdown-column">
+                        <h4>Notebooks</h4>
+                        <ul>
+                          <li>Threadbound Notebooks</li>
+                          <li>Wirebound Notebooks</li>
+                          <li>Self-Care Journals</li>
+                          <li>Journaling Kit</li>
+                          <li>Mossery Introspect</li>
+                        </ul>
+                      </div>
+                      <div className="dropdown-column">
+                        <h4>Notebooks</h4>
+                        <ul>
+                          <li>Threadbound Notebooks</li>
+                          <li>Wirebound Notebooks</li>
+                          <li>Self-Care Journals</li>
+                          <li>Journaling Kit</li>
+                          <li>Mossery Introspect</li>
+                        </ul>
+                      </div>
+                      {/* Add more columns as needed */}
+                    </div>
+                  </div>
+                )}
+              </li>
+              <li>Products</li>
+              <li>About</li>
+              <li>Contact</li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </>
   );
 };
 

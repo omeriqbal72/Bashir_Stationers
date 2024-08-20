@@ -7,21 +7,20 @@
 .dropdown-menu {
     position: absolute;
     width: 90%;
-    top: 100%; /* Places it directly below the Shop item */
+    top: 40; /* Places it directly below the Shop item */
     left: 50%; /* Starts positioning from the middle of the Shop item */
     transform: translateX(-50%); /* Moves it left by half its width to center it */
     background-color: white;
-    padding: 20px;
+    padding: 2rem;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 11;
+    z-index: 6;
   }
 
 /* Grid Container */
 .dropdown-grid {
     display: grid;
-    grid-template-columns: auto auto auto;
-    gap: 20px;
+    grid-template-columns: auto auto auto auto;
     width: 100%;
     /* Ensure grid takes full width */
 }
@@ -30,15 +29,18 @@
 .dropdown-column {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: start;
+    justify-content: flex-start;
+    height: 15rem;
+    width: 100%;
     /* Align items to the start (left) */
 }
 
 .dropdown-column h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
+    margin: 0;
+    margin-bottom: 1em;
     font-size: 16px;
-    color: #333;
+    color: var(--accent-color);
 }
 
 .dropdown-column ul {
@@ -47,19 +49,17 @@
     flex-direction: column;
     margin: 0;
     padding: 0;
-    text-align: left;
-    align-items: flex-start;
-    justify-content: left;
+    line-height: 0.05em;
     /* Align text to the left */
 }
 
 
 .dropdown-column li {
-    margin-bottom: 8px;
     color: #666;
-    text-align: left;
-    /* Align text to the left */
-}
+    margin: 0;
+    padding: 0;
+    font-size: small;
+    }
 
 .dropdown-column li:hover {
     color: #007bff;

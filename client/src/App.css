@@ -7,8 +7,14 @@
     --accent-color: #4B6587;
     --background-color: #F7F6F2;
 }
-
+body {
+    overflow-y: scroll;
+}
 button {
     font-family: "Poppins", sans-serif;
+    color: var(--accent-color);
+}
 
+nav{
+    color: var(--accent-color);
 }
