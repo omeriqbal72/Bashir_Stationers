@@ -1,0 +1,52 @@
+.slider-section {
+  text-align: center;
+  padding: 2rem;
+  background-color: var(--green-shade);
+}
+
+.slider-section h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.slider-section p {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.all-collections-btn {
+  padding: 0.5rem 1rem;
+  color: var(--accent-color);
+  border: 2px solid #333;
+  background-color: transparent;
+  cursor: pointer;
+  margin-bottom: 2rem;
+}
+
+
+.slider-container {
+  width: 90%; /* Or any width you desire */
+  margin: 0 auto;
+}
+
+.slider-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+
+
+.slider-item img {
+  width: 90%;
+  object-fit: cover;
+  object-position: center;
+}
+
+
+.slick-prev:before,
+.slick-next:before {
+  color: #333;
+  /* Arrow color */
+}

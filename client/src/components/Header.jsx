@@ -3,7 +3,7 @@ import '../css/header.css';
 import '../css/shopdropdown.css';
 import DropdownCategories from './DropDownCategories.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faHouse, faShop, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
 
 
 const Header = () => {
@@ -32,7 +32,7 @@ const Header = () => {
       <header className="header-main">
         <div className='header-main-section-1'>
           <div className="logo">
-            <h1>Bashir Stationers</h1>
+            <h1>Rasheed Stationers</h1>
           </div>
           <div className="search-bar">
             <input type="text" placeholder="Search..." />
@@ -55,11 +55,15 @@ const Header = () => {
         <div className='header-main-section2-nav'>
           <nav>
             <ul>
-              <li>Home</li>
+              <li>
+                <FontAwesomeIcon icon={faHouse} size="sm" />
+                Home
+              </li>
               <li
                 className="navbar-item shop-item"
                 onMouseEnter={() => setDropdownVisible(true)}
               >
+                <FontAwesomeIcon icon={faShop} size="sm" />
                 Shop
                 {isDropdownVisible && (
                   <div
@@ -122,9 +126,18 @@ const Header = () => {
                   </div>
                 )}
               </li>
-              <li>Products</li>
-              <li>About</li>
-              <li>Contact</li>
+              <li>
+                <FontAwesomeIcon icon={faBoxOpen} size="sm" />
+                Products
+              </li>
+              <li>
+                <FontAwesomeIcon icon={faAddressCard} size="sm" />
+                About
+              </li>
+              <li>
+                <FontAwesomeIcon icon={faAddressBook} size="sm" />
+                Contact
+              </li>
             </ul>
           </nav>
         </div>

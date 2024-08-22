@@ -7,7 +7,6 @@
   
   .dropdown-button {
     background-color: transparent;
-    color: var(--accent-color);
     padding: 10px 20px;
     font-size: 16px;
     border: none;

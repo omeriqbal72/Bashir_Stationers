@@ -1,8 +1,8 @@
 .header-main {
     position: sticky;
     top: 0;
-    background-color: var(--primary-color);
-    color: var(--accent-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
     display: flex;
     width: 100%;
     padding: 1rem;
@@ -16,13 +16,14 @@
     width: 100%;
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 
 .header-main-section-2 {
     display: flex;
     width: 100%;
     align-items: center;
-    background-color: var(--background-color);
+    background-color: #f0ecc5;
     justify-content: space-evenly;
 }
 
@@ -73,14 +74,16 @@
 
 .header-main-section2-dropdown{
     display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    flex: 1;
+    flex: 1.7;
 }
 
 .header-main-section2-nav{
     display: flex;
     width: 100%;
-    flex: 2;
+    flex: 3;
 }
 
 .header-main-section2-nav nav{
@@ -102,6 +105,9 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    display: flex;
+    gap: .4em;
+    align-items: center;
 }
 
 .header-main-section-2 nav ul li:hover {

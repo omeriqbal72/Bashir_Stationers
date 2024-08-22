@@ -2,19 +2,24 @@
 
 :root {
     font-family: "Poppins", sans-serif;
-    --primary-color: #F0E5CF;
-    --secondary-color: #C8C6C6;
-    --accent-color: #4B6587;
-    --background-color: #F7F6F2;
+    --primary-color: #ffffff;
+    --secondary-color: #fffde9;
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --pink-shade: #fcd9d9;
+    --green-shade: #ebf6f5;
+    --blue-shade: #ccedff;
+    
+        
 }
 body {
     overflow-y: scroll;
 }
 button {
     font-family: "Poppins", sans-serif;
-    color: var(--accent-color);
+    color: var(--text-color);
 }
 
 nav{
-    color: var(--accent-color);
+    color: var(--text-color);
 }
