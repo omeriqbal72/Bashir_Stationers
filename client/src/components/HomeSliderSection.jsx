@@ -1,9 +1,8 @@
 import React from "react";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import "../css/homeslidersection.css";
-import Img1 from '../Ui_Images/home-banner-img1.jpg'
-import Img2 from '../Ui_Images/home-banner-img2.jpg'
+import SliderImg1 from '../Ui_Images/home-slider-pens.jpg'
+import SliderImg2 from '../Ui_Images/home-slider-notebook.jpg'
+import SliderImg3 from '../Ui_Images/home-slider-staplers.jpeg'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, Scrollbar, A11y } from 'swiper/modules';
 import 'swiper/css';
@@ -28,40 +27,42 @@ const HomeSliderSection = () => {
       <Swiper modules={[Navigation, Pagination, Scrollbar, Autoplay, A11y]}
         spaceBetween={10}
         slidesPerView={4}
-        autoplay={{ delay: 750, disableOnInteraction: false }} // Configure autoplay settings
-        navigation={{
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        }}
-        loop = {true}>
+        autoplay={{ delay: 1000, disableOnInteraction: false }} 
+        loop={true}>
         <SwiperSlide>
           <div className="slider-item">
-            <img src={Img2} alt="Books & Stationery" />
+            <img src={SliderImg1} alt="Books & Stationery" />
+            <div className="slider-text">Pens</div>
           </div>
         </SwiperSlide>
         <SwiperSlide>
           <div className="slider-item">
-            <img src={Img2} alt="Books & Stationery" />
+            <img src={SliderImg2} alt="Books & Stationery" />
+            <div className="slider-text">Books & Stationery</div>
           </div>
         </SwiperSlide>
         <SwiperSlide>
           <div className="slider-item">
-            <img src={Img2} alt="Books & Stationery" />
+            <img src={SliderImg3} alt="Staplers" />
+            <div className="slider-text">Staplers</div>
           </div>
         </SwiperSlide>
         <SwiperSlide>
           <div className="slider-item">
-            <img src={Img2} alt="Books & Stationery" />
+            <img src={SliderImg2} alt="Books & Stationery" />
+            <div className="slider-text">Books & Stationery</div>
           </div>
         </SwiperSlide>
         <SwiperSlide>
           <div className="slider-item">
-            <img src={Img2} alt="Books & Stationery" />
+            <img src={SliderImg1} alt="Books & Stationery" />
+            <div className="slider-text">Books & Stationery</div>
           </div>
         </SwiperSlide>
         <SwiperSlide>
           <div className="slider-item">
-            <img src={Img2} alt="Books & Stationery" />
+            <img src={SliderImg3} alt="Books & Stationery" />
+            <div className="slider-text">Books & Stationery</div>
           </div>
         </SwiperSlide>
         {/* Add more slides as needed */}

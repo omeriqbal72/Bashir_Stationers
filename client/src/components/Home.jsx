@@ -1,7 +1,9 @@
 import React from 'react';
 import '../css/home.css';
+import HomeHero from './HomeHero.jsx';
 import HomeBanner from './HomeBanner.jsx';
 import HomeSliderSection from './HomeSliderSection.jsx';
+import HomeBrandSlider from './HomeBrandSlider.jsx';
 import HomeProducts from './HomeProductsSection.jsx';
 
 const Home = () => {
@@ -18,9 +20,13 @@ const Home = () => {
           <div className='home-main-illustration'></div>
         </div>
 
-        <HomeBanner />
-        <HomeSliderSection />
-        <HomeProducts />
+        
+        <HomeBanner/>
+        <HomeHero/>
+        <HomeSliderSection/>
+        <HomeProducts/>
+        <HomeBrandSlider/>
+        
       </div>
     </>
   );

@@ -6,7 +6,9 @@
     flex-wrap: wrap;
     gap: 1rem;
     background-color: var(--background-color);
+    
 }
+
 
 .home-banner-img1{
     flex: 2;
@@ -81,7 +83,7 @@
 }
 
 .home-banner-btn:hover{
-    color: transparent;
+    color: black;
     background-color: white;
 }
 
