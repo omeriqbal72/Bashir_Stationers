@@ -10,23 +10,32 @@ const productSchema = new mongoose.Schema({
         ref: 'Company',
         required: true,
     },
-    category: {
+    categories: [{ 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
         required: true,
-    },
+    }],
     type: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProductType',
         required: true,
     },
+    colors:{
+        type: [String]
+    },
+    quantity:{
+        type: Number,
+        required:true
+    },
     price: {
         type: Number,
         required: true,
     },
-    image: {
-        type: String,
-    }
+    images: {
+        type: [String],
+    },
+
+    
 });
 
-module.exports = mongoose.model('Products', productSchema);
+module.exports = mongoose.model('Product', productSchema);
