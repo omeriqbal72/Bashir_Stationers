@@ -1,0 +1,155 @@
+/* Overall Page Layout */
+.edit-product-page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.edit-product-page h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Form Structure and Elements */
+.edit-product-page form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    /* Adjust spacing between elements as needed */
+}
+
+.edit-product-page label {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.edit-product-page label input,
+.edit-product-page label select {
+    font-size: 16px;
+    /* Consistent font size */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.edit-product-page .color-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    /* Adjust spacing between color boxes */
+}
+
+.edit-product-page .color-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-product-page .color-box.selected {
+    border: 2px solid #000;
+}
+
+.edit-product-page .existing-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    /* Adjust spacing between images */
+}
+
+.edit-product-page .existing-images img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+/* Responsive Behavior (Optional) */
+@media (max-width: 768px) {
+    .edit-product-page label {
+        width: 100%;
+        /* Labels take full width on smaller screens */
+    }
+
+    .edit-product-page .color-selection,
+    .edit-product-page .existing-images {
+        justify-content: space-between;
+        /* Distribute elements evenly */
+    }
+}
+
+/* Buttons */
+.edit-product-page button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    background-color: #333;
+    color: #fff;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.edit-product-page button:hover {
+    background-color: #222;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-button {
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.dropdown-content {
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: 30%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    display: none;
+    z-index: 1;
+    list-style-type: none;
+}
+
+.dropdown-button {
+    /* ... other styles ... */
+    position: relative;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content li {
+    display: flex;
+    align-items: center;
+    
+}
+
+.dropdown-content input[type="checkbox"] {
+    margin-left: 5px;
+}
+
+.dropdown-content label{
+    width: 100%;
+}

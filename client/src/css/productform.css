@@ -1,0 +1,118 @@
+/* Overall container */
+.product-form-container {
+    display: flex;
+    width: 100%;
+  }
+  
+  /* Image section */
+  .product-form-image {
+    flex: 0 0 30%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .product-form-image img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Form section */
+  .product-form {
+    flex: 1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Form messages */
+  .error-message,
+  .success-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .success-message {
+    color: green;
+  }
+  
+  /* Form group */
+  .form-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .form-group label {
+    flex: 0 0 30%;
+    font-weight: bold;
+  }
+  
+  .form-group input,
+  .form-group select {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+  }
+  
+  /* Dropdown */
+  .dropdown {
+    position: relative;
+  }
+  
+  .dropdown-button {
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .dropdown-content {
+    position: absolute;
+    width: 20%;
+    top: 100%;
+    left: 30%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    display: none;
+    z-index: 1;
+    list-style-type: none;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown-content li {
+    margin-bottom: 5px;
+  }
+  
+  .dropdown-content input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  
+  /* Submit button */
+  .submit-button {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .submit-button:hover {
+    background-color: #222;
+  }
