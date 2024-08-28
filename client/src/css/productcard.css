@@ -1,0 +1,36 @@
+  .product-card {
+    background-color: white;
+    padding: 1rem;
+    border: none;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    width: 100%;
+    max-width: 15rem;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .product-card:hover {
+    transform: scale(1.02);
+  }
+
+
+  .product-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 1rem;
+  }
+
+  .product-title {
+    font-size: 1.4rem;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    line-height: 1.7rem;
+    margin-bottom: 1rem;
+  }
+
+  .product-price {
+    font-size: 1rem;
+    font-weight: 500;
+  }

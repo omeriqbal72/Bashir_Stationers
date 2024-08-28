@@ -1,0 +1,39 @@
+.brand-logo-section {
+    text-align: center;
+    padding: 2rem 0;
+    background-color: white;
+  }
+  
+  .brand-logo-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .brand-logo-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+    
+  .slider-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .slider-item img {
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+   
+  }

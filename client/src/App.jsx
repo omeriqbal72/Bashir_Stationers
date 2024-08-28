@@ -1,13 +1,24 @@
 import { useState } from 'react'
-import Home from './components/Home.jsx'
+import axios from 'axios'
+import Home from './components/Home/Home.jsx'
+import Products from './components/ProductPage/ProductPage.jsx'
+import Header from './components/Header/Header.jsx'
 import './App.css'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.withCredentials = true;
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <Home/>
+      <Router>
+        <Header/>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Products />} />
+      </Routes>
+    </Router>
     </>
   )
 }
