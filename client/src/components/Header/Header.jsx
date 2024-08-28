@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import '../css/header.css';
-import '../css/shopdropdown.css';
+import { Link } from 'react-router-dom';
+import '../../css/header.css';
+import '../../css/shopdropdown.css';
 import DropdownCategories from './DropDownCategories.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faHouse, faShop, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
@@ -55,10 +56,13 @@ const Header = () => {
         <div className='header-main-section2-nav'>
           <nav>
             <ul>
-              <li>
-                <FontAwesomeIcon icon={faHouse} size="sm" />
-                Home
-              </li>
+              <Link to={'/'}>
+                <li>
+                  <FontAwesomeIcon icon={faHouse} size="sm" />
+                  Home
+                </li>
+              </Link>
+
               <li
                 className="navbar-item shop-item"
                 onMouseEnter={() => setDropdownVisible(true)}
@@ -126,10 +130,13 @@ const Header = () => {
                   </div>
                 )}
               </li>
+              <Link to={'/products'}>
               <li>
                 <FontAwesomeIcon icon={faBoxOpen} size="sm" />
                 Products
               </li>
+              </Link>
+             
               <li>
                 <FontAwesomeIcon icon={faAddressCard} size="sm" />
                 About

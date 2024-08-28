@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../css/dropdowncategories.css';
+import '../../css/dropdowncategories.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListUl } from '@fortawesome/free-solid-svg-icons';
 

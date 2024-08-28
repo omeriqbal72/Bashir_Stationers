@@ -9,17 +9,33 @@
     --pink-shade: #fcd9d9;
     --green-shade: #ebf6f5;
     --blue-shade: #ccedff;
-    
-        
+
 }
+
 body {
     overflow-y: scroll;
 }
+
 button {
     font-family: "Poppins", sans-serif;
     color: var(--text-color);
 }
 
-nav{
+nav {
     color: var(--text-color);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:visited {
+    color: inherit;
+    /* Ensure the visited link has the same color */
+}
+
+a:hover {
+    color: inherit;
+    /* Optional: keeps the color the same on hover */
 }

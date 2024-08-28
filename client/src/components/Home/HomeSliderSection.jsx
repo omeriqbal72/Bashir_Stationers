@@ -1,8 +1,8 @@
 import React from "react";
-import "../css/homeslidersection.css";
-import SliderImg1 from '../Ui_Images/home-slider-pens.jpg'
-import SliderImg2 from '../Ui_Images/home-slider-notebook.jpg'
-import SliderImg3 from '../Ui_Images/home-slider-staplers.jpeg'
+import "../../css/homeslidersection.css";
+import SliderImg1 from '../../Ui_Images/home-slider-pens.jpg'
+import SliderImg2 from '../../Ui_Images/home-slider-notebook.jpg'
+import SliderImg3 from '../../Ui_Images/home-slider-staplers.jpeg'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, Scrollbar, A11y } from 'swiper/modules';
 import 'swiper/css';

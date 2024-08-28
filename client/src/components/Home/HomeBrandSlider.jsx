@@ -1,13 +1,13 @@
 import React from 'react';
-import '../css/homebrandslider.css'
+import '../../css/homebrandslider.css'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 
-import Dux from '../Ui_Images/dux-logo.png';
-import Dollar from '../Ui_Images/dollar-logo.png';
-import Oro from '../Ui_Images/oro-logo.png';
-import Deer from '../Ui_Images/deer-logo.png';
+import Dux from '../../Ui_Images/dux-logo.png';
+import Dollar from '../../Ui_Images/dollar-logo.png';
+import Oro from '../../Ui_Images/oro-logo.png';
+import Deer from '../../Ui_Images/deer-logo.png';
 
 
 const HomeBrandSlider = () => {
@@ -21,7 +21,7 @@ const HomeBrandSlider = () => {
                 spaceBetween={10}
                 slidesPerView={4}
                 autoplay={{ delay: 0, disableOnInteraction: false }}
-                speed={1500}// Configure autoplay settings
+                speed={1500}
                 loop={true}
                 freeMode={true}
                 className="brand-logo-slider"

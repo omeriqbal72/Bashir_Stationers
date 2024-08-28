@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/home.css';
+import '../../css/home.css';
 import HomeHero from './HomeHero.jsx';
 import HomeBanner from './HomeBanner.jsx';
 import HomeSliderSection from './HomeSliderSection.jsx';
