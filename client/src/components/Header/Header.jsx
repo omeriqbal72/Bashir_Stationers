@@ -131,16 +131,18 @@ const Header = () => {
                 )}
               </li>
               <Link to={'/products'}>
-              <li>
-                <FontAwesomeIcon icon={faBoxOpen} size="sm" />
-                Products
-              </li>
+                <li>
+                  <FontAwesomeIcon icon={faBoxOpen} size="sm" />
+                  Products
+                </li>
               </Link>
-             
-              <li>
-                <FontAwesomeIcon icon={faAddressCard} size="sm" />
-                About
-              </li>
+              <Link to={'/about'}>
+                <li>
+                  <FontAwesomeIcon icon={faAddressCard} size="sm" />
+                  About
+                </li>
+              </Link>
+
               <li>
                 <FontAwesomeIcon icon={faAddressBook} size="sm" />
                 Contact

@@ -1,109 +1,112 @@
 /* Overall container */
-.product-form-container {
+.admin-add-product-page-form-container {
     display: flex;
     width: 100%;
-  }
-  
-  /* Image section */
-  .product-form-image {
+}
+
+/* Image section */
+.admin-add-product-page-form-image {
     flex: 0 0 30%;
     padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  .product-form-image img {
+}
+
+.admin-add-product-page-form-image img {
     max-width: 100%;
     height: auto;
-  }
-  
-  /* Form section */
-  .product-form {
+}
+
+/* Form section */
+.admin-add-product-page-form {
     flex: 1;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Form messages */
-  .error-message,
-  .success-message {
+}
+
+/* Form messages */
+.admin-add-product-page-error-message,
+.admin-add-product-page-success-message {
     color: red;
     font-weight: bold;
     margin-bottom: 10px;
     text-align: center;
-  }
-  
-  .success-message {
+}
+
+.admin-add-product-page-success-message {
     color: green;
-  }
-  
-  /* Form group */
-  .form-group {
+}
+
+/* Form group */
+.admin-add-product-page-form-group {
     margin-bottom: 15px;
     display: flex;
-    align-items: center;
-  }
-  
-  .form-group label {
-    flex: 0 0 30%;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.admin-add-product-page-form-group label {
     font-weight: bold;
-  }
-  
-  .form-group input,
-  .form-group select {
-    flex: 1;
+
+}
+
+.admin-add-product-page-form-group input,
+.admin-add-product-page-form-group select {
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     outline: none;
-  }
-  
-  /* Dropdown */
-  .dropdown {
+    box-sizing: border-box;
+}
+
+/* Dropdown */
+.admin-add-product-page-dropdown {
     position: relative;
-  }
-  
-  .dropdown-button {
+    width: 100%;
+}
+
+.admin-add-product-page-dropdown-button {
     background: none;
-    border: none;
+    border: 1px solid #ccc;
     padding: 10px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-  }
-  
-  .dropdown-content {
+    border-radius: 5px;
+}
+
+.admin-add-product-page-dropdown-content {
     position: absolute;
-    width: 20%;
     top: 100%;
-    left: 30%;
+    left: 0;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     padding: 10px;
-    display: none;
     z-index: 1;
     list-style-type: none;
-  }
-  
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-  
-  .dropdown-content li {
-    margin-bottom: 5px;
-  }
-  
-  .dropdown-content input[type="checkbox"] {
-    margin-right: 5px;
-  }
-  
-  /* Submit button */
-  .submit-button {
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.admin-add-product-page-dropdown-content li {
+   
+    display: flex; 
+    align-items: center; 
+}
+
+.admin-add-product-page-dropdown-content input[type="checkbox"] {
+    width: 1rem;
+}
+
+/* Submit button */
+.admin-add-product-page-submit-button {
     background-color: #333;
     color: #fff;
     padding: 10px 20px;
@@ -111,8 +114,10 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
-  }
-  
-  .submit-button:hover {
+    width: 100%;
+    text-align: center;
+}
+
+.admin-add-product-page-submit-button:hover {
     background-color: #222;
-  }
+}

@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import '../css/editProduct.css'
-
+import '../../css/editProduct.css';
 
 const availableColors = ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White', 'Purple'];
 const categories = ['Pens', 'Writing Tools', 'Painting Tools', 'Binding Tools', 'Pencils', 'Erasers'];
@@ -47,10 +46,18 @@ const EditProductPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setProduct(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
+
+        if (name === "companyName") {
+            setProduct(prevState => ({
+                ...prevState,
+                company: { name: value }
+            }));
+        } else {
+            setProduct(prevState => ({
+                ...prevState,
+                [name]: value
+            }));
+        }
     };
 
     const handleCategoryChange = (e) => {
@@ -104,7 +111,6 @@ const EditProductPage = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
-
     const handleSubmit = async () => {
         try {
             const formData = new FormData();
@@ -133,14 +139,13 @@ const EditProductPage = () => {
     };
 
     const handleCancel = () => {
-        // Redirect or reset as needed
         navigate('/admin');
     };
 
     if (!product) return <div>Loading...</div>;
 
     return (
-        <div className="edit-product-page">
+        <div className="edit-product-page-container">
             <h2>Edit Product</h2>
             <form>
                 <label>
@@ -173,11 +178,11 @@ const EditProductPage = () => {
                         ))}
                     </select>
                 </label>
-                <div ref={dropdownRef} className="form-group dropdown">
+                <div ref={dropdownRef} className="edit-product-page-dropdown">
                     <label>Category:</label>
                     <button
                         type="button"
-                        className="dropdown-button"
+                        className="edit-product-page-dropdown-button"
                         onClick={toggleDropdown}
                     >
                         {selectedCategories.length > 0
@@ -185,9 +190,9 @@ const EditProductPage = () => {
                             : 'Select Categories'}
                     </button>
                     {isDropdownOpen && (
-                        <ul className="dropdown-content">
-                            {Object.keys(categoryTypes).map((cat) => (
-                                <li key={cat}>
+                        <ul className="edit-product-page-dropdown-content">
+                            {categories.map((cat) => (
+                                <li key={cat} className="edit-product-page-dropdown-item">
                                     <input
                                         type="checkbox"
                                         id={cat}
@@ -226,18 +231,19 @@ const EditProductPage = () => {
                 </label>
                 <label>
                     Colors:
-                    <div className="color-selection">
+                    <div className="edit-product-page-color-selection">
                         {availableColors.map((color, index) => (
                             <div
                                 key={index}
-                                className={`color-box ${selectedColors.includes(color) ? 'selected' : ''}`}
+                                className={`edit-product-page-color-box ${selectedColors.includes(color) ? 'selected' : ''}`}
                                 style={{ backgroundColor: color.toLowerCase() }}
                                 onClick={() => handleColorChange(color)}
-                            >     
+                            >
                             </div>
                         ))}
                     </div>
                 </label>
+
                 <label>
                     New Images:
                     <input
@@ -246,18 +252,20 @@ const EditProductPage = () => {
                         onChange={handleFileChange}
                     />
                 </label>
+
                 <label>
                     Existing Images:
-                    <div>
+                    <div className="edit-product-page-existing-images">
                         {product.images && product.images.map((image, index) => (
-                            <div key={index} style={{ display: 'inline-block', margin: '5px' }}>
+                            <div key={index} className="edit-product-page-image-container">
                                 <img
                                     src={`http://localhost:8080/${image}`}
                                     alt={`${product.name} ${index + 1}`}
-                                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                                    className="edit-product-page-image"
                                 />
                                 <button
                                     type="button"
+                                    className="edit-product-page-remove-button"
                                     onClick={() => handleRemoveImage(image)}
                                 >
                                     Remove
@@ -266,8 +274,11 @@ const EditProductPage = () => {
                         ))}
                     </div>
                 </label>
-                <button type="button" onClick={handleSubmit}>Save</button>
-                <button type="button" onClick={handleCancel}>Cancel</button>
+                <div>
+                    <button type="button" className="edit-product-page-save-button" onClick={handleSubmit}>Save</button>
+                    <button type="button" className="edit-product-page-cancel-button" onClick={handleCancel}>Cancel</button>
+                </div>
+
             </form>
         </div>
     );
