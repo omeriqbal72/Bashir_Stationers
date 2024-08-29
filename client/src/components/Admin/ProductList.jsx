@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ConfirmationModal from './ConfirmationModal'; // Import the confirmation modal
-import '../css/productlist.css'; // Import the CSS file
+import '../../css/productlist.css'; // Import the CSS file
 import { toast, ToastContainer } from 'react-toastify'; // Import toast and ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import the CSS for toast
 import { Link } from 'react-router-dom'; // Import Link for navigation

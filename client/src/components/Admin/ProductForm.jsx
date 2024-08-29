@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import '../css/productform.css'; // Import the CSS file
+import '../../css/productform.css'; // Import the CSS file
 
 const ProductForm = ({ onProductAdded }) => {
     const [name, setName] = useState('');
@@ -123,15 +123,16 @@ const ProductForm = ({ onProductAdded }) => {
     }, []);
 
     return (
-        <div className="product-form-container">
-            <div className="product-form-image">
+        <div className="admin-add-product-page-form-container">
+            
+            <div className="admin-add-product-page-form-image">
                 <img src="/path/to/your/image.jpg" alt="Product" />
             </div>
-            <form onSubmit={handleSubmit} className="product-form">
-                {error && <p className="error-message">{error}</p>}
-                {success && <p className="success-message">{success}</p>}
+            <form onSubmit={handleSubmit} className="admin-add-product-page-form">
+                {error && <p className="admin-add-product-page-error-message">{error}</p>}
+                {success && <p className="admin-add-product-page-success-message">{success}</p>}
 
-                <div className="form-group">
+                <div className="admin-add-product-page-form-group">
                     <label>Name:</label>
                     <input
                         type="text"
@@ -141,7 +142,7 @@ const ProductForm = ({ onProductAdded }) => {
                     />
                 </div>
 
-                <div className="form-group">
+                <div className="admin-add-product-page-form-group">
                     <label>Company:</label>
                     <select
                         value={company}
@@ -157,11 +158,11 @@ const ProductForm = ({ onProductAdded }) => {
                     </select>
                 </div>
 
-                <div ref={dropdownRef} className="form-group dropdown">
+                <div ref={dropdownRef} className="admin-add-product-page-form-group admin-add-product-page-dropdown">
                     <label>Category:</label>
                     <button
                         type="button"
-                        className="dropdown-button"
+                        className="admin-add-product-page-dropdown-button"
                         onClick={toggleDropdown}
                     >
                         {selectedCategories.length > 0
@@ -169,7 +170,7 @@ const ProductForm = ({ onProductAdded }) => {
                             : 'Select Categories'}
                     </button>
                     {isDropdownOpen && (
-                        <ul className="dropdown-content">
+                        <ul className="admin-add-product-page-dropdown-content">
                             {Object.keys(categoryTypes).map((cat) => (
                                 <li key={cat}>
                                     <input
@@ -187,7 +188,7 @@ const ProductForm = ({ onProductAdded }) => {
                 </div>
 
                 {selectedCategories.length > 0 && (
-                    <div className="form-group">
+                    <div className="admin-add-product-page-form-group">
                         <label>Type:</label>
                         <select
                             value={type}
@@ -208,7 +209,7 @@ const ProductForm = ({ onProductAdded }) => {
                     </div>
                 )}
 
-                <div className="form-group">
+                <div className="admin-add-product-page-form-group">
                     <label>Price:</label>
                     <input
                         type="number"
@@ -218,7 +219,7 @@ const ProductForm = ({ onProductAdded }) => {
                     />
                 </div>
 
-                <div className="form-group">
+                <div className="admin-add-product-page-form-group">
                     <label>Quantity:</label>
                     <input
                         type="number"
@@ -228,11 +229,11 @@ const ProductForm = ({ onProductAdded }) => {
                     />
                 </div>
 
-                <div ref={colorDropdownRef} className="form-group dropdown">
+                <div ref={colorDropdownRef} className="admin-add-product-page-form-group admin-add-product-page-dropdown">
                     <label>Colors:</label>
                     <button
                         type="button"
-                        className="dropdown-button"
+                        className="admin-add-product-page-dropdown-button"
                         onClick={toggleColorDropdown}
                     >
                         {selectedColors.length > 0
@@ -240,7 +241,7 @@ const ProductForm = ({ onProductAdded }) => {
                             : 'Select Colors'}
                     </button>
                     {isColorDropdownOpen && (
-                        <ul className="dropdown-content">
+                        <ul className="admin-add-product-page-dropdown-content">
                             {colors.map((color) => (
                                 <li key={color}>
                                     <input
@@ -257,7 +258,7 @@ const ProductForm = ({ onProductAdded }) => {
                     )}
                 </div>
 
-                <div className="form-group">
+                <div className="admin-add-product-page-form-group">
                     <label>Images:</label>
                     <input
                         type="file"
@@ -266,11 +267,12 @@ const ProductForm = ({ onProductAdded }) => {
                     />
                 </div>
 
-                <button type="submit" className="submit-button">
+                <button type="submit" className="admin-add-product-page-submit-button">
                     Add Product
                 </button>
             </form>
         </div>
+
     );
 };
 

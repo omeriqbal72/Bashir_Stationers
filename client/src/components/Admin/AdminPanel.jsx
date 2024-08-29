@@ -1,6 +1,6 @@
 import React from 'react'
-import ProductForm from '../components/ProductForm';
-import ProductList from '../components/ProductList';
+import ProductForm from './ProductForm';
+import ProductList from './ProductList';
 import { useState } from 'react';
 
 const AdminPanel = () => {

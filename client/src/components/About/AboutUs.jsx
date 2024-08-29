@@ -1,9 +1,9 @@
 import React from 'react';
-import '../css/aboutus.css';
-import pen from '../Ui_Images/business-pen-set.png'
-import stapler from '../Ui_Images/stapler.png'
-import paper from '../Ui_Images/paper.png'
-import ceo from '../Ui_Images/ceo.jpg'
+import '../../css/aboutus.css';
+import pen from '../../Ui_Images/business-pen-set.png'
+import stapler from '../../Ui_Images/stapler.png'
+import paper from '../../Ui_Images/paper.png'
+import ceo from '../../Ui_Images/ceo.jpg'
 
 const AboutUs = () => {
     return (
@@ -144,7 +144,7 @@ const AboutUs = () => {
             </div>
 
 
-            <div className="about-fourth-section">
+            {/* <div className="about-fourth-section">
                 <h1>Owner</h1>
                 <div className="about-fourth-cards">
                     <div className="about-fourth-card-small">
@@ -182,7 +182,7 @@ const AboutUs = () => {
                     </div>
 
                 </div>
-            </div>
+            </div> */}
 
 
         </div>
