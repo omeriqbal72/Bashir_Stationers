@@ -7,12 +7,10 @@
 
 .product-page-sidebar{
     display: flex;
-    width: 100%;
-    flex: 1;
+    flex: .5;
 }
 
 .product-page-listing{
     display: flex;
-    width: 100%;
     flex: 3;
 }
