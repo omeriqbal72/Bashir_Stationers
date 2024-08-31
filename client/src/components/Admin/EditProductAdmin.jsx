@@ -3,26 +3,50 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../css/editProduct.css';
 
-const availableColors = ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White', 'Purple'];
-const categories = ['Pens', 'Writing Tools', 'Painting Tools', 'Binding Tools', 'Pencils', 'Erasers'];
-const categoryTypes = {
-    Pens: ['Gel pens', 'Ball pens', 'Ink pens', 'Ballpoints'],
-    'Writing Tools': ['Markers', 'Highlighters', 'Chalk'],
-    'Painting Tools': ['Brushes', 'Palettes', 'Acrylic Paints'],
-    'Binding Tools': ['Staplers', 'Binders', 'Paper Clips'],
-    Pencils: ['HB Pencils', 'Mechanical Pencils'],
-    Erasers: ['Rubber Erasers', 'Kneaded Erasers'],
+const categoryData = {
+    'Writing Tools': {
+        'Pens': ['Ball pens', 'Gel pens', 'Ink pens'],
+        'Pencils': ['Drawing pencil', 'Lead pencil'],
+        'Markers': ['Permanent', 'Whiteboard'],
+        'Highlighters': ['Fluorescent', 'Pastel'],
+    },
+    'Painting Tools': {
+        'Brushes': ['Flat', 'Round'],
+        'Palettes': ['Wooden', 'Plastic'],
+        'Acrylic Paints': ['Basic Colors', 'Metallic'],
+    },
+    'Binding Tools': {
+        'Staplers': ['Heavy Duty', 'Light Duty'],
+        'Binders': ['3-Ring', 'D-Ring'],
+        'Paper Clips': ['Standard', 'Colored'],
+    },
+    'School Supplies': {
+            'Pens': ['Ball pens', 'Gel pens', 'Ink pens'],
+            'Pencils': ['Drawing pencil', 'Lead pencil'],
+            'Markers': ['Permanent', 'Whiteboard'],
+            'Highlighters': ['Fluorescent', 'Pastel'],
+            'Brushes': ['Flat', 'Round'],
+            'Acrylic Paints': ['Basic Colors', 'Metallic'],
+        },
+
+        'Office Supplies': {
+            'Pens': ['Ball pens', 'Gel pens', 'Ink pens'],
+            'Staplers': ['Heavy Duty', 'Light Duty'],
+            'Paper Clips': ['Standard', 'Colored'],
+            'Highlighters': ['Fluorescent', 'Pastel'],
+        },
 };
+
 const companies = ['dux', 'piano', 'dollar', 'casio'];
+const availablecolors = ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White'];
 
 const EditProductPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
-    const [selectedCategories, setSelectedCategories] = useState([]);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
-    const [availableTypes, setAvailableTypes] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedSubCategory, setSelectedSubCategory] = useState('');
+    const [type, setType] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
     const [newImages, setNewImages] = useState([]);
     const [removedImages, setRemovedImages] = useState([]);
@@ -33,8 +57,10 @@ const EditProductPage = () => {
                 const response = await axios.get(`/admin/edit-product/${id}`);
                 const productData = response.data;
                 setProduct(productData);
-                setSelectedCategories(productData.categories.map(cat => cat.name) || []);
-                setAvailableTypes(categoryTypes[productData.categories[0]?.name] || []);
+                setSelectedCategory(productData.category.name || '');
+                setSelectedSubCategory(productData.subCategory.name || '');
+                setType(productData.type.name || '');
+                console.log(type)
                 setSelectedColors(productData.colors || []);
             } catch (error) {
                 console.error('Error fetching product:', error);
@@ -52,6 +78,13 @@ const EditProductPage = () => {
                 ...prevState,
                 company: { name: value }
             }));
+            
+        }
+        else if (name === "description") {
+            setProduct(prevState => ({
+                ...prevState,
+                description: value
+            }));
         } else {
             setProduct(prevState => ({
                 ...prevState,
@@ -61,20 +94,17 @@ const EditProductPage = () => {
     };
 
     const handleCategoryChange = (e) => {
-        const { value, checked } = e.target;
-        const updatedCategories = checked
-            ? [...selectedCategories, value]
-            : selectedCategories.filter(category => category !== value);
-
-        setSelectedCategories(updatedCategories);
-        setAvailableTypes(categoryTypes[updatedCategories[0]] || []);
-
-        setProduct(prevState => ({
-            ...prevState,
-            categories: updatedCategories.map(name => ({ name }))
-        }));
+        const value = e.target.value;
+        setSelectedCategory(value);
+        setSelectedSubCategory(''); // Reset subcategory and type
+        setType('');
     };
 
+    const handleSubCategoryChange = (e) => {
+        const value = e.target.value;
+        setSelectedSubCategory(value);
+        setType(''); // Reset type
+    };
     const handleTypeChange = (e) => {
         const selectedType = e.target.value;
         setProduct(prevState => ({
@@ -107,9 +137,7 @@ const EditProductPage = () => {
         }));
     };
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
+   
 
     const handleSubmit = async () => {
         try {
@@ -117,10 +145,9 @@ const EditProductPage = () => {
             formData.append('name', product.name);
             formData.append('price', product.price);
             formData.append('companyName', product.company?.name || '');
-            formData.append('categories', JSON.stringify(selectedCategories));
-            formData.append('typeName', product.type?.name || '');
             formData.append('quantity', product.quantity);
             formData.append('colors', JSON.stringify(selectedColors));
+            formData.append('description' , product.description)
             newImages.forEach(image => formData.append('images', image));
             formData.append('removedImages', removedImages.join(','));
 
@@ -178,48 +205,57 @@ const EditProductPage = () => {
                         ))}
                     </select>
                 </label>
-                <div ref={dropdownRef} className="edit-product-page-dropdown">
+                <div className="admin-edit-product-page-form-group">
                     <label>Category:</label>
-                    <button
-                        type="button"
-                        className="edit-product-page-dropdown-button"
-                        onClick={toggleDropdown}
-                    >
-                        {selectedCategories.length > 0
-                            ? selectedCategories.join(', ')
-                            : 'Select Categories'}
-                    </button>
-                    {isDropdownOpen && (
-                        <ul className="edit-product-page-dropdown-content">
-                            {categories.map((cat) => (
-                                <li key={cat} className="edit-product-page-dropdown-item">
-                                    <input
-                                        type="checkbox"
-                                        id={cat}
-                                        value={cat}
-                                        checked={selectedCategories.includes(cat)}
-                                        onChange={handleCategoryChange}
-                                    />
-                                    <label htmlFor={cat}>{cat}</label>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-
-                <label>
-                    Type:
                     <select
-                        name="typeName"
-                        value={product.type?.name || ''}
-                        onChange={handleTypeChange}
-                        disabled={selectedCategories.length === 0}
+                        value={selectedCategory}
+                        onChange={handleCategoryChange}
+                        disabled
                     >
-                        {availableTypes.map((type, index) => (
-                            <option key={index} value={type}>{type}</option>
+                        <option value="" disabled>Select Category</option>
+                        {Object.keys(categoryData).map((cat) => (
+                            <option key={cat} value={cat}>
+                                {cat}
+                            </option>
                         ))}
                     </select>
-                </label>
+                </div>
+
+                {selectedCategory && (
+                    <div className="admin-edit-product-page-form-group">
+                        <label>SubCategory:</label>
+                        <select
+                            value={selectedSubCategory}
+                            onChange={handleSubCategoryChange}
+                            disabled
+                        >
+                            <option value="" disabled>Select SubCategory</option>
+                            {Object.keys(categoryData[selectedCategory]).map((subCat) => (
+                                <option key={subCat} value={subCat}>
+                                    {subCat}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
+
+                {selectedSubCategory && (
+                    <div className="admin-edit-product-page-form-group">
+                        <label>Type:</label>
+                        <select
+                            value={type}
+                            onChange={handleTypeChange}
+                            disabled
+                        >
+                            <option value="" disabled>Select Type</option>
+                            {categoryData[selectedCategory][selectedSubCategory]?.map((t) => (
+                                <option key={t} value={t}>
+                                    {t}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
                 <label>
                     Quantity:
                     <input
@@ -232,7 +268,7 @@ const EditProductPage = () => {
                 <label>
                     Colors:
                     <div className="edit-product-page-color-selection">
-                        {availableColors.map((color, index) => (
+                        {availablecolors.map((color, index) => (
                             <div
                                 key={index}
                                 className={`edit-product-page-color-box ${selectedColors.includes(color) ? 'selected' : ''}`}
@@ -242,6 +278,15 @@ const EditProductPage = () => {
                             </div>
                         ))}
                     </div>
+                </label>
+
+                <label>
+                    Description:
+                    <textarea
+                        
+                        value={product.description || ''}
+                        onChange={handleChange}
+                    />
                 </label>
 
                 <label>
