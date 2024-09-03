@@ -10,6 +10,11 @@ const subCategorySchema = new mongoose.Schema({
         ref: 'Category',
         required: true,
     },
+    types:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'ProductType'
+    }],
+
     products: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',

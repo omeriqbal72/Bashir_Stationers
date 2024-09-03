@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { getTest } = require('../controllers/authControllers')
 const { getProducts ,addProduct, editProduct, deleteProduct , getProductById} = require('../controllers/adminControllers.js');
-const { getAllCategories} = require('../controllers/productControllers.js');
+const { getAllCategories } = require('../controllers/productControllers.js');
 
 const multer = require('multer');
 const path = require('path');
@@ -54,6 +54,7 @@ router.get('/admin/edit-product/:id', getProductById);
 router.get('/get-products' , getProducts);
 
 router.get('/get-categories' , getAllCategories);
+
 
 router.delete('/delete-product/:productId', deleteProduct);
 
