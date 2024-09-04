@@ -1,6 +1,5 @@
 const Category = require('../models/category'); // Adjust the path to your Category model
-const subcategory = require('../models/subcategory');
-const SubCategory = require('../models/subcategory')
+const SubCategory = require('../models/subcategory');
 
 const getAllCategories = async (req, res) => {
     try {
@@ -61,7 +60,6 @@ const getProductsBySubCategoryName = async (req, res) => {
         res.status(500).json({ message: 'An error occurred while fetching products', error: error.message });
     }
 };
-
 
 module.exports = {
      getAllCategories,

@@ -16,7 +16,7 @@ const getProducts = async (req, res) => {
             .populate('type');
 
         res.status(200).json(products);
-        console.log(products)
+       
     } catch (error) {
         res.status(500).json({ message: 'Failed to fetch products', error: error.message });
     }
@@ -24,18 +24,14 @@ const getProducts = async (req, res) => {
 
 const getProductById = async (req, res) => {
     try {
-        // Extract product ID from request parameters
+       
         const productId = req.params.id;
-
-        // Fetch the product from the database
         const product = await Product.findById(productId).populate('category').populate('subCategory').populate('type');
 
-        // Check if the product exists
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Return the product data
         res.json(product);
     } catch (error) {
         console.error('Error fetching product:', error);
@@ -47,7 +43,6 @@ const addProduct = async (req, res) => {
     try {
         const { name, company, category, subCategory, type, colors, description, quantity, price } = req.body;
 
-        // Parse colors JSON string to array
         let colorArray = [];
         try {
             colorArray = JSON.parse(colors);
@@ -64,58 +59,57 @@ const addProduct = async (req, res) => {
         }
 
         // Handle company
-        let companyId = company;
         if (!company || company.trim() === "") {
             return res.status(400).json({ message: "Company name is required" });
         }
 
         let existingCompany = await Company.findOne({ name: company });
-        if (existingCompany) {
-            companyId = existingCompany._id;
-        } else {
+        if (!existingCompany) {
             const newCompany = new Company({ name: company });
             existingCompany = await newCompany.save();
-            companyId = existingCompany._id;
         }
+        const companyId = existingCompany._id;
 
         // Handle category
-        let categoryId = null;
         let existingCategory = await Category.findOne({ name: category });
-        if (existingCategory) {
-            categoryId = existingCategory._id;
-        } else {
-            const newCategory = new Category({ name: category });
-            const savedCategory = await newCategory.save();
-            categoryId = savedCategory._id;
+        if (!existingCategory) {
+            existingCategory = new Category({ name: category });
+            existingCategory = await existingCategory.save();
         }
+        const categoryId = existingCategory._id;
 
         // Handle subCategory
-        let subCategoryId = null;
         let existingSubCategory = await SubCategory.findOne({ name: subCategory, category: categoryId });
-        if (existingSubCategory) {
-            subCategoryId = existingSubCategory._id;
-        } else {
-            const newSubCategory = new SubCategory({ name: subCategory, category: categoryId });
-            const savedSubCategory = await newSubCategory.save();
-            subCategoryId = savedSubCategory._id;
+        if (!existingSubCategory) {
+            existingSubCategory = new SubCategory({ name: subCategory, category: categoryId });
+            existingSubCategory = await existingSubCategory.save();
 
             // Add the new subCategory to the associated category
             await Category.findByIdAndUpdate(
                 categoryId,
-                { $addToSet: { subcategories: subCategoryId } },
+                { $addToSet: { subcategories: existingSubCategory._id } },
                 { new: true }
             );
         }
+        const subCategoryId = existingSubCategory._id;
 
-        // Handle type
+        // Handle type (optional)
         let typeId = null;
-        let existingType = await ProductType.findOne({ name: type, subcategory: subCategoryId });
-        if (existingType) {
+        if (type && type.trim() !== "") {
+           
+            let existingType = await ProductType.findOne({ name: type , subcategory:subCategoryId });
+            if (!existingType) {
+                existingType = new ProductType({ name: type , subcategory: subCategoryId });
+                existingType = await existingType.save();
+
+                
+                await SubCategory.findByIdAndUpdate(
+                    subCategoryId,
+                    { $addToSet: { types: existingType._id } },
+                    { new: true }
+                );
+            }
             typeId = existingType._id;
-        } else {
-            const newType = new ProductType({ name: type, subcategory: subCategoryId });
-            const savedType = await newType.save();
-            typeId = savedType._id;
         }
 
         // Create the new product
@@ -124,7 +118,7 @@ const addProduct = async (req, res) => {
             company: companyId,
             category: categoryId,
             subCategory: subCategoryId,
-            type: typeId,
+            type: typeId, 
             colors: colorArray,
             description,
             quantity,
@@ -150,15 +144,18 @@ const addProduct = async (req, res) => {
             { new: true }
         );
 
-        // Update type with the new product ID
-        await ProductType.findByIdAndUpdate(
-            typeId,
-            { $addToSet: { products: newProduct._id } },
-            { new: true }
-        );
+        // If type is provided, update ProductType with the new product ID
+        if (typeId) {
+            await ProductType.findByIdAndUpdate(
+                typeId,
+                { $addToSet: { products: newProduct._id } },
+                { new: true }
+            );
+        }
 
         res.status(201).json(newProduct);
     } catch (error) {
+        console.error('Error occurred:', error.stack);
         res.status(500).json({ message: 'An error occurred while adding the product', error: error.message });
     }
 };
@@ -268,45 +265,46 @@ const deleteProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Remove the product from the associated company's products array
         await Company.findByIdAndUpdate(product.company, {
             $pull: { products: product._id }
         });
 
-        // Remove the product from the respective categories' products arrays
-        await Category.updateMany(
-            { _id: { $in: product.categories } }, // Find categories that include this product
-            { $pull: { products: product._id } }  // Remove the product ID from the products array
-        );
+        await SubCategory.findByIdAndUpdate(product.subCategory, {
+            $pull: { products: product._id }
+        });
 
-        // Remove the product from the respective types' products arrays
+        await Category.findByIdAndUpdate(product.category, {
+            $pull: { products: product._id }
+        });
+
         if (product.type) {
             await ProductType.findByIdAndUpdate(product.type, {
                 $pull: { products: product._id }
             });
         }
 
-        // Log the current directory
         console.log('Current Directory:', __dirname);
 
-        // Construct and log the path to the image
-        if (product.image && product.image.startsWith('uploads/productImages/')) {
-            const imagePath = path.resolve(__dirname, '..', '..', product.image);
-            console.log('Attempting to delete file at:', imagePath);
+        if (product.images && product.images.length > 0) {
+            for (const imagePath of product.images) {
+                if (imagePath.startsWith('uploads/productImages/')) {
+                    const fullPath = path.resolve(__dirname, '..', '..', imagePath);
+                    console.log('Attempting to delete file at:', fullPath);
 
-            try {
-                await fs.access(imagePath);
-                await fs.unlink(imagePath);
-                console.log('File deleted successfully');
-            } catch (err) {
-                console.error('Failed to delete image:', err);
-                return res.status(500).json({ message: 'Failed to delete image' });
+                    try {
+                        await fs.access(fullPath);
+                        await fs.unlink(fullPath);
+                        console.log('File deleted successfully');
+                    } catch (err) {
+                        console.error('Failed to delete image:', err);
+                        return res.status(500).json({ message: 'Failed to delete image' });
+                    }
+                } else {
+                    console.log('No valid image path to delete or image path does not start with "uploads/productImages/"');
+                }
             }
-        } else {
-            console.log('No valid image path to delete or image path does not start with "uploads/productImages/"');
         }
 
-        // Delete the product
         await product.deleteOne();
 
         res.status(200).json({ message: 'Product deleted successfully' });

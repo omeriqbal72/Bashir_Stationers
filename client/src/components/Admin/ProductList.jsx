@@ -1,53 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import ConfirmationModal from './ConfirmationModal';
 import '../../css/productlist.css';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 
-const ProductList = ({ refresh }) => {
-    const [products, setProducts] = useState([]);
-    const [error, setError] = useState('');
-
+const ProductList = ({ products, onDeleteProduct }) => {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [productToDelete, setProductToDelete] = useState(null);
     const [imageIndex, setImageIndex] = useState({});
-
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get('/get-products');
-                setProducts(response.data);
-                console.log(response.data)
-            } catch (error) {
-                setError('Failed to fetch products');
-            }
-        };
-
-        fetchProducts();
-    }, [refresh]); // Re-fetch products whenever refresh changes
 
     const handleDelete = (product) => {
         setProductToDelete(product);
         setIsConfirmOpen(true);
     };
 
-    const confirmDelete = async () => {
-        try {
-            await axios.delete(`/delete-product/${productToDelete._id}`);
-
-            setProducts(products.filter(product => product._id !== productToDelete._id));
-            setIsConfirmOpen(false);
-            toast.success('Product deleted successfully', {
-                position: 'bottom-center'
-            });
-        } catch (error) {
-            console.error('Error deleting product:', error);
-            setError('Failed to delete product');
+    const confirmDelete = () => {
+        if (productToDelete) {
+            onDeleteProduct(productToDelete._id);
+            setIsConfirmOpen(false);      
         }
     };
-
 
     const handleImageClick = (productId, direction) => {
         setImageIndex(prev => {
@@ -60,7 +31,6 @@ const ProductList = ({ refresh }) => {
 
     return (
         <div className="product-list-container">
-            {error && <p style={{ color: 'red' }}>{error}</p>}
             {products.map(product => {
                 const currentIndex = imageIndex[product._id] || 0;
 
@@ -93,7 +63,6 @@ const ProductList = ({ refresh }) => {
                             <p>Category: {product.category?.name || 'N/A'}</p>
                             <p>SubCategory: {product.subCategory?.name || 'N/A'}</p>
                             <p>Type: {product.type?.name || 'N/A'}</p>
-
                             <p>Price: {product.price}</p>
                             <Link to={`/edit-product/${product._id}`}>
                                 <button>Edit</button>
@@ -109,7 +78,7 @@ const ProductList = ({ refresh }) => {
                 onClose={() => setIsConfirmOpen(false)}
                 onConfirm={confirmDelete}
             />
-            <ToastContainer />
+            
         </div>
     );
 };

@@ -23,7 +23,7 @@ const productSchema = new mongoose.Schema({
     type: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProductType',
-        required: true,
+        
     },
     colors:{
         type: [String]
@@ -44,6 +44,7 @@ const productSchema = new mongoose.Schema({
     },
     images: {
         type: [String],
+        required: true,
     },
 
     date: {

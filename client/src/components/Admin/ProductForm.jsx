@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import '../../css/productform.css'; // Import the CSS file
-import 'react-toastify/dist/ReactToastify.css'; // Import the CSS for toast
-import { toast, ToastContainer } from 'react-toastify';
+import admin from '../../Ui_Images/admin-panel.jpg'
+
 
 const ProductForm = ({ onProductAdded }) => {
     const [name, setName] = useState('');
@@ -12,15 +12,12 @@ const ProductForm = ({ onProductAdded }) => {
     const [type, setType] = useState('');
     const [price, setPrice] = useState('');
     const [quantity, setQuantity] = useState(0);
-    const [description, setDescription] = useState(''); // Added description state
+    const [description, setDescription] = useState('');
     const [images, setImages] = useState([]);
     const [selectedColors, setSelectedColors] = useState([]);
-    const [error, setError] = useState(''); // Added error state
+    const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [isColorDropdownOpen, setIsColorDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
-    const subCategoryDropdownRef = useRef(null);
-    const typeDropdownRef = useRef(null);
     const colorDropdownRef = useRef(null);
 
     // Define hierarchical data for categories, subcategories, and types
@@ -65,14 +62,14 @@ const ProductForm = ({ onProductAdded }) => {
     const handleCategoryChange = (e) => {
         const value = e.target.value;
         setSelectedCategory(value);
-        setSelectedSubCategory(''); // Reset subcategory and type when category changes
+        setSelectedSubCategory('');
         setType('');
     };
 
     const handleSubCategoryChange = (e) => {
         const value = e.target.value;
         setSelectedSubCategory(value);
-        setType(''); // Reset type when subcategory changes
+        setType('');
     };
 
     const handleTypeChange = (e) => {
@@ -116,13 +113,12 @@ const ProductForm = ({ onProductAdded }) => {
                 },
             });
 
-            toast.success('Product added successfully', {
-                position: 'bottom-center'
-            });
+
 
             if (response.status === 201) {
                 setSuccess('Product added successfully');
                 onProductAdded(response.data);
+
                 // Clear form fields
                 setName('');
                 setCompany('');
@@ -162,7 +158,7 @@ const ProductForm = ({ onProductAdded }) => {
     return (
         <div className="admin-add-product-page-form-container">
             <div className="admin-add-product-page-form-image">
-                <img src="/path/to/your/image.jpg" alt="Product" />
+                <img src={admin} alt="Product" />
             </div>
             <form onSubmit={handleSubmit} className="admin-add-product-page-form">
                 <div className="admin-add-product-page-form-group">
@@ -231,7 +227,7 @@ const ProductForm = ({ onProductAdded }) => {
                         <select
                             value={type}
                             onChange={handleTypeChange}
-                            required
+                            
                         >
                             <option value="" disabled>Select Type</option>
                             {categoryData[selectedCategory][selectedSubCategory]?.map((t) => (
@@ -258,10 +254,14 @@ const ProductForm = ({ onProductAdded }) => {
                     <input
                         type="number"
                         value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setQuantity(value.startsWith('0') ? value.replace(/^0+/, '') : value);
+                        }}
                         required
                     />
                 </div>
+
 
                 <div className="admin-add-product-page-form-group">
                     <label>Description:</label>
@@ -300,6 +300,7 @@ const ProductForm = ({ onProductAdded }) => {
                         type="file"
                         multiple
                         onChange={(e) => setImages(Array.from(e.target.files))}
+                        required
                     />
                 </div>
 
@@ -308,7 +309,7 @@ const ProductForm = ({ onProductAdded }) => {
                 {error && <p className="error-message">{error}</p>}
                 {success && <p className="success-message">{success}</p>}
             </form>
-            <ToastContainer />
+
         </div>
     );
 };
