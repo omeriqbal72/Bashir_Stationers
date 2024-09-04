@@ -1,141 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../../css/dropdowncategories.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faListUl } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown, Space } from 'antd';
+import { Dropdown, Menu } from 'antd';
 
 const DropDownCategories = () => {
+    const [categories, setCategories] = useState([]);
+    
+    useEffect(() => {
+        // Replace the URL with your actual API endpoint
+        axios.get('/get-categories')
+            .then(response => {
+                setCategories(response.data);
+                //console.log(response.data); // Uncomment this line to debug
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+            });
+    }, []);
 
-    const items = [
-        {
-            key: '1',
-            label: 'Art Supplies',
-            children: [
-                {
-                    key: '1-1',
-                    label: '3rd menu item',
-                },
-                {
-                    key: '1-2',
-                    label: '4th menu item',
-                },
-            ],
-        },
-        {
-            key: '2',
-            label: 'Craft Supplies',
-            children: [
-                {
-                    key: '2-1',
-                    label: '3rd menu item',
-                },
-                {
-                    key: '2-2',
-                    label: '4th menu item',
-                },
-            ],
-        },
-        {
-            key: '3',
-            label: 'Office Supplies',
-            children: [
-                {
-                    key: '2-1',
-                    label: '3rd menu item',
-                },
-                {
-                    key: '2-2',
-                    label: '4th menu item',
-                },
-            ],
-        },
-        {
-            key: '4',
-            label: 'Organizers',
-            children: [
-                {
-                    key: '2-1',
-                    label: '3rd menu item',
-                },
-                {
-                    key: '2-2',
-                    label: '4th menu item',
-                },
-            ],
-        },
-        {
-            key: '5',
-            label: 'Paper Products',
-            children: [
-                {
-                    key: '2-1',
-                    label: '3rd menu item',
-                },
-                {
-                    key: '2-2',
-                    label: '4th menu item',
-                },
-            ],
-        },
-        {
-            key: '6',
-            label: 'Presentation Tools',
-            children: [
-                {
-                    key: '2-1',
-                    label: '3rd menu item',
-                },
-                {
-                    key: '2-2',
-                    label: '4th menu item',
-                },
-            ],
-        },
-        {
-            key: '7',
-            label: 'School Supplies',
-            children: [
-                {
-                    key: '2-1',
-                    label: '3rd menu item',
-                },
-                {
-                    key: '2-2',
-                    label: '4th menu item',
-                },
-            ],
-        },
-        {
-            key: '8',
-            label: 'Writing Tools',
-            children: [
-                {
-                    key: '2-1',
-                    label: '3rd menu item',
-                },
-                {
-                    key: '2-2',
-                    label: '4th menu item',
-                },
-            ],
-        },
-
-    ];
+    // Map categories and subcategories to the format expected by the Menu component
+    const items = categories.map(category => ({
+        key: category._id,
+        label: (
+            <Link to={`/products?category=${encodeURIComponent(category.name)}`}>
+                {category.name}
+            </Link>
+        ),
+        children: category.subcategories.map(sub => ({
+            key: sub._id,
+            label: (
+            <Link to={`/products?subcategory=${encodeURIComponent(sub.name)}`}>
+                {sub.name}
+            </Link>
+        )
+        })),
+    }));
 
     return (
-
         <Dropdown
             menu={{
-                items,
+                items
             }}
         >
-                <div className="dropdown-container">
-                     <FontAwesomeIcon icon={faListUl} />
-                    <button className="dropdown-button">Browse Categories</button>
-                    {/* <DownOutlined /> */}
-                </div>
-            
+            <div className="dropdown-container">
+                <FontAwesomeIcon icon={faListUl} />
+                <button className="dropdown-button">Browse Categories</button>
+            </div>
+
         </Dropdown>
     );
 }
+
 export default DropDownCategories;
