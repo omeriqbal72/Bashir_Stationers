@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { getTest } = require('../controllers/authControllers')
 const { getProducts ,addProduct, editProduct, deleteProduct , getProductById} = require('../controllers/adminControllers.js');
-const { getAllCategories} = require('../controllers/productControllers.js');
+const { getAllCategories, getProductsByCategoryName, getProductsBySubCategoryName} = require('../controllers/productControllers.js');
 
 const multer = require('multer');
 const path = require('path');
@@ -42,17 +42,15 @@ const upload = multer({
 }).array('images', 5); // Allow up to 5 images, adjust as needed
 
 
-
-
-
-
 router.post('/add-product', upload, addProduct);
 
 router.put('/edit-product/:productId', upload, editProduct);
+
 router.get('/test', getTest);
 router.get('/admin/edit-product/:id', getProductById);
 router.get('/get-products' , getProducts);
-
+router.get('/products/category/:categoryname' , getProductsByCategoryName),
+router.get('/products/subcategory/:subcategoryname', getProductsBySubCategoryName),
 router.get('/get-categories' , getAllCategories);
 
 router.delete('/delete-product/:productId', deleteProduct);

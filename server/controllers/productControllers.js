@@ -1,4 +1,6 @@
 const Category = require('../models/category'); // Adjust the path to your Category model
+const subcategory = require('../models/subcategory');
+const SubCategory = require('../models/subcategory')
 
 const getAllCategories = async (req, res) => {
     try {
@@ -9,6 +11,60 @@ const getAllCategories = async (req, res) => {
     }
 };
 
+const getProductsByCategoryName = async (req, res) => {
+    try {
+        const categoryName = req.params.categoryname; // Correct parameter name
+        console.log("Category Name from Request Params:", categoryName);
+
+        // Find the category by name and populate the products array
+        const category = await Category.findOne({ name: categoryName }).populate('products');
+        console.log("Category Found:", category);
+
+        if (!category) {
+            console.log("Category Not Found");
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        res.status(200).json(category.products);
+    } catch (error) {
+        console.log("Error Occurred:", error.message);
+        res.status(500).json({ message: 'An error occurred while fetching products', error: error.message });
+    }
+};
+
+
+const getProductsBySubCategoryName = async (req, res) => {
+    try {
+
+        console.log("Request Params:", req.params);
+
+        const subCategoryName = req.params.subcategoryname;
+        
+        console.log("Subcategory Name from Request Params:", subCategoryName);
+
+        const subCategory = await SubCategory.findOne({ name: subCategoryName }).populate('products');
+
+        console.log("Found Subcategory:", subCategory);
+
+        if (!subCategory) {
+            console.log('Subcategory not found');
+            return res.status(404).json({ message: 'SubCategory not found' });
+        }
+
+        // Log the products array before sending the response
+        console.log("Products in Subcategory:", subCategory.products);
+
+        res.status(200).json(subCategory.products);
+    } catch (error) {
+        // Log the error message
+        console.error('Error fetching products:', error.message);
+        res.status(500).json({ message: 'An error occurred while fetching products', error: error.message });
+    }
+};
+
+
 module.exports = {
      getAllCategories,
+     getProductsByCategoryName,
+     getProductsBySubCategoryName
      };
