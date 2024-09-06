@@ -21,4 +21,5 @@ const subCategorySchema = new mongoose.Schema({
     }]
 });
 
+subCategorySchema.index({ name: 'text' }); 
 module.exports = mongoose.model('SubCategory', subCategorySchema);

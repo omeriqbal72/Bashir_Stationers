@@ -2,7 +2,7 @@ const Company = require('../models/company');
 const Category = require('../models/category');
 const Product = require('../models/products');
 const ProductType = require('../models/productType');
-const SubCategory = require('../models/subcategory')
+const SubCategory = require('../models/subcategory');
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -16,7 +16,7 @@ const getProducts = async (req, res) => {
             .populate('type');
 
         res.status(200).json(products);
-       
+
     } catch (error) {
         res.status(500).json({ message: 'Failed to fetch products', error: error.message });
     }
@@ -24,7 +24,7 @@ const getProducts = async (req, res) => {
 
 const getProductById = async (req, res) => {
     try {
-       
+
         const productId = req.params.id;
         const product = await Product.findById(productId).populate('category').populate('subCategory').populate('type');
 
@@ -96,13 +96,13 @@ const addProduct = async (req, res) => {
         // Handle type (optional)
         let typeId = null;
         if (type && type.trim() !== "") {
-           
-            let existingType = await ProductType.findOne({ name: type , subcategory:subCategoryId });
+
+            let existingType = await ProductType.findOne({ name: type, subcategory: subCategoryId });
             if (!existingType) {
-                existingType = new ProductType({ name: type , subcategory: subCategoryId });
+                existingType = new ProductType({ name: type, subcategory: subCategoryId });
                 existingType = await existingType.save();
 
-                
+
                 await SubCategory.findByIdAndUpdate(
                     subCategoryId,
                     { $addToSet: { types: existingType._id } },
@@ -118,7 +118,7 @@ const addProduct = async (req, res) => {
             company: companyId,
             category: categoryId,
             subCategory: subCategoryId,
-            type: typeId, 
+            type: typeId,
             colors: colorArray,
             description,
             quantity,
@@ -253,7 +253,6 @@ const editProduct = async (req, res) => {
 };
 
 
-
 const deleteProduct = async (req, res) => {
     try {
         const { productId } = req.params;
@@ -265,46 +264,28 @@ const deleteProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        await Company.findByIdAndUpdate(product.company, {
-            $pull: { products: product._id }
-        });
-
-        await SubCategory.findByIdAndUpdate(product.subCategory, {
-            $pull: { products: product._id }
-        });
-
-        await Category.findByIdAndUpdate(product.category, {
-            $pull: { products: product._id }
-        });
-
+        // Remove product references from other collections (company, category, etc.)
+        await Company.findByIdAndUpdate(product.company, { $pull: { products: product._id } });
+        await SubCategory.findByIdAndUpdate(product.subCategory, { $pull: { products: product._id } });
+        await Category.findByIdAndUpdate(product.category, { $pull: { products: product._id } });
         if (product.type) {
-            await ProductType.findByIdAndUpdate(product.type, {
-                $pull: { products: product._id }
+            await ProductType.findByIdAndUpdate(product.type, { $pull: { products: product._id } });
+        }
+
+        // Delete images from the server
+        if (product.images && product.images.length > 0) {
+            product.images.forEach(imgPath => {
+                fs.unlink(path.join(__dirname, '..', imgPath), (err) => {
+                    if (err) {
+                        console.error(`Failed to delete ${imgPath}:`, err);
+                    } else {
+                        console.log(`File ${imgPath} deleted successfully.`);
+                    }
+                });
             });
         }
 
-        console.log('Current Directory:', __dirname);
-
-        if (product.images && product.images.length > 0) {
-            for (const imagePath of product.images) {
-                if (imagePath.startsWith('uploads/productImages/')) {
-                    const fullPath = path.resolve(__dirname, '..', '..', imagePath);
-                    console.log('Attempting to delete file at:', fullPath);
-
-                    try {
-                        await fs.access(fullPath);
-                        await fs.unlink(fullPath);
-                        console.log('File deleted successfully');
-                    } catch (err) {
-                        console.error('Failed to delete image:', err);
-                        return res.status(500).json({ message: 'Failed to delete image' });
-                    }
-                } else {
-                    console.log('No valid image path to delete or image path does not start with "uploads/productImages/"');
-                }
-            }
-        }
-
+        // Delete the product from the database
         await product.deleteOne();
 
         res.status(200).json({ message: 'Product deleted successfully' });
@@ -313,7 +294,6 @@ const deleteProduct = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
-
 
 
 

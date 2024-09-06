@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { getTest } = require('../controllers/authControllers')
 const { getProducts ,addProduct, editProduct, deleteProduct , getProductById} = require('../controllers/adminControllers.js');
-const { getAllCategories, getProductsByCategoryName, getProductsBySubCategoryName} = require('../controllers/productControllers.js');
+const { getAllCategories, getProductsByCategoryName, getProductsBySubCategoryName , SearchProducts,
+    getProductsByCompanyName, getProductsByProductTypeName , SearchbyIcon , getProductsByName} = require('../controllers/productControllers.js');
 
 
 const multer = require('multer');
@@ -50,9 +51,14 @@ router.put('/edit-product/:productId', upload, editProduct);
 router.get('/test', getTest);
 router.get('/admin/edit-product/:id', getProductById);
 router.get('/get-products' , getProducts);
-router.get('/products/category/:categoryname' , getProductsByCategoryName),
-router.get('/products/subcategory/:subcategoryname', getProductsBySubCategoryName),
+router.get('/products/category/:categoryname' , getProductsByCategoryName);
+router.get('/products/subcategory/:subcategoryname', getProductsBySubCategoryName);
+router.get('/products/company/:companyname' , getProductsByCompanyName);
+router.get('/products/type/:producttypename', getProductsByProductTypeName);
 router.get('/get-categories' , getAllCategories);
+router.get('/get-search-products', SearchProducts);
+router.get('/products/search/:searched', SearchbyIcon);
+router.get('/products/product/:productname', getProductsByName);
 
 
 router.delete('/delete-product/:productId', deleteProduct);

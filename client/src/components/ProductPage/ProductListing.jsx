@@ -11,6 +11,10 @@ function ProductListing() {
     const queryParams = new URLSearchParams(location.search);
     const category = queryParams.get('category');
     const subcategory = queryParams.get('subcategory');
+    const company = queryParams.get('company')
+    const type = queryParams.get('type')
+    const search = queryParams.get('search')
+    const product = queryParams.get('product')
 
     // Set URL based on category or subcategory (avoid unnecessary re-renders)
     useEffect(() => {
@@ -19,14 +23,23 @@ function ProductListing() {
             newUrl = `/products/category/${encodeURIComponent(category)}`;
         } else if (subcategory) {
             newUrl = `/products/subcategory/${encodeURIComponent(subcategory)}`;
-        } else {
+        } else if(company){
+            newUrl = `/products/company/${encodeURIComponent(company)}`
+        } else if (type){
+            newUrl = `/products/type/${encodeURIComponent(type)}`
+        }else if(search){
+            newUrl = `/products/search/${encodeURIComponent(search)}`
+        } else if (product){
+            newUrl = `/products/product/${encodeURIComponent(product)}`
+        }
+        else {
             newUrl = '/get-products';
         }
 
         if (url !== newUrl) {
             setUrl(newUrl);
         }
-    }, [category, subcategory]); // Only re-run when category or subcategory changes
+    }, [category, subcategory , company , type , search , product]); // Only re-run when category or subcategory changes
 
     const { products, error, loading } = getAllProducts(url);
 
