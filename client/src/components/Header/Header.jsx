@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../css/header.css';
 import '../../css/shopdropdown.css';
 import DropdownCategories from './DropDownCategories.jsx';
+import SearchBar from './SearchBar.jsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faHouse, faShop, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
 
@@ -35,12 +36,7 @@ const Header = () => {
           <div className="logo">
             <h1>Rasheed Stationers</h1>
           </div>
-          <div className="search-bar">
-            <input type="text" placeholder="Search..." />
-            <button type="submit">
-              <FontAwesomeIcon icon={faSearch} />
-            </button>
-          </div>
+          <SearchBar/>
           <div className="actions">
             <button>Login/Register</button>
             <button className="heart-icon">❤️</button>

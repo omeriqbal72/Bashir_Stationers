@@ -20,4 +20,5 @@ const productTypeSchema = new mongoose.Schema({
     
 });
 
+productTypeSchema.index({ name: 'text' });
 module.exports = mongoose.model('ProductType', productTypeSchema);
