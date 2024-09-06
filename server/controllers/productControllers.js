@@ -195,10 +195,10 @@ const SearchbyIcon = async (req, res) => {
     try {
         // First, find products and populate related fields
         const products = await Product.find({})
-            .populate('company')  // Populating company field
-            .populate('category') // Populating category field
-            .populate('subCategory') // Populating subCategory field
-            .populate('type') // Populating type field
+            .populate('company')  
+            .populate('category') 
+            .populate('subCategory') 
+            .populate('type') 
             .exec();
 
         // Filter products that match the search term

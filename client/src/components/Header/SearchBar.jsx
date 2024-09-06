@@ -149,13 +149,23 @@ const SearchBar = () => {
                 setDropdownVisible(false);
                 setQuery('');
             } else {
-                // Handle the case where no item is selected
-                navigate(`/products?search=${encodeURIComponent(query)}`);
-                setQuery('');
-                setDropdownVisible(false);
+                handleClickandEnter()
+
             }
         }
     };
+
+    const handleClickandEnter = () => {
+        if (query !== '') {
+            navigate(`/products?search=${encodeURIComponent(query)}`);
+            setQuery('');
+            setDropdownVisible(false);
+        }
+        else {
+            alert('Enter Something')
+        }
+
+    }
 
 
     const navigateToSelectedItem = (result) => {
@@ -198,7 +208,7 @@ const SearchBar = () => {
                 onChange={handleChange}
                 onKeyDown={handleKeyDown}
             />
-            <button onClick={() => fetchResults(query)}>
+            <button onClick={() => handleClickandEnter()}>
                 <FontAwesomeIcon icon={faSearch} />
             </button>
             {isDropdownVisible && allResults.length > 0 && (
