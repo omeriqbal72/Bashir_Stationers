@@ -10,6 +10,23 @@ const getAllCategories = async (req, res) => {
     }
 };
 
+const getProductById = async (req, res) => {
+    try {
+       
+        const productId = req.params.id;
+        const product = await Product.findById(productId).populate('category').populate('subCategory').populate('type');
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.json(product);
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 const getProductsByCategoryName = async (req, res) => {
     try {
         const categoryName = req.params.categoryname; // Correct parameter name

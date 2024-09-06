@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../css/productlisting.css';
 import { useLocation } from 'react-router-dom';
-import ProductCard from '../ProductCard/ProductCard.jsx';
+import ProductCard from '../Product/ProductCard.jsx';
 import { getAllProducts } from '../../Functions/GetAPI.js'; // Assuming correct import path
 
 function ProductListing() {

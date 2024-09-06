@@ -1,0 +1,28 @@
+.image-gallery {
+  display: flex;
+}
+
+.thumbnails {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-right: 2rem;
+}
+
+.thumbnails img {
+  width: 4rem;
+  height: 4rem;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.thumbnails img.active,
+.thumbnails img:hover {
+  border-color: #000;
+}
+
+.main-image img {
+  max-width: 100%;
+  height: auto;
+}

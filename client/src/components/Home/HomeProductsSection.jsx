@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductCard from '../ProductCard/ProductCard.jsx';
+import ProductCard from '../Product/ProductCard.jsx';
 import '../../css/homeproductssection.css'
 import Img from '../../Ui_Images/home-banner-img2.jpg'
 import Img1 from '../../Ui_Images/home-banner-img4.jpg'
