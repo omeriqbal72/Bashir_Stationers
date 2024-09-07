@@ -1,31 +1,28 @@
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
 
-export const getAllProducts = (url) => {
-  const [products, setProducts] = useState([]);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+// Function to fetch products (queryFn)
+const fetchProducts = async ({ queryKey }) => {
+  const url = queryKey[1];
+  const { data } = await axios.get(url);
+  return data;
+};
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        setError(false);
-        const response = await axios.get(url);
-        setProducts(response.data);
-      } catch (error) {
-        setError(true);
-        console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+// React Query hook for fetching products
+export const useGetAllProducts = (url) => {
+  const queryKey = ['products', url]; // Define query key
 
-    // Only call the API if the URL is provided
-    if (url) {
-      fetchProducts();
-    }
-  }, [url]);
+  // Use useQuery hook
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey,
+    queryFn: fetchProducts,
+    enabled: !!url, // Fetch only if URL is valid
+    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+    cacheTime: 1000 * 60 * 10, // Cache data for 10 minutes
+    retry: 2, // Retry failed requests up to 2 times
+    refetchOnWindowFocus: false, // Do not refetch on window focus
+  });
 
-  return { products, error, loading };
+  // Return data, loading state, and error information
+  return { data, isLoading, isError, error };
 };

@@ -17,7 +17,7 @@ const AboutUs = () => {
                         <p>
                             "To redefine the standard in stationery distribution by delivering
                             unmatched authenticity, quality, and service that empowers every
-                            business to achieve its full potential."
+                            business to achieve its full potential"
                         </p>
                     </div>
 
