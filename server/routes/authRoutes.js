@@ -50,6 +50,7 @@ router.put('/edit-product/:productId', upload, editProduct);
 
 router.get('/test', getTest);
 router.get('/admin/edit-product/:id', getProductById);
+router.get('/product/:id', getProductById);
 router.get('/get-products' , getProducts);
 router.get('/products/category/:categoryname' , getProductsByCategoryName);
 router.get('/products/subcategory/:subcategoryname', getProductsBySubCategoryName);

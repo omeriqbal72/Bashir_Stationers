@@ -42,6 +42,7 @@ function ProductListing() {
     }, [category, subcategory , company , type , search , product]); // Only re-run when category or subcategory changes
 
     const { products, error, loading } = getAllProducts(url);
+    console.log(products)
 
     return (
         <div className="product-list">
@@ -51,7 +52,7 @@ function ProductListing() {
             <div className="product-grid">
                 {products.map((product) => (
                     <ProductCard
-                        key={product.id}
+                        id={product._id}
                         images={product.images[0]} // Ensure correct image URL from API data
                         name={product.name}
                         price={product.price}
