@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef , useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import '../../css/searchbar.css';
@@ -38,10 +38,9 @@ const SearchBar = () => {
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
 
-    // Debounced query state
-    const debouncedQuery = useDebounce(query, 1000); // 1000ms debounce delay
-
-    const fetchResults = async (searchTerm) => {
+    const debouncedQuery = useDebounce(query, 1000);
+    // Memoized fetchResults function
+    const fetchResults = useCallback(async (searchTerm) => {
         try {
             const response = await axios.get(`/get-search-products?q=${searchTerm}`);
             if (response.status === 200) {
@@ -53,24 +52,23 @@ const SearchBar = () => {
         } catch (error) {
             console.error('Error fetching search results:', error);
         }
-    };
+    }, []);
 
-    // Effect for handling the debounced query
     useEffect(() => {
         if (debouncedQuery.trim().length > 0) {
             fetchResults(debouncedQuery);
+            setHasTriggeredImmediateFetch(true);
         }
-    }, [debouncedQuery]);
+    }, [debouncedQuery, fetchResults]);
 
-    // Immediate fetch effect for 3 characters typed quickly
     useEffect(() => {
         if (query.length >= 3 && Date.now() - lastTypedTime < 1000 && !hasTriggeredImmediateFetch) {
             fetchResults(query); // Immediate API call
             setHasTriggeredImmediateFetch(true); // Mark immediate fetch as triggered
         }
-    }, [query, lastTypedTime, hasTriggeredImmediateFetch]);
+    }, [query, lastTypedTime, hasTriggeredImmediateFetch, fetchResults]);
 
-    // Reset immediate fetch flag and clear results when the query is cleared
+
     useEffect(() => {
         if (query.length === 0) {
             setHasTriggeredImmediateFetch(false);
@@ -102,12 +100,10 @@ const SearchBar = () => {
     const handleChange = (event) => {
         const inputValue = event.target.value;
 
-        // Prevent leading spaces
         if (inputValue.startsWith(' ')) {
             return;
         }
 
-        // Prevent input of HTML-like tags
         if (/<\/?[^>]+(>|$)/g.test(inputValue)) {
             setQuery('');
             setHasTriggeredImmediateFetch(false);
@@ -166,7 +162,6 @@ const SearchBar = () => {
         }
 
     }
-
 
     const navigateToSelectedItem = (result) => {
         const encodedName = encodeURIComponent(result.name);
