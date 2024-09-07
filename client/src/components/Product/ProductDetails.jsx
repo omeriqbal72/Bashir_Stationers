@@ -1,15 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../css/productdetails.css'
 import ProductQuantity from './ProductQuantity.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 
-const ProductDetails = () => {
+
+const ProductDetails = ({data}) => {
+  const [productDetails, setProductDetails] = useState(null);
+
+  useEffect(() => {
+    // Store the product data in the component state when the component mounts
+    if (data) {
+      setProductDetails(data);
+      
+    }
+  }, [data]);
+  console.log(productDetails)
+
   return (
     <div className="product-details">
       <div className='product-details-subsection'>
         <div className='product-info'>
-          <h1>White Chalks</h1>
+          <h1>{productDetails.name}</h1>
           <div className="rating">⭐⭐⭐⭐ (437 reviews)</div>
 
           <div className="color-options">
