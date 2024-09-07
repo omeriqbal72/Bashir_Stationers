@@ -13,6 +13,7 @@ const getAllCategories = async (req, res) => {
     }
 };
 
+
 const getProductsByCategoryName = async (req, res) => {
     try {
         const categoryName = req.params.categoryname; // Correct parameter name

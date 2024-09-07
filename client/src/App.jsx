@@ -4,10 +4,11 @@ import AdminPanel from './components/Admin/AdminPanel.jsx';
 import AboutUs from './components/About/AboutUs.jsx';
 import EditProductPage from './components/Admin/EditProductAdmin.jsx';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './components/Home/Home.jsx';
-import Products from './components/ProductPage/ProductPage.jsx';
-import Header from './components/Header/Header.jsx';
-import './App.css';
+import Home from './components/Home/Home.jsx'
+import Products from './components/ProductPage/ProductPage.jsx'
+import Header from './components/Header/Header.jsx'
+import Product from './components/Product/Product.jsx'
+import './App.css'
 
 // React Query imports
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -34,6 +35,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/product" element={<Product />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/edit-product/:id" element={<EditProductPage />} />
@@ -41,6 +43,7 @@ function App() {
       </Router>
     </QueryClientProvider>
   );
+
 }
 
 export default App;

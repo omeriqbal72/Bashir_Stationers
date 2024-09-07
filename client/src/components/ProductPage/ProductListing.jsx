@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import ProductCard from '../ProductCard/ProductCard.jsx';
 import { useGetAllProducts } from '../../Functions/GetAPI.js'; // Updated import path
 
+
 function ProductListing() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -45,6 +46,7 @@ function ProductListing() {
       </div>
     </div>
   );
+
 }
 
 export default ProductListing;
