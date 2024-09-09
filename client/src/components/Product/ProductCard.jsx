@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../css/productcard.css'
 
 function ProductCard(props) {
+  console.log(props.id)
   return (
 
     <Link to={`/product?id=${encodeURIComponent(props.id)}`}>

@@ -1,27 +1,30 @@
-import React, {useEffect, useState} from 'react';
-import '../../css/productdetails.css'
+import React, { useEffect, useState } from 'react';
+import '../../css/productdetails.css';
 import ProductQuantity from './ProductQuantity.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 
-
-const ProductDetails = ({data}) => {
+const ProductDetails = ({ data }) => {
   const [productDetails, setProductDetails] = useState(null);
 
   useEffect(() => {
     // Store the product data in the component state when the component mounts
     if (data) {
       setProductDetails(data);
-      
     }
   }, [data]);
-  console.log(productDetails)
+
+  if (!productDetails) {
+    // Return null or a loading placeholder if productDetails hasn't been set yet
+    return <div>Loading product details...</div>;
+  }
 
   return (
     <div className="product-details">
       <div className='product-details-subsection'>
         <div className='product-info'>
-          <h1>{productDetails.name}</h1>
+          {/* Safe access to product details */}
+          <h1>{productDetails.name || 'No Name Available'}</h1>
           <div className="rating">⭐⭐⭐⭐ (437 reviews)</div>
 
           <div className="color-options">
@@ -32,8 +35,9 @@ const ProductDetails = ({data}) => {
               <span className="color orange"></span>
             </div>
           </div>
+
           <ProductQuantity />
-          <p className="price">Rs. 110</p>
+          <p className="price">Rs. {productDetails.price || 'Price not available'}</p>
         </div>
 
         <div className='purchase-btns'>
@@ -42,23 +46,16 @@ const ProductDetails = ({data}) => {
             Add to Cart
           </button>
           <button className="buy-now-btn">
-            <FontAwesomeIcon icon={faCreditCard} style={{ color: "#000000", }} />
+            <FontAwesomeIcon icon={faCreditCard} style={{ color: "#000000" }} />
             Buy Now
           </button>
         </div>
-
       </div>
-
 
       <div className="product-description">
         <h2>Description</h2>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eos, ullam tempore? Error, recusandae sequi!
-          Explicabo amet facilis ab similique. Doloremque, velit accusamus odit obcaecati id rem pariatur dolorum
-          possimus doloribus facilis quia ex quos aspernatur aperiam sunt adipisci dolores ipsa vel eaque corporis
-          ut?</p>
+        <p>{productDetails.description || 'No description available'}</p>
       </div>
-
-
     </div>
   );
 };

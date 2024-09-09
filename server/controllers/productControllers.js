@@ -3,6 +3,8 @@ const Category = require('../models/category');
 const Product = require('../models/products');
 const ProductType = require('../models/productType');
 const SubCategory = require('../models/subcategory');
+const path = require('path');
+const fs = require('fs');
 
 const getAllCategories = async (req, res) => {
     try {
@@ -222,6 +224,44 @@ const SearchbyIcon = async (req, res) => {
     }
 };
 
+const checkFileExists = (filePath) => {
+    return new Promise((resolve, reject) => {
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+            if (err) {
+                resolve(false); // File does not exist
+            } else {
+                resolve(true); // File exists
+            }
+        });
+    });
+};
+
+const checkImagesExist = async (req, res) => {
+    try {
+        const { images } = req.query; // Get images array from query parameters
+        if (!images) {
+            return res.status(400).json({ message: 'No images provided' });
+        }
+
+        const imageArray = Array.isArray(images) ? images : images.split(',');
+        const imageResponses = await Promise.all(imageArray.map(async (imageName) => {
+            const imagePath = path.join(__dirname, 'uploads', 'productImages', imageName);
+            const fileExists = await checkFileExists(imagePath);
+
+            return {
+                imageName,
+                exists: fileExists,
+                imageUrl: fileExists ? `/uploads/productImages/${imageName}` : "",
+            };
+        }));
+
+        res.json(imageResponses);
+    } catch (error) {
+        console.error('Error checking images:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 
 
 
@@ -235,6 +275,7 @@ module.exports = {
     getProductsByProductTypeName,
     getProductsByName,
     SearchProducts,
-    SearchbyIcon
+    SearchbyIcon,
+    checkImagesExist
 
 };
