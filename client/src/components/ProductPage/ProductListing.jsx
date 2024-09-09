@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../css/productlisting.css';
 import { useLocation } from 'react-router-dom';
-import ProductCard from '../ProductCard/ProductCard.jsx';
+import ProductCard from '../Product/ProductCard.jsx';
 import { useGetAllProducts } from '../../Functions/GetAPI.js'; // Updated import path
 
 
@@ -37,7 +37,7 @@ function ProductListing() {
       <div className="product-grid">
         {products.map((product) => (
           <ProductCard
-            key={product.id}
+            id={product._id}
             images={product.images[0]} // Ensure correct image URL from API data
             name={product.name}
             price={product.price}
