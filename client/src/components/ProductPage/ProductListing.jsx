@@ -1,9 +1,9 @@
-import React from 'react';
-import '../../css/productlisting.css';
+import React, { useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ProductCard from '../Product/ProductCard.jsx';
-import { useGetAllProducts } from '../../Functions/GetAPI.js'; // Updated import path
-
+import { useGetAllProducts } from '../../Functions/GetAPI.js';
+import { useInView } from 'react-intersection-observer';
+import '../../css/productlisting.css';
 
 function ProductListing() {
   const location = useLocation();
@@ -15,38 +15,75 @@ function ProductListing() {
   const search = queryParams.get('search');
   const product = queryParams.get('product');
 
-  // Build URL dynamically based on query params
-  const url = React.useMemo(() => {
+  // Constructing the base URL
+  const url = useMemo(() => {
     if (category) return `/products/category/${encodeURIComponent(category)}`;
     if (subcategory) return `/products/subcategory/${encodeURIComponent(subcategory)}`;
     if (company) return `/products/company/${encodeURIComponent(company)}`;
     if (type) return `/products/type/${encodeURIComponent(type)}`;
     if (search) return `/products/search/${encodeURIComponent(search)}`;
     if (product) return `/products/product/${encodeURIComponent(product)}`;
-    return '/get-products';
+    return '/products/all-products'; // Base URL without page and limit
   }, [category, subcategory, company, type, search, product]);
 
-  // Fetch products using React Query (uses queryKey as ['products', url])
-  const { data: products = [], error, isLoading } = useGetAllProducts(url);
+  // Fetch products using useInfiniteQuery
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useGetAllProducts(url);
+
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
+
+  if (isLoading) return <h1>Loading.....</h1>;
+  if (isError) return <h1>Something Went Wrong: {error.message}</h1>;
+
+  const products = data?.pages?.flatMap(page => page.products) || [];
 
   return (
     <div className="product-list">
-      {error && <h1>Something Went Wrong</h1>}
-      {isLoading && <h1>Loading.....</h1>}
       <h3>Search Results ({products.length})</h3>
       <div className="product-grid">
-        {products.map((product) => (
-          <ProductCard
-            id={product._id}
-            images={product.images[0]} // Ensure correct image URL from API data
-            name={product.name}
-            price={product.price}
-          />
-        ))}
+        {products.length > 0 ? (
+          products.map(product => {
+            console.log('Rendering ProductCard with:', {
+              id: product._id,
+              images: product.images?.[0],
+              name: product.name,
+              price: product.price
+            });
+            return (
+              <ProductCard
+                key={product._id}
+                id={product._id}
+                images={product.images?.[0]}
+                name={product.name}
+                price={product.price}
+              />
+            );
+          })
+        ) : (
+          <p>No products found</p>
+        )}
+      </div>
+
+      <div ref={ref} style={{ height: '100px', backgroundColor: 'transparent' }}>
+        {isFetchingNextPage && <p>Loading more products...</p>}
       </div>
     </div>
   );
-
 }
 
 export default ProductListing;

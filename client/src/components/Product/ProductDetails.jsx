@@ -3,6 +3,7 @@ import '../../css/productdetails.css';
 import ProductQuantity from './ProductQuantity.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus, faCreditCard, faStar, faPencil, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+import DOMPurify from 'dompurify';
 
 const ProductDetails = ({ data }) => {
   const [productDetails, setProductDetails] = useState(null);
@@ -17,6 +18,8 @@ const ProductDetails = ({ data }) => {
   if (!productDetails) {
     return <div>Loading product details...</div>;
   }
+
+  const sanitizedDescription = DOMPurify.sanitize(productDetails.description || 'No description available');
 
   return (
     <>
@@ -82,7 +85,9 @@ const ProductDetails = ({ data }) => {
           </button>
         </div>
 
-
+      <div className="product-description">
+        <h2>Description</h2>
+        <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }}></div>
       </div>
 
 

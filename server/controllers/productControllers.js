@@ -15,24 +15,98 @@ const getAllCategories = async (req, res) => {
     }
 };
 
+const getallProducts = async (req, res) => {
+    try {
+        const { page = 1, limit = 12 } = req.query;
+        const pageInt = parseInt(page);  
+        const limitInt = parseInt(limit);  
+        const skip = (pageInt - 1) * limitInt;  
+
+        // Fetch products with population, pagination, and limit
+        const products = await Product.find()
+            .populate('company')
+            .populate('category')
+            .populate('subCategory')
+            .populate('type')
+            .skip(skip)
+            .limit(limitInt);
+
+        const totalProducts = await Product.countDocuments();
+
+        console.log(`Page: ${pageInt}, Products returned: ${products.length}, Total Products: ${totalProducts}`);
+
+        res.status(200).json({
+            products,
+            currentPage: pageInt,
+            totalPages: Math.ceil(totalProducts / limitInt),  // Calculate total pages
+            totalProducts,  // Total number of products
+        });
+    } catch (error) {
+        console.error('Failed to fetch products:', error.message);
+        res.status(500).json({ message: 'Failed to fetch products', error: error.message });
+    }
+};
+
 
 const getProductsByCategoryName = async (req, res) => {
     try {
-        const categoryName = req.params.categoryname; // Correct parameter name
-        console.log("Category Name from Request Params:", categoryName);
+        const { categoryname } = req.params;
+        const { page = 1, limit = 12 } = req.query;
+        const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+        const limitInt = parseInt(limit, 10);
 
-        // Find the category by name and populate the products array
-        const category = await Category.findOne({ name: categoryName }).populate('products');
-        console.log("Category Found:", category);
+        console.log(`Fetching products for category: ${categoryname}, Page: ${page}, Limit: ${limit}`);
 
-        if (!category) {
-            console.log("Category Not Found");
+        // Aggregate pipeline
+        const pipeline = [
+            // Match category by name
+            { $match: { name: categoryname } },
+            // Lookup products in the Product collection
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'products',
+                    foreignField: '_id',
+                    as: 'populatedProducts'
+                }
+            },
+            // Unwind populatedProducts array
+            { $unwind: '$populatedProducts' },
+            // Skip and limit for pagination
+            { $skip: skip },
+            { $limit: limitInt },
+            // Project fields
+            {
+                $project: {
+                    _id: 0,
+                    product: '$populatedProducts'
+                }
+            }
+        ];
+
+        // Execute aggregation
+        const result = await Category.aggregate(pipeline);
+
+        if (result.length === 0) {
             return res.status(404).json({ message: 'Category not found' });
         }
 
-        res.status(200).json(category.products);
+        // Get the category ID
+        const categoryId = (await Category.findOne({ name: categoryname }))._id;
+
+        // Count total products by matching category
+        const totalProducts = await Product.countDocuments({ category: categoryId });
+
+        console.log(`Page: ${page}, Products returned: ${result.length}, Total Products: ${totalProducts}`);
+
+        res.status(200).json({
+            products: result.map(item => item.product),
+            currentPage: parseInt(page, 10),
+            totalPages: Math.ceil(totalProducts / limitInt),
+            totalProducts,
+        });
     } catch (error) {
-        console.log("Error Occurred:", error.message);
+        console.error('Error fetching products by category:', error.message);
         res.status(500).json({ message: 'An error occurred while fetching products', error: error.message });
     }
 };
@@ -40,103 +114,223 @@ const getProductsByCategoryName = async (req, res) => {
 
 const getProductsBySubCategoryName = async (req, res) => {
     try {
+        const { subcategoryname } = req.params;
+        const { page = 1, limit = 12 } = req.query;
+        const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+        const limitInt = parseInt(limit, 10);
 
-        console.log("Request Params:", req.params);
-        const subCategoryName = req.params.subcategoryname;
+        console.log(`Fetching products for subcategory: ${subcategoryname}, Page: ${page}, Limit: ${limit}`);
 
-        const subCategory = await SubCategory.findOne({ name: subCategoryName }).populate('products');
-
-        console.log("Found Subcategory:", subCategory);
+        // Find the subcategory
+        const subCategory = await SubCategory.findOne({ name: subcategoryname }).exec();
 
         if (!subCategory) {
-            console.log('Subcategory not found');
             return res.status(404).json({ message: 'SubCategory not found' });
         }
 
-        res.status(200).json(subCategory.products);
+        // Get the list of product IDs for this subcategory
+        const subCategoryId = subCategory._id;
+
+        // Aggregate pipeline to get products by subcategory
+        const pipeline = [
+            // Match products by subcategory ID
+            { $match: { subCategory: subCategoryId } },
+            // Skip and limit for pagination
+            { $skip: skip },
+            { $limit: limitInt },
+            // Project fields
+            {
+                $project: {
+                    _id: 0,
+                    product: '$$ROOT' // Return entire product document
+                }
+            }
+        ];
+
+        // Execute aggregation to fetch products
+        const result = await Product.aggregate(pipeline);
+
+        // Count total products by subcategory ID
+        const totalProducts = await Product.countDocuments({ subCategory: subCategoryId });
+
+        console.log(`Page: ${page}, Products returned: ${result.length}, Total Products: ${totalProducts}`);
+
+        res.status(200).json({
+            products: result.map(item => item.product),
+            currentPage: parseInt(page, 10),
+            totalPages: Math.ceil(totalProducts / limitInt),
+            totalProducts,
+        });
     } catch (error) {
-        // Log the error message
-        console.error('Error fetching products:', error.message);
+        console.error('Error fetching products by subcategory:', error.message);
         res.status(500).json({ message: 'An error occurred while fetching products', error: error.message });
     }
 };
+
+
 
 const getProductsByCompanyName = async (req, res) => {
     try {
+        const { companyname } = req.params;
+        const { page = 1, limit = 12 } = req.query;
+        const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+        const limitInt = parseInt(limit, 10);
 
-        console.log("Request Params:", req.params);
-        const companyName = req.params.companyname;
+        console.log(`Fetching products for company: ${companyname}, Page: ${page}, Limit: ${limit}`);
 
-        const company = await Company.findOne({ name: companyName }).populate('products');
+        // Aggregate pipeline
+        const pipeline = [
+            // Match company by name
+            { $match: { name: companyname } },
+            // Lookup products in the Product collection
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: '_id',
+                    foreignField: 'company',
+                    as: 'populatedProducts'
+                }
+            },
+            // Unwind populatedProducts array
+            { $unwind: '$populatedProducts' },
+            // Skip and limit for pagination
+            { $skip: skip },
+            { $limit: limitInt },
+            // Project fields
+            {
+                $project: {
+                    _id: 0,
+                    product: '$populatedProducts'
+                }
+            }
+        ];
 
-        if (!company) {
-            console.log('Company not found');
+        // Execute aggregation
+        const result = await Company.aggregate(pipeline);
+
+        if (result.length === 0) {
             return res.status(404).json({ message: 'Company not found' });
         }
 
-        res.status(200).json(company.products);
+        // Find the company to get its _id
+        const company = await Company.findOne({ name: companyname }).exec();
+
+        if (!company) {
+            return res.status(404).json({ message: 'Company not found' });
+        }
+
+        // Count total products for the company
+        const totalProducts = await Product.countDocuments({ company: company._id });
+
+        console.log(`Page: ${page}, Products returned: ${result.length}, Total Products: ${totalProducts}`);
+
+        res.status(200).json({
+            products: result.map(item => item.product),
+            currentPage: parseInt(page, 10),
+            totalPages: Math.ceil(totalProducts / limitInt),
+            totalProducts,
+        });
     } catch (error) {
-        // Log the error message
-        console.error('Error fetching products:', error.message);
+        console.error('Error fetching products by company:', error.message);
         res.status(500).json({ message: 'An error occurred while fetching products', error: error.message });
     }
 };
+
 
 
 const getProductsByName = async (req, res) => {
     try {
-        // Extract the product name from request parameters
-        console.log("Request Params:", req.params);
-        const productName = req.params.productname;
+        const { productname } = req.params;
+        const { page = 1, limit = 12 } = req.query;
+        const pageInt = parseInt(page, 10);
+        const limitInt = parseInt(limit, 10);
+        const skip = (pageInt - 1) * limitInt;
 
-        // Use a case-insensitive regex to search for products with the given name
-        const products = await Product.find({
-            name: productName
-        })
-        .populate('company')  // Populate company field if needed
-        .populate('category') // Populate category field if needed
-        .populate('subCategory') // Populate subCategory field if needed
-        .populate('type') // Populate type field if needed
-        .exec();
+        console.log(`Fetching products by name: ${productname}, Page: ${pageInt}, Limit: ${limitInt}`);
 
-        // Check if any products are found
+        // Find products by name with pagination
+        const products = await Product.find({ name: productname })
+            .populate('company category subCategory type')
+            .skip(skip)
+            .limit(limitInt);
+
         if (products.length === 0) {
-            console.log('No products found');
             return res.status(404).json({ message: 'No products found' });
         }
 
-        // Return the found products
-        res.status(200).json(products);
+        // Count total products matching the name
+        const totalProducts = await Product.countDocuments({ name: productname });
+
+        console.log(`Page: ${pageInt}, Products returned: ${products.length}, Total Products: ${totalProducts}`);
+
+        res.status(200).json({
+            products,
+            currentPage: pageInt,
+            totalPages: Math.ceil(totalProducts / limitInt),
+            totalProducts,
+        });
     } catch (error) {
-        // Log the error message
-        console.error('Error fetching products:', error.message);
+        console.error('Error fetching products by name:', error.message);
         res.status(500).json({ message: 'An error occurred while fetching products', error: error.message });
     }
 };
+
+
 
 const getProductsByProductTypeName = async (req, res) => {
     try {
-        console.log("Request Params:", req.params);
-        const productTypeName = req.params.producttypename;
+        const { producttypename } = req.params;
+        const { page = 1, limit = 12 } = req.query;
+        const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+        const limitInt = parseInt(limit, 10);
 
-        const productType = await ProductType.findOne({ name: productTypeName }).populate('products');
+        console.log(`Fetching products for type: ${producttypename}, Page: ${page}, Limit: ${limit}`);
 
-        console.log("Found Product Type:", productType);
+        // Find the product type
+        const productType = await ProductType.findOne({ name: producttypename }).exec();
 
         if (!productType) {
-            console.log('Product Type not found');
             return res.status(404).json({ message: 'Product Type not found' });
         }
 
-        res.status(200).json(productType.products);
+        // Get the list of product IDs for this type
+        const productTypeId = productType._id;
+
+        // Aggregate pipeline to get products by type
+        const pipeline = [
+            // Match products by type ID
+            { $match: { type: productTypeId } },
+            // Skip and limit for pagination
+            { $skip: skip },
+            { $limit: limitInt },
+            // Project fields
+            {
+                $project: {
+                    _id: 0,
+                    product: '$$ROOT' // Return entire product document
+                }
+            }
+        ];
+
+        // Execute aggregation to fetch products
+        const result = await Product.aggregate(pipeline);
+
+        // Count total products by type ID
+        const totalProducts = await Product.countDocuments({ type: productTypeId });
+
+        console.log(`Page: ${page}, Products returned: ${result.length}, Total Products: ${totalProducts}`);
+
+        res.status(200).json({
+            products: result.map(item => item.product),
+            currentPage: parseInt(page, 10),
+            totalPages: Math.ceil(totalProducts / limitInt),
+            totalProducts,
+        });
     } catch (error) {
-        // Log the error message
-        console.error('Error fetching products:', error.message);
+        console.error('Error fetching products by type:', error.message);
         res.status(500).json({ message: 'An error occurred while fetching products', error: error.message });
     }
 };
-
-
 
 const SearchProducts = async (req, res) => {
     const query = req.query.q || '';
@@ -184,24 +378,29 @@ const SearchProducts = async (req, res) => {
 };
 
 const SearchbyIcon = async (req, res) => {
-    console.log('Search Term:', req.params);
-
+    console.log('Search Params:', req.params);
+    
     // Extract and sanitize the search term
     const searchTerm = (req.params.searched || '').toString().trim();
     console.log('Search Term:', searchTerm);
 
+    // Extract pagination parameters
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 12;
+    const skip = (page - 1) * limit;
+
     if (searchTerm.length === 0) {
         console.log('No search term provided');
-        return res.status(200).json({ products: [] });
+        return res.status(200).json({ products: [], currentPage: page, totalPages: 1, totalProducts: 0 });
     }
 
     try {
-        // First, find products and populate related fields
+        // Find products and populate related fields
         const products = await Product.find({})
-            .populate('company')  
-            .populate('category') 
-            .populate('subCategory') 
-            .populate('type') 
+            .populate('company')
+            .populate('category')
+            .populate('subCategory')
+            .populate('type')
             .exec();
 
         // Filter products that match the search term
@@ -215,9 +414,20 @@ const SearchbyIcon = async (req, res) => {
             );
         });
 
-        console.log('Number of Products:', filteredProducts.length);
+        // Calculate pagination
+        const totalProducts = filteredProducts.length;
+        const totalPages = Math.ceil(totalProducts / limit);
+        const paginatedProducts = filteredProducts.slice(skip, skip + limit);
 
-        res.status(200).json(filteredProducts );
+        console.log('Number of Products:', paginatedProducts.length);
+
+        // Send response with paginated products and pagination information
+        res.status(200).json({
+            products: paginatedProducts,
+            currentPage: page,
+            totalPages,
+            totalProducts
+        });
     } catch (error) {
         console.error('Error fetching detailed search results:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -268,6 +478,7 @@ const checkImagesExist = async (req, res) => {
 
 
 module.exports = {
+    getallProducts,
     getAllCategories,
     getProductsByCategoryName,
     getProductsBySubCategoryName,

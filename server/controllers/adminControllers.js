@@ -5,6 +5,7 @@ const ProductType = require('../models/productType');
 const SubCategory = require('../models/subcategory');
 const fs = require('fs').promises;
 const path = require('path');
+const company = require('../models/company');
 
 
 const getProducts = async (req, res) => {

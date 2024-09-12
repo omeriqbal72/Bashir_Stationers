@@ -1,22 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../../css/productcard.css'
+import '../../css/productcard.css';
 
-function ProductCard(props) {
- // console.log(props.id)
+function ProductCard({ id, images, name, price }) {
+  //console.log('ProductCard Props:', { id, images, name, price });
+
   return (
-
-    <Link to={`/product?id=${encodeURIComponent(props.id)}`}>
+    <Link to={`/product?id=${encodeURIComponent(id)}`}>
       <div className="product-card">
         <img
-          src={`http://localhost:8080/${props.images}`}
-          alt={props.name}
+          src={`http://localhost:8080/${images || 'default-placeholder.png'}`}
+          alt={name}
         />
-        <p className='product-title'>{props.name}</p>
-        <p className='product-price'>Rs.{props.price}</p>
+        <p className='product-title'>{name}</p>
+        <p className='product-price'>Rs.{price}</p>
       </div>
     </Link>
-
   );
 }
 
