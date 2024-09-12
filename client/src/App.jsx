@@ -8,6 +8,7 @@ import Home from './components/Home/Home.jsx'
 import Products from './components/ProductPage/ProductPage.jsx'
 import Header from './components/Header/Header.jsx'
 import Product from './components/Product/Product.jsx'
+import Footer from './components/Footer/Footer.jsx'
 import './App.css'
 
 // React Query imports
@@ -40,6 +41,7 @@ function App() {
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/edit-product/:id" element={<EditProductPage />} />
         </Routes>
+        <Footer/>
       </Router>
     </QueryClientProvider>
   );
