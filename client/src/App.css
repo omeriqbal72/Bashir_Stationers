@@ -3,12 +3,13 @@
 :root {
     font-family: "Poppins", sans-serif;
     --primary-color: #ffffff;
-    --secondary-color: #fffde9;
+    --secondary-color: #f0ecc5;
     --background-color: #ffffff;
     --text-color: #000000;
     --pink-shade: #fcd9d9;
-    --green-shade: #ebf6f5;
-    --blue-shade: #ccedff;
+    --green-shade: #B4E380;
+    --blue-shade: #d6f1ff;
+    
 
 }
 

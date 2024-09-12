@@ -2,8 +2,11 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import ProductImageGallery from './ProductImageGallery';
 import ProductDetails from './ProductDetails';
+import LineSpacer from './LineSpacer.jsx';
+import SimilarProductSlider from './SimilarProductsSlider.jsx'
 import { useGetProductDetails } from '../../Functions/GetAPI.js';
 import '../../css/product.css';
+
 
 
 const Product = () => {
@@ -27,15 +30,32 @@ const Product = () => {
   }
 
   return (
-    <div className="product">
-      <div className="left-section">
-        <ProductImageGallery images={product.images} />
+    <>
+      <div className="product">
+        <div className="left-section">
+          <ProductImageGallery images={product.images} />
+        </div>
+        <div className="right-section">
+          <ProductDetails data={product} />
+        </div>
       </div>
-      <div className="right-section">
-        <ProductDetails data={product} />
+      
+      <LineSpacer />
+
+      <div className="product-description">
+        <h2>Description</h2>
+        <p>{product.description || 'No description available'}</p>
       </div>
-    </div>
+
+      <div className="slider-section">
+        <h2>You may also like</h2>
+        <div className="similar-products-slider-container">
+          <SimilarProductSlider />
+        </div>
+      </div>
+    </>
   );
 }
+
 
 export default Product;

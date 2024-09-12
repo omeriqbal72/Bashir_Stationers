@@ -3,8 +3,8 @@
     padding: 1rem;
     border: none;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    width: 100%;
-    max-width: 15rem;
+    width: 15rem;
+    height: 22rem;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
   }

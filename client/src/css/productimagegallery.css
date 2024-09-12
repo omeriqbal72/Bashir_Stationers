@@ -1,5 +1,6 @@
 .image-gallery {
   display: flex;
+  padding: 1rem;
 }
 
 .thumbnails {

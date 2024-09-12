@@ -55,7 +55,7 @@ const ProductForm = ({ onProductAdded }) => {
         }
     };
 
-    const companies = ['dux', 'piano', 'dollar', 'casio'];
+    const companies = ['Dux', 'Piano', 'Dollar', 'Casio'];
 
     const colors = ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White'];
 

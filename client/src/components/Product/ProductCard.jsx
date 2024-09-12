@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../css/productcard.css';
 
 function ProductCard({ id, images, name, price }) {
-  console.log('ProductCard Props:', { id, images, name, price });
+  //console.log('ProductCard Props:', { id, images, name, price });
 
   return (
     <Link to={`/product?id=${encodeURIComponent(id)}`}>

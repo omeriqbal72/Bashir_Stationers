@@ -2,45 +2,76 @@ import React, { useEffect, useState } from 'react';
 import '../../css/productdetails.css';
 import ProductQuantity from './ProductQuantity.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus, faCreditCard } from '@fortawesome/free-solid-svg-icons';
+import { faCartPlus, faCreditCard, faStar, faPencil, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 import DOMPurify from 'dompurify';
 
 const ProductDetails = ({ data }) => {
   const [productDetails, setProductDetails] = useState(null);
 
   useEffect(() => {
-    // Store the product data in the component state when the component mounts
     if (data) {
       setProductDetails(data);
     }
   }, [data]);
+  console.log(productDetails)
 
   if (!productDetails) {
-    // Return null or a loading placeholder if productDetails hasn't been set yet
     return <div>Loading product details...</div>;
   }
 
   const sanitizedDescription = DOMPurify.sanitize(productDetails.description || 'No description available');
 
   return (
-    <div className="product-details">
-      <div className='product-details-subsection'>
-        <div className='product-info'>
-          {/* Safe access to product details */}
-          <h1>{productDetails.name || 'No Name Available'}</h1>
-          <div className="rating">⭐⭐⭐⭐ (437 reviews)</div>
+    <>
+      <div className="product-details">
+        <h1 className="product-name">
+          {productDetails.name || 'No Name Available'}
+        </h1>
 
-          <div className="color-options">
-            <h4>Colors</h4>
-            <div className="colors">
-              <span className="color black"></span>
-              <span className="color grey"></span>
-              <span className="color orange"></span>
+        <div className='product-info'>
+
+          <div className="rating">
+            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B", }} />
+            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B", }} />
+            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B", }} />
+            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B", }} />
+            <span>(437 reviews)</span>
+          </div>
+
+          <div className="product-category-and-company">
+            <div className="product-category">
+              <FontAwesomeIcon icon={faLayerGroup} />
+              <span>
+                {productDetails.category.name || 'No Name Available'}
+              </span>
+            </div>
+
+            <div className="product-brand">
+              <FontAwesomeIcon icon={faPencil} />
+              {productDetails.company.name}
             </div>
           </div>
 
-          <ProductQuantity />
           <p className="price">Rs. {productDetails.price || 'Price not available'}</p>
+
+          {productDetails.colors.length > 0 && (
+            <div className="color-options">
+              <h4>Colors</h4>
+              <div className="colors">
+                {/* Map through the colors array */}
+                {productDetails.colors.map((color, index) => (
+                  <span
+                    key={index}
+                    className="color"
+                    style={{ backgroundColor: color }}  // Apply inline styling to set background color
+                  ></span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <ProductQuantity />
+
         </div>
 
         <div className='purchase-btns'>
@@ -53,13 +84,14 @@ const ProductDetails = ({ data }) => {
             Buy Now
           </button>
         </div>
-      </div>
 
       <div className="product-description">
         <h2>Description</h2>
         <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }}></div>
       </div>
-    </div>
+
+
+    </>
   );
 };
 

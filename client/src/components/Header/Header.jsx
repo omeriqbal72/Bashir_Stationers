@@ -33,10 +33,12 @@ const Header = () => {
     <>
       <header className="header-main">
         <div className='header-main-section-1'>
-          <div className="logo">
-            <h1>Rasheed Stationers</h1>
-          </div>
-          <SearchBar/>
+          <Link to={'/'}>
+            <div className="logo">
+              <h1>Rasheed Stationers</h1>
+            </div>
+          </Link>
+          <SearchBar />
           <div className="actions">
             <button>Login/Register</button>
             <button className="heart-icon">❤️</button>
