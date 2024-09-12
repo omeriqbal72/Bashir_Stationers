@@ -4,7 +4,7 @@ const { getTest } = require('../controllers/authControllers')
 const { getProducts ,addProduct, editProduct, deleteProduct , getProductById} = require('../controllers/adminControllers.js');
 const { getAllCategories, getProductsByCategoryName, getProductsBySubCategoryName , SearchProducts,
     getProductsByCompanyName, getProductsByProductTypeName , SearchbyIcon , getProductsByName,
-    checkImagesExist } = require('../controllers/productControllers.js');
+    checkImagesExist, getallProducts } = require('../controllers/productControllers.js');
 
 
 const multer = require('multer');
@@ -62,6 +62,7 @@ router.get('/get-search-products', SearchProducts);
 router.get('/products/search/:searched', SearchbyIcon);
 router.get('/products/product/:productname', getProductsByName);
 router.get('/check-images' , checkImagesExist)
+router.get('/products/all-products', getallProducts)
 
 
 router.delete('/delete-product/:productId', deleteProduct);

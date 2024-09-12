@@ -1,0 +1,7 @@
+.editor-container {
+    width: 100%;
+}
+
+.editor-container .tox-tinymce {
+    width: 100% !important; /* Override default TinyMCE width */
+}

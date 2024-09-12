@@ -3,6 +3,7 @@ import '../../css/productdetails.css';
 import ProductQuantity from './ProductQuantity.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus, faCreditCard } from '@fortawesome/free-solid-svg-icons';
+import DOMPurify from 'dompurify';
 
 const ProductDetails = ({ data }) => {
   const [productDetails, setProductDetails] = useState(null);
@@ -18,6 +19,8 @@ const ProductDetails = ({ data }) => {
     // Return null or a loading placeholder if productDetails hasn't been set yet
     return <div>Loading product details...</div>;
   }
+
+  const sanitizedDescription = DOMPurify.sanitize(productDetails.description || 'No description available');
 
   return (
     <div className="product-details">
@@ -54,7 +57,7 @@ const ProductDetails = ({ data }) => {
 
       <div className="product-description">
         <h2>Description</h2>
-        <p>{productDetails.description || 'No description available'}</p>
+        <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }}></div>
       </div>
     </div>
   );

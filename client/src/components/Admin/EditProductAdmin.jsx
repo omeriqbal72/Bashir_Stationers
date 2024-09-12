@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../css/editProduct.css';
+import TextEditor from './TextEditor'
+import { adminProductDetails } from '../../Functions/GetAPI.js';
+import ColorSelector from './ColorSelector.jsx';
 
 const categoryData = {
     'Writing Tools': {
@@ -10,7 +13,7 @@ const categoryData = {
         'Markers': ['Permanent', 'Whiteboard'],
         'Highlighters': ['Fluorescent', 'Pastel'],
     },
-    'Painting Tools': {
+    'Art Tools': {
         'Brushes': ['Flat', 'Round'],
         'Palettes': ['Wooden', 'Plastic'],
         'Acrylic Paints': ['Basic Colors', 'Metallic'],
@@ -21,20 +24,20 @@ const categoryData = {
         'Paper Clips': ['Standard', 'Colored'],
     },
     'School Supplies': {
-            'Pens': ['Ball pens', 'Gel pens', 'Ink pens'],
-            'Pencils': ['Drawing pencil', 'Lead pencil'],
-            'Markers': ['Permanent', 'Whiteboard'],
-            'Highlighters': ['Fluorescent', 'Pastel'],
-            'Brushes': ['Flat', 'Round'],
-            'Acrylic Paints': ['Basic Colors', 'Metallic'],
-        },
+        'School Pens': ['Ball pens', 'Gel pens', 'Ink pens'],
+        'Pencils': ['Drawing pencil', 'Lead pencil'],
+        'Markers': ['Permanent', 'Whiteboard'],
+        'Highlighters': ['Fluorescent', 'Pastel'],
+        'Brushes': ['Flat', 'Round'],
+        'Acrylic Paints': ['Basic Colors', 'Metallic'],
+    },
 
-        'Office Supplies': {
-            'Pens': ['Ball pens', 'Gel pens', 'Ink pens'],
-            'Staplers': ['Heavy Duty', 'Light Duty'],
-            'Paper Clips': ['Standard', 'Colored'],
-            'Highlighters': ['Fluorescent', 'Pastel'],
-        },
+    'Office Supplies': {
+        'Office Pens': ['Ball pens', 'Highlighters', 'Ink pens'],
+        'Staplers': ['Heavy Duty', 'Light Duty'],
+        'Paper Clips': ['Standard', 'Binder Clips'],
+        'Office Highlighters': ['Fluorescent', 'Pastel'],
+    }
 };
 
 const companies = ['dux', 'piano', 'dollar', 'casio'];
@@ -50,42 +53,32 @@ const EditProductPage = () => {
     const [selectedColors, setSelectedColors] = useState([]);
     const [newImages, setNewImages] = useState([]);
     const [removedImages, setRemovedImages] = useState([]);
+    const [description, setDescription] = useState('');
+
+    const { data: fetchedproduct, isLoading, isError, error } = adminProductDetails(id);
+
 
     useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const response = await axios.get(`/admin/edit-product/${id}`);
-                const productData = response.data;
-                setProduct(productData);
-                setSelectedCategory(productData.category.name || '');
-                setSelectedSubCategory(productData.subCategory.name || '');
-                setType(productData.type.name || '');
-                console.log(type)
-                setSelectedColors(productData.colors || []);
-            } catch (error) {
-                console.error('Error fetching product:', error);
-            }
-        };
+        if (fetchedproduct) {
+            setProduct(fetchedproduct)
 
-        fetchProduct();
-    }, [id]);
+            setSelectedCategory(fetchedproduct.category?.name || '');
+            setSelectedSubCategory(fetchedproduct.subCategory?.name || '');
+            setType(fetchedproduct.type?.name || '');
+            setDescription(fetchedproduct.description || '');
+            setSelectedColors(fetchedproduct.colors || []);
+        }
+    }, [fetchedproduct]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
         if (name === "companyName") {
-            setProduct(prevState => ({
+            setProduct((prevState) => ({
                 ...prevState,
-                company: { name: value }
+                company: { ...prevState.company, name: value }
             }));
-            
         }
-        else if (name === "description") {
-            setProduct(prevState => ({
-                ...prevState,
-                description: value
-            }));
-        } else {
+        else {
             setProduct(prevState => ({
                 ...prevState,
                 [name]: value
@@ -113,15 +106,11 @@ const EditProductPage = () => {
         }));
     };
 
-    const handleColorChange = (color) => {
-        setSelectedColors(prevColors =>
-            prevColors.includes(color)
-                ? prevColors.filter(c => c !== color)
-                : [...prevColors, color]
-        );
-        setProduct(prevState => ({
+    const handleEditorChange = (content) => {
+        // Update the product description when the editor content changes
+        setProduct((prevState) => ({
             ...prevState,
-            colors: selectedColors
+            description: content,
         }));
     };
 
@@ -137,9 +126,13 @@ const EditProductPage = () => {
         }));
     };
 
-   
-
     const handleSubmit = async () => {
+        if (!product) return;
+        if (product.images.length === 0 && newImages.length === 0) {
+            alert('Please upload at least one image.');
+            return;
+        }
+    
         try {
             const formData = new FormData();
             formData.append('name', product.name);
@@ -147,9 +140,10 @@ const EditProductPage = () => {
             formData.append('companyName', product.company?.name || '');
             formData.append('quantity', product.quantity);
             formData.append('colors', JSON.stringify(selectedColors));
-            formData.append('description' , product.description)
+            formData.append('description', product.description)
             newImages.forEach(image => formData.append('images', image));
             formData.append('removedImages', removedImages.join(','));
+
 
             const response = await axios.put(`/edit-product/${product._id}`, formData, {
                 headers: {
@@ -157,7 +151,6 @@ const EditProductPage = () => {
                 }
             });
 
-            // Handle successful save
             console.log('Product updated successfully:', response.data);
             navigate('/admin');
         } catch (error) {
@@ -169,7 +162,17 @@ const EditProductPage = () => {
         navigate('/admin');
     };
 
-    if (!product) return <div>Loading...</div>;
+    if (isLoading) {
+        return <div>Loading...</div>; // Display loading state
+    }
+
+    if (isError) {
+        return <div>Error: {error.message}</div>; // Display error state
+    }
+
+    if (!product) {
+        return <div>No product found</div>; // Handle case where product is not found
+    }
 
     return (
         <div className="edit-product-page-container">
@@ -230,7 +233,7 @@ const EditProductPage = () => {
                             disabled
                         >
                             <option value="" disabled>Select SubCategory</option>
-                            {Object.keys(categoryData[selectedCategory]).map((subCat) => (
+                            {Object.keys(categoryData[selectedCategory] || {}).map((subCat) => (
                                 <option key={subCat} value={subCat}>
                                     {subCat}
                                 </option>
@@ -248,7 +251,7 @@ const EditProductPage = () => {
                             disabled
                         >
                             <option value="" disabled>Select Type</option>
-                            {categoryData[selectedCategory][selectedSubCategory]?.map((t) => (
+                            {categoryData[selectedCategory]?.[selectedSubCategory]?.map((t) => (
                                 <option key={t} value={t}>
                                     {t}
                                 </option>
@@ -265,30 +268,19 @@ const EditProductPage = () => {
                         onChange={handleChange}
                     />
                 </label>
-                <label>
-                    Colors:
-                    <div className="edit-product-page-color-selection">
-                        {availablecolors.map((color, index) => (
-                            <div
-                                key={index}
-                                className={`edit-product-page-color-box ${selectedColors.includes(color) ? 'selected' : ''}`}
-                                style={{ backgroundColor: color.toLowerCase() }}
-                                onClick={() => handleColorChange(color)}
-                            >
-                            </div>
-                        ))}
-                    </div>
-                </label>
-
+                <ColorSelector
+                    colors={['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White']}
+                    selectedColors={selectedColors}
+                    setSelectedColors={setSelectedColors}
+                />
                 <label>
                     Description:
-                    <textarea
-                        
-                        value={product.description || ''}
-                        onChange={handleChange}
-                    />
-                </label>
+                    <div >
+                        <TextEditor value={product.description} onChange={handleEditorChange} />
+                    </div>
 
+
+                </label>
                 <label>
                     New Images:
                     <input
@@ -324,9 +316,12 @@ const EditProductPage = () => {
                     <button type="button" className="edit-product-page-cancel-button" onClick={handleCancel}>Cancel</button>
                 </div>
 
+
             </form>
         </div>
     );
 };
-
 export default EditProductPage;
+
+
+

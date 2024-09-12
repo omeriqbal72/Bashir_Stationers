@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import '../../css/productform.css'; // Import the CSS file
 import admin from '../../Ui_Images/admin-panel.jpg'
-
+import TextEditor from './TextEditor'
+import ColorSelector from './ColorSelector';
 
 const ProductForm = ({ onProductAdded }) => {
     const [name, setName] = useState('');
@@ -20,7 +21,6 @@ const ProductForm = ({ onProductAdded }) => {
     const [isColorDropdownOpen, setIsColorDropdownOpen] = useState(false);
     const colorDropdownRef = useRef(null);
 
-    // Define hierarchical data for categories, subcategories, and types
     const categoryData = {
         'Writing Tools': {
             'Pens': ['Ball pens', 'Gel pens', 'Ink pens'],
@@ -76,19 +76,6 @@ const ProductForm = ({ onProductAdded }) => {
         setType(e.target.value);
     };
 
-    const handleColorChange = (e) => {
-        const value = e.target.value;
-        setSelectedColors((prev) =>
-            prev.includes(value)
-                ? prev.filter((color) => color !== value)
-                : [...prev, value]
-        );
-    };
-
-    const toggleColorDropdown = () => {
-        setIsColorDropdownOpen(!isColorDropdownOpen);
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -112,8 +99,6 @@ const ProductForm = ({ onProductAdded }) => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
-
 
             if (response.status === 201) {
                 setSuccess('Product added successfully');
@@ -146,6 +131,10 @@ const ProductForm = ({ onProductAdded }) => {
         ) {
             setIsColorDropdownOpen(false);
         }
+    };
+
+    const handleEditorChange = (content) => {
+        setDescription(content); // Update description state on content change
     };
 
     useEffect(() => {
@@ -227,7 +216,7 @@ const ProductForm = ({ onProductAdded }) => {
                         <select
                             value={type}
                             onChange={handleTypeChange}
-                            
+
                         >
                             <option value="" disabled>Select Type</option>
                             {categoryData[selectedCategory][selectedSubCategory]?.map((t) => (
@@ -265,34 +254,14 @@ const ProductForm = ({ onProductAdded }) => {
 
                 <div className="admin-add-product-page-form-group">
                     <label>Description:</label>
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        required
-                    />
+                    <TextEditor value={description} onChange={handleEditorChange} placeholder="Enter product description..." />
                 </div>
 
-                <div className="admin-add-product-page-form-group">
-                    <label>Colors:</label>
-                    <button type="button" onClick={toggleColorDropdown}>
-                        {selectedColors.length ? selectedColors.join(', ') : 'Select Colors'}
-                    </button>
-                    {isColorDropdownOpen && (
-                        <ul ref={colorDropdownRef} className="color-dropdown">
-                            {colors.map((color) => (
-                                <li key={color}>
-                                    <input
-                                        type="checkbox"
-                                        value={color}
-                                        checked={selectedColors.includes(color)}
-                                        onChange={handleColorChange}
-                                    />
-                                    {color}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
+                <ColorSelector
+                    colors={['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White']}
+                    selectedColors={selectedColors}
+                    setSelectedColors={setSelectedColors}
+                />
 
                 <div className="admin-add-product-page-form-group">
                     <label>Images:</label>
