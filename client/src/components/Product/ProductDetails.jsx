@@ -85,12 +85,12 @@ const ProductDetails = ({ data }) => {
           </button>
         </div>
 
-      <div className="product-description">
-        <h2>Description</h2>
-        <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }}></div>
+        <div className="product-description">
+          <h2>Description</h2>
+          <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }}></div>
+        </div>
+
       </div>
-
-
     </>
   );
 };

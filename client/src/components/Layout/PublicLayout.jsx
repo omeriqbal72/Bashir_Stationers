@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../Header/Header.jsx'// Assuming your header is in this path
 import { Outlet } from 'react-router-dom';
+import Footer from '../Footer/Footer.jsx';
 
 const PublicLayout = () => {
   return (
@@ -9,6 +10,7 @@ const PublicLayout = () => {
       <main>
         <Outlet /> {/* This is where the public routes will be rendered */}
       </main>
+      <Footer/>
     </div>
   );
 };

@@ -11,6 +11,7 @@ import EditProductPage from './components/Admin/EditProductAdmin.jsx';
 import PublicLayout from './components/Layout/PublicLayout.jsx'; // Import Public Layout
 import AdminLayout from './components/Layout/AdminLayout.jsx';   // Import Admin Layout
 import axios from 'axios';
+import Footer from './components/Footer/Footer.jsx'
 import './App.css'
 
 axios.defaults.baseURL = 'http://localhost:8080';
@@ -38,6 +39,7 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/product" element={<Product />} />
             <Route path="/about" element={<AboutUs />} />
+            
           </Route>
 
           {/* Admin routes */}
@@ -48,7 +50,7 @@ function App() {
             <Route path="/edit-product/:id" element={<EditProductPage />} />
           </Route>
         </Routes>
-        <Footer/>
+        
       </Router>
     </QueryClientProvider>
   );
