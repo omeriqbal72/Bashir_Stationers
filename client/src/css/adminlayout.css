@@ -1,0 +1,17 @@
+.admin-layout {
+    display: flex; 
+  }
+
+  .admin-layout-sidebar{
+    position: sticky; 
+    top: 0; 
+    flex: .7; 
+    height: fit-content; 
+  }
+  
+  .admin-content {
+    flex: 3.3;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
