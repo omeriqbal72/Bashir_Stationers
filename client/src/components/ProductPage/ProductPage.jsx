@@ -8,9 +8,9 @@ const ProductPage = () => {
     return (
         <>
             <div className="product-page">
-                <div className="product-page-sidebar">
+                {/* <div className="product-page-sidebar">
                     <ProductSidebar />
-                </div>
+                </div> */}
                 <div className="product-page-listing">
                     <ProductListing />
                 </div>

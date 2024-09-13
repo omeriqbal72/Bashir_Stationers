@@ -35,7 +35,7 @@ const ProductList = ({ products, onDeleteProduct }) => {
                 const currentIndex = imageIndex[product._id] || 0;
 
                 return (
-                    <div key={product._id} className="product-card">
+                    <div key={product._id} className="product-list-card">
                         {product.images && product.images.length > 0 && (
                             <div className="image-slider">
                                 <button
