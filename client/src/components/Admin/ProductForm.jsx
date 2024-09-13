@@ -4,8 +4,12 @@ import '../../css/productform.css'; // Import the CSS file
 import admin from '../../Ui_Images/admin-panel.jpg'
 import TextEditor from './TextEditor'
 import ColorSelector from './ColorSelector';
+import AdminSideBar from './AdminSideBar';
+import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 const ProductForm = ({ onProductAdded }) => {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [company, setCompany] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -17,9 +21,6 @@ const ProductForm = ({ onProductAdded }) => {
     const [images, setImages] = useState([]);
     const [selectedColors, setSelectedColors] = useState([]);
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
-    const [isColorDropdownOpen, setIsColorDropdownOpen] = useState(false);
-    const colorDropdownRef = useRef(null);
 
     const categoryData = {
         'Writing Tools': {
@@ -57,7 +58,7 @@ const ProductForm = ({ onProductAdded }) => {
 
     const companies = ['Dux', 'Piano', 'Dollar', 'Casio'];
 
-    const colors = ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White'];
+    const colorsArray = ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White'];
 
     const handleCategoryChange = (e) => {
         const value = e.target.value;
@@ -90,7 +91,8 @@ const ProductForm = ({ onProductAdded }) => {
         formData.append('price', price);
         formData.append('description', description); // Added description
         images.forEach((image) => {
-            formData.append('images', image);
+        formData.append('images', image);
+       
         });
 
         try {
@@ -101,10 +103,9 @@ const ProductForm = ({ onProductAdded }) => {
             });
 
             if (response.status === 201) {
-                setSuccess('Product added successfully');
-                onProductAdded(response.data);
-
-                // Clear form fields
+                toast.success('Product added successfully', {
+                    position: 'bottom-center'
+                });
                 setName('');
                 setCompany('');
                 setSelectedCategory('');
@@ -114,41 +115,37 @@ const ProductForm = ({ onProductAdded }) => {
                 setImages([]);
                 setSelectedColors([]);
                 setQuantity(0);
-                setDescription(''); // Clear description
+                setDescription(''); 
                 setError('');
+                navigate('/admin');
+                
             }
         } catch (error) {
-            setError('Failed to add product');
-            setSuccess('');
+            if (error.response) {
+                console.error('Error response:', error.response);
+                setError(`Failed to add product: ${error.response.data.message || error.response.statusText}`);
+            } else if (error.request) {
+                console.error('Error request:', error.request);
+                setError('No response from server.');
+            } else {
+                console.error('Error:', error.message);
+                setError('Error occurred while adding product.');
+            }
         }
-    };
-
-    const handleClickOutside = (e) => {
-
-        if (
-            colorDropdownRef.current &&
-            !colorDropdownRef.current.contains(e.target)
-        ) {
-            setIsColorDropdownOpen(false);
-        }
+        
     };
 
     const handleEditorChange = (content) => {
-        setDescription(content); // Update description state on content change
+        setDescription(content); 
     };
 
-    useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
 
     return (
         <div className="admin-add-product-page-form-container">
-            <div className="admin-add-product-page-form-image">
+             {error && <p className="error-message">{error}</p>}
+            {/* <div className="admin-add-product-page-form-image">
                 <img src={admin} alt="Product" />
-            </div>
+            </div> */}
             <form onSubmit={handleSubmit} className="admin-add-product-page-form">
                 <div className="admin-add-product-page-form-group">
                     <label>Name:</label>
@@ -258,7 +255,7 @@ const ProductForm = ({ onProductAdded }) => {
                 </div>
 
                 <ColorSelector
-                    colors={['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White']}
+                    colors={colorsArray}
                     selectedColors={selectedColors}
                     setSelectedColors={setSelectedColors}
                 />
@@ -275,9 +272,10 @@ const ProductForm = ({ onProductAdded }) => {
 
                 <button type="submit">Add Product</button>
 
-                {error && <p className="error-message">{error}</p>}
-                {success && <p className="success-message">{success}</p>}
+               
             </form>
+
+            <ToastContainer/>
 
         </div>
     );

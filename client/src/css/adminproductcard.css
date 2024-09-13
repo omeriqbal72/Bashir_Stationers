@@ -1,0 +1,50 @@
+.admin-product-card {
+    display: flex;
+    width: 100%; /* Adjust width as needed */
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .admin-product-info {
+    display: flex;
+    flex-grow: 1;
+  }
+  
+  .admin-product-image-container {
+    width: 150px;
+    height: 150px;
+    margin-right: 20px;
+  }
+  
+  .admin-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-position: center;
+    top: 0;
+    left: 0;
+    transition: opacity 0.5s ease;
+  }
+  
+  .admin-product-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Vertically align content */
+  }
+  
+  .admin-product-actions-buttons {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    margin-top: 10px;
+  }
+  
+  .admin-product-actions-buttons button {
+    margin-left: 5px; /* Add spacing between buttons */
+    padding: 5px 10px; /* Adjust button padding */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Add button styles (colors, hover effects) as needed */

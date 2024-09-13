@@ -159,7 +159,7 @@ const EditProductPage = () => {
     };
 
     const handleCancel = () => {
-        navigate('/admin');
+        navigate('/admin-manage-products');
     };
 
     if (isLoading) {

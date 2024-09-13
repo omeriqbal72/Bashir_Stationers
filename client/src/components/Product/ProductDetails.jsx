@@ -86,6 +86,8 @@ const ProductDetails = ({ data }) => {
         </div>
 
 
+
+      </div>
     </>
   );
 };
