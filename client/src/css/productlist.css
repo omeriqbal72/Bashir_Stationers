@@ -5,7 +5,7 @@
     padding: 20px;
 }
 
-.product-card {
+.product-list-card {
     display: flex;
     flex-direction: column;
     width: 25%;
@@ -16,7 +16,7 @@
     position: relative;
 }
 
-.product-card img {
+.product-list-card img {
     width: 100%;
     height: 200px;
     background-size: cover;
@@ -83,7 +83,7 @@
     right: 10px;
 }
 
-.product-card button {
+.product-card-btn {
     background-color: #007bff;
     color: white;
     border: none;

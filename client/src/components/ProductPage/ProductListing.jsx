@@ -58,12 +58,6 @@ function ProductListing() {
       <div className="product-grid">
         {products.length > 0 ? (
           products.map(product => {
-            console.log('Rendering ProductCard with:', {
-              id: product._id,
-              images: product.images?.[0],
-              name: product.name,
-              price: product.price
-            });
             return (
               <ProductCard
                 key={product._id}
@@ -71,6 +65,7 @@ function ProductListing() {
                 images={product.images?.[0]}
                 name={product.name}
                 price={product.price}
+                company={product.company.name}
               />
             );
           })
