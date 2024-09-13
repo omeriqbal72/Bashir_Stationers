@@ -20,7 +20,7 @@ const fetchProducts = async ({ queryKey, pageParam = 1 }) => {
   const { data } = await axios.get(`${url}?page=${pageParam}&limit=12`);
 
   // Log the fetched products and pagination details
-  console.log(`Fetched page ${pageParam}, Products:`, data.products);
+  //console.log(`Fetched page ${pageParam}, Products:`, data.products);
   return data;
 };
 
@@ -42,15 +42,15 @@ export const useGetAllProducts = (url) => {
     enabled: !!url, 
     getNextPageParam: (lastPage) => {
       const { currentPage, totalPages } = lastPage;
-      console.log(`Current Page: ${currentPage}, Total Pages: ${totalPages}`);
+      //console.log(`Current Page: ${currentPage}, Total Pages: ${totalPages}`);
 
       const nextPage = currentPage < totalPages ? currentPage + 1 : undefined;
-      console.log(`Next page to fetch: ${nextPage}`);
+      //console.log(`Next page to fetch: ${nextPage}`);
       return nextPage;
     },
   });
 
-  console.log(`Has next page: ${hasNextPage}, Is fetching next page: ${isFetchingNextPage}`);
+  //console.log(`Has next page: ${hasNextPage}, Is fetching next page: ${isFetchingNextPage}`);
 
   return {
     data,

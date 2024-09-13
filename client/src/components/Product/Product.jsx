@@ -5,6 +5,7 @@ import ProductDetails from './ProductDetails';
 import LineSpacer from './LineSpacer.jsx';
 import SimilarProductSlider from './SimilarProductsSlider.jsx'
 import { useGetProductDetails } from '../../Functions/GetAPI.js';
+import DOMPurify from 'dompurify';
 import '../../css/product.css';
 
 
@@ -29,6 +30,9 @@ const Product = () => {
     return <div>No product found</div>; // Handle case where product is not found
   }
 
+  const sanitizedDescription = DOMPurify.sanitize(product.description || 'No description available');
+
+
   return (
     <>
       <div className="product">
@@ -44,7 +48,7 @@ const Product = () => {
 
       <div className="product-description">
         <h2>Description</h2>
-        <p>{product.description || 'No description available'}</p>
+        <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }}></div>
       </div>
 
       <div className="slider-section">

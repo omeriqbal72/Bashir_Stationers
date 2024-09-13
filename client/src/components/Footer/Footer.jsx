@@ -12,7 +12,7 @@ const Footer = () => {
         <footer className="footer">
             {/* The Wave */}
             <Waves
-                fill="#93c47d"
+                fill="#DEF9C4"
                 paused={false}
                 options={{
                     height: 5,
