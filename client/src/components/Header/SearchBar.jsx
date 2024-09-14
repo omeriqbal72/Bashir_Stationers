@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef , useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import '../../css/searchbar.css';
@@ -63,8 +63,8 @@ const SearchBar = () => {
 
     useEffect(() => {
         if (query.length >= 3 && Date.now() - lastTypedTime < 1000 && !hasTriggeredImmediateFetch) {
-            fetchResults(query); // Immediate API call
-            setHasTriggeredImmediateFetch(true); // Mark immediate fetch as triggered
+            fetchResults(query);
+            setHasTriggeredImmediateFetch(true);
         }
     }, [query, lastTypedTime, hasTriggeredImmediateFetch, fetchResults]);
 
@@ -210,70 +210,86 @@ const SearchBar = () => {
                 <div className="search-dropdown" ref={dropdownRef}>
                     {results.products.length > 0 && (
                         <div className="search-results-section">
-                            <h4>Products</h4>
+                            <div className="search-results-heading">
+                                <h4>Products</h4>
+                            </div>
+
                             {results.products.map((product, index) => (
+
                                 <div
                                     key={product._id}
                                     className={`search-dropdown-item ${selectedIndex === index ? 'selected' : ''}`}
-                                    onClick={() => handleClick(product)}
-                                >
-                                    {product.name}
+                                    onClick={() => handleClick(product)}>
+                                    <div>
+                                        {product.name}
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     )}
                     {results.companies.length > 0 && (
                         <div className="search-results-section">
-                            <h4>Companies</h4>
+                            <div className="search-results-heading">
+                                <h4>Company</h4>
+                            </div>
                             {results.companies.map((company, index) => (
+
+
                                 <div
                                     key={company._id}
                                     className={`search-dropdown-item ${selectedIndex === results.products.length + index ? 'selected' : ''}`}
-                                    onClick={() => handleClick(company)}
-                                >
-                                    {company.name}
+                                    onClick={() => handleClick(company)}>
+                                    <div>
+                                        {company.name}
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     )}
                     {results.categories.length > 0 && (
                         <div className="search-results-section">
-                            <h4>Categories</h4>
+                            <div className="search-results-heading">
+                                <h4>Category</h4>
+                            </div>
                             {results.categories.map((category, index) => (
-                                <div
-                                    key={category._id}
+                                <div key={category._id}
                                     className={`search-dropdown-item ${selectedIndex === results.products.length + results.companies.length + index ? 'selected' : ''}`}
-                                    onClick={() => handleClick(category)}
-                                >
-                                    {category.name}
+                                    onClick={() => handleClick(category)}>
+                                    <div>
+                                        {category.name}
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     )}
                     {results.subcategories.length > 0 && (
                         <div className="search-results-section">
-                            <h4>Subcategories</h4>
+                            <div className="search-results-heading">
+                                <h4>Subcategory</h4>
+                            </div>
                             {results.subcategories.map((subcategory, index) => (
-                                <div
-                                    key={subcategory._id}
+                                <div key={subcategory._id}
                                     className={`search-dropdown-item ${selectedIndex === results.products.length + results.companies.length + results.categories.length + index ? 'selected' : ''}`}
-                                    onClick={() => handleClick(subcategory)}
-                                >
-                                    {subcategory.name}
+                                    onClick={() => handleClick(subcategory)}>
+                                    <div>
+                                        {subcategory.name}
+                                    </div>
                                 </div>
                             ))}
                         </div>
                     )}
                     {results.productTypes.length > 0 && (
                         <div className="search-results-section">
-                            <h4>Product Types</h4>
+                            <div className="search-results-heading">
+                                <h4>Product Type</h4>
+                            </div>
                             {results.productTypes.map((type, index) => (
-                                <div
-                                    key={type._id}
+                                <div key={type._id}
                                     className={`search-dropdown-item ${selectedIndex === results.products.length + results.companies.length + results.categories.length + results.subcategories.length + index ? 'selected' : ''}`}
-                                    onClick={() => handleClick(type)}
-                                >
-                                    {type.name}
+                                    onClick={() => handleClick(type)}>
+                                    <div>
+                                        {type.name}
+                                    </div>
                                 </div>
                             ))}
                         </div>

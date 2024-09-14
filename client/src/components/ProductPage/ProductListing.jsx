@@ -42,6 +42,8 @@ function ProductListing() {
     isFetchingNextPage
   } = useGetAllProducts(url);
 
+  console.log(data)
+
   const { ref, inView } = useInView({
     threshold: 0.5,
   });

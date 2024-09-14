@@ -1,5 +1,4 @@
-
-.search-bar {
+.admin-search-bar {
     display: flex;
     align-items: center;
     position: relative;
@@ -7,17 +6,16 @@
     margin: 0 auto;
 }
 
-.search-bar input {
+.admin-search-bar input {
     width: 100%;
     padding: 0.5rem 1rem;
-    /* Adjust padding to make space for the icon */
     border: 1px solid #ccc;
     border-radius: 25px;
     outline: none;
     height: 1.3rem;
 }
 
-.search-bar button {
+.admin-search-bar button {
     position: absolute;
     right: 10px;
     /* Position the button inside the input */
@@ -28,11 +26,7 @@
     color: #333;
 }
 
-.search-bar button:focus {
-    outline: none;
-}
-
-.search-dropdown {
+.admin-search-bar-dropdown {
     position: absolute;
     top: 100%;
     left: 0;
@@ -44,29 +38,24 @@
     max-height: 300px;
     overflow-y: auto;
     border-radius: 1rem;
-  }
+}
 
-  .search-results-section{
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-  }
-  
+.admin-search-bar-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
-  .search-results-heading{
-    padding: 1rem 0 0  1rem;
-  }
-  .search-dropdown-item {
-    height: 4vh;
-    padding: 0.5rem 0 0.5rem 1rem;
+.admin-search-bar-dropdown ul li {
+    padding: 8px;
     cursor: pointer;
-  }
-  
-  .search-dropdown-item:hover {
-    background-color: #f0f0f0;
-  }
+}
 
-  .search-dropdown-item.selected {
-    background-color: #f0f0f0; /* Highlighted background color */
-    font-weight: bold;
+.admin-search-bar-dropdown ul li.highlighted {
+    background-color: #f0f0f0;
+    color: #000; 
+}
+
+.admin-search-bar-dropdown ul li:hover {
+    background-color: #e0e0e0;
 }

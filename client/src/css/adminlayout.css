@@ -1,17 +1,19 @@
 .admin-layout {
-    display: flex; 
-  }
+    display: flex;
+    height: 100vh;
+    overflow-y: auto; /* Add overflow-y: auto to enable scrolling for the entire layout */
+}
 
-  .admin-layout-sidebar{
-    position: sticky; 
-    top: 0; 
-    flex: .7; 
-    height: fit-content; 
-  }
-  
-  .admin-content {
+.admin-layout-sidebar {
+    position: sticky;
+    top: 0;
+    flex: 0.7;
+    height: 100%;
+    overflow-y: hidden; /* Prevent scrolling within the sidebar */
+}
+
+.admin-content {
     flex: 3.3;
-    padding: 20px;
-    overflow-y: auto;
-  }
-  
+ 
+    box-sizing: border-box;
+}   
