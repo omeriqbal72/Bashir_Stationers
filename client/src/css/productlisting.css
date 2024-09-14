@@ -1,16 +1,14 @@
 .product-list {
-    padding: 2rem;
-    width: 100%;
-  }
-  
-  .product-list h3 {
-    font-size: 1.4rem;
-    margin-bottom: 2rem;
-  }
-  
-  .product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 5rem;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 5rem;
+  padding: 1rem 2rem;
+  box-sizing: border-box;
+}
+

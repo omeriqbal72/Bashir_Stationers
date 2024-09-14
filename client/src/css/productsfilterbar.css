@@ -1,0 +1,25 @@
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    padding: 1.5rem 2rem;
+    box-sizing: border-box;
+    justify-content: space-between;
+  }
+
+  .product-search-results h3{
+    font-size: 24px;
+  }
+
+  .product-search-results span{
+    font-size: 13px;
+    font-weight: 300;
+  }
+
+  .filter-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }

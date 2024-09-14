@@ -83,7 +83,9 @@ const ProductDetails = ({ data }) => {
             Buy Now
           </button>
         </div>
+
       </div>
+
 
     </>
   );
