@@ -27,8 +27,9 @@ const AdminSideBar = () => {
 
     return (
         <aside className="admin-sidebar">
+            <h1>Rasheed Stationers</h1>
             <ul>
-
+                
                 <li><a href="/admin">Home</a></li>
                 <li onClick={toggleProducts}>
                     <a href="#">Products</a>

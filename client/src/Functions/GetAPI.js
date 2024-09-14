@@ -8,19 +8,17 @@ const fetchProductDetails = async ({ queryKey }) => {
   return data;
 };
 
-const fetchAdminProductDetails = async ({ queryKey }) => {
-  const id = queryKey[1];
-  const { data } = await axios.get(`/admin/edit-product/${id}`);
-  return data;
-};
+// const fetchAdminProductDetails = async ({ queryKey }) => {
+//   const id = queryKey[1];
+//   const { data } = await axios.get(`/admin/edit-product/${id}`);
+//   return data;
+// };
 
 
 const fetchProducts = async ({ queryKey, pageParam = 1 }) => {
   const url = queryKey[1]; // Extract the URL from queryKey
   const { data } = await axios.get(`${url}?page=${pageParam}&limit=12`);
 
-  // Log the fetched products and pagination details
-  //console.log(`Fetched page ${pageParam}, Products:`, data.products);
   return data;
 };
 
@@ -50,8 +48,6 @@ export const useGetAllProducts = (url) => {
     },
   });
 
-  //console.log(`Has next page: ${hasNextPage}, Is fetching next page: ${isFetchingNextPage}`);
-
   return {
     data,
     isLoading,
@@ -69,22 +65,22 @@ export const useGetProductDetails = (id) => {
   return useQuery({
     queryKey: ['product', id],
     queryFn: fetchProductDetails,
-    enabled: !!id, // Fetch only if ID is valid
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
-    cacheTime: 1000 * 60 * 10, // Cache data for 10 minutes
-    retry: 2, // Retry failed requests up to 2 times
-    refetchOnWindowFocus: false, // Do not refetch on window focus
+    enabled: !!id, 
+    staleTime: 1000 * 60 * 5, 
+    cacheTime: 1000 * 60 * 10,
+    retry: 2, 
+    refetchOnWindowFocus: false, 
   });
 };
 
-export const adminProductDetails = (id) => {
-  return useQuery({
-    queryKey: ['product', id],
-    queryFn: fetchAdminProductDetails,
-    enabled: !!id, // Fetch only if ID is valid
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
-    cacheTime: 1000 * 60 * 10, // Cache data for 10 minutes
-    retry: 2, // Retry failed requests up to 2 times
-    refetchOnWindowFocus: false, // Do not refetch on window focus
-  });
-};
+// export const adminProductDetails = (id) => {
+//   return useQuery({
+//     queryKey: ['product', id],
+//     queryFn: fetchAdminProductDetails,
+//     enabled: !!id, // Fetch only if ID is valid
+//     staleTime: 1000 * 60 * 5, // Cache data for 5 minutes
+//     cacheTime: 1000 * 60 * 10, // Cache data for 10 minutes
+//     retry: 2, // Retry failed requests up to 2 times
+//     refetchOnWindowFocus: false, // Do not refetch on window focus
+//   });
+// };

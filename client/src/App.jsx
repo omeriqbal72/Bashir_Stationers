@@ -13,6 +13,7 @@ import AdminLayout from './components/Layout/AdminLayout.jsx';   // Import Admin
 import axios from 'axios';
 import Footer from './components/Footer/Footer.jsx'
 import './App.css'
+import AdminSuccess from './components/Admin/AdminSuccess.jsx';
 
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.withCredentials = true;
@@ -45,6 +46,7 @@ function App() {
           {/* Admin routes */}
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/admin/success-page" element={<AdminSuccess />}/>
             <Route path="/admin/manage-products" element={<AdminManageProduct />} />
             <Route path="/admin/add-product" element={<ProductForm />} />
             <Route path="/edit-product/:id" element={<EditProductPage />} />

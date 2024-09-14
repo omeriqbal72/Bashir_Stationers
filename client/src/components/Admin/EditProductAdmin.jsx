@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../../css/editProduct.css';
 import TextEditor from './TextEditor'
-import { adminProductDetails } from '../../Functions/GetAPI.js';
+import { useGetProductDetails } from '../../Functions/GetAPI.js';
 import ColorSelector from './ColorSelector.jsx';
 
 const categoryData = {
@@ -55,7 +55,7 @@ const EditProductPage = () => {
     const [removedImages, setRemovedImages] = useState([]);
     const [description, setDescription] = useState('');
 
-    const { data: fetchedproduct, isLoading, isError, error } = adminProductDetails(id);
+    const { data: fetchedproduct, isLoading, isError, error } = useGetProductDetails(id);
 
 
     useEffect(() => {
@@ -132,7 +132,7 @@ const EditProductPage = () => {
             alert('Please upload at least one image.');
             return;
         }
-    
+
         try {
             const formData = new FormData();
             formData.append('name', product.name);
@@ -152,14 +152,19 @@ const EditProductPage = () => {
             });
 
             console.log('Product updated successfully:', response.data);
-            navigate('/admin');
+            navigate('/admin/success-page', {
+                state: {
+                    message: 'Product edited successfully!',
+                    product: product
+                }
+            });
         } catch (error) {
             console.error('Failed to update product:', error);
         }
     };
 
     const handleCancel = () => {
-        navigate('/admin-manage-products');
+        navigate('/admin/manage-products');
     };
 
     if (isLoading) {

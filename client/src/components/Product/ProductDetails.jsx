@@ -19,7 +19,7 @@ const ProductDetails = ({ data }) => {
     return <div>Loading product details...</div>;
   }
 
- 
+
   return (
     <>
       <div className="product-details">
@@ -83,11 +83,8 @@ const ProductDetails = ({ data }) => {
             Buy Now
           </button>
         </div>
-        </div>
-
-
-
       </div>
+
     </>
   );
 };

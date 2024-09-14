@@ -6,8 +6,9 @@ import '../../css/adminlayout.css'
 const AdminLayout = () => {
   return (
     <div className="admin-layout">
+
       <div className="admin-layout-sidebar">
-        <AdminSidebar /> {/* Sidebar visible on all admin pages */}
+        <AdminSidebar />
       </div>
 
       <main className="admin-content">

@@ -91,8 +91,8 @@ const ProductForm = ({ onProductAdded }) => {
         formData.append('price', price);
         formData.append('description', description); // Added description
         images.forEach((image) => {
-        formData.append('images', image);
-       
+            formData.append('images', image);
+
         });
 
         try {
@@ -103,9 +103,7 @@ const ProductForm = ({ onProductAdded }) => {
             });
 
             if (response.status === 201) {
-                toast.success('Product added successfully', {
-                    position: 'bottom-center'
-                });
+
                 setName('');
                 setCompany('');
                 setSelectedCategory('');
@@ -115,10 +113,17 @@ const ProductForm = ({ onProductAdded }) => {
                 setImages([]);
                 setSelectedColors([]);
                 setQuantity(0);
-                setDescription(''); 
+                setDescription('');
                 setError('');
-                navigate('/admin');
-                
+                const addedProduct = response.data;  // Assuming the API returns the added product in the response
+
+                // Redirect to success page with the message and product details
+                navigate('/admin/success-page', {
+                    state: {
+                        message: 'Product added successfully!',
+                        product: addedProduct,  // Pass the returned product to the success page
+                    },
+                });
             }
         } catch (error) {
             if (error.response) {
@@ -132,17 +137,17 @@ const ProductForm = ({ onProductAdded }) => {
                 setError('Error occurred while adding product.');
             }
         }
-        
+
     };
 
     const handleEditorChange = (content) => {
-        setDescription(content); 
+        setDescription(content);
     };
 
 
     return (
         <div className="admin-add-product-page-form-container">
-             {error && <p className="error-message">{error}</p>}
+            {error && <p className="error-message">{error}</p>}
             {/* <div className="admin-add-product-page-form-image">
                 <img src={admin} alt="Product" />
             </div> */}
@@ -272,10 +277,8 @@ const ProductForm = ({ onProductAdded }) => {
 
                 <button type="submit">Add Product</button>
 
-               
-            </form>
 
-            <ToastContainer/>
+            </form>
 
         </div>
     );
