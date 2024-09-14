@@ -45,7 +45,7 @@ export const useGetAllProducts = (url) => {
       //console.log(`Current Page: ${currentPage}, Total Pages: ${totalPages}`);
 
       const nextPage = currentPage < totalPages ? currentPage + 1 : undefined;
-      //console.log(`Next page to fetch: ${nextPage}`);
+      
       return nextPage;
     },
   });

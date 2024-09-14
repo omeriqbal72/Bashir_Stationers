@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../css/productpage.css'
-import ProductSidebar from './ProductSidebar.jsx';
+import ProductSidebar from './ProductsFilterBar.jsx';
 import ProductListing from './ProductListing.jsx';
 
 const ProductPage = () => {

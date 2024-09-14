@@ -8,10 +8,10 @@
 
 .product-page-sidebar{
     display: flex;
-    flex: .5;
+    width: 100%;
 }
 
 .product-page-listing{
     display: flex;
-    flex: 3;
+    width: 100%;
 }
