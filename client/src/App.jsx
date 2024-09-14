@@ -11,7 +11,6 @@ import EditProductPage from './components/Admin/EditProductAdmin.jsx';
 import PublicLayout from './components/Layout/PublicLayout.jsx'; // Import Public Layout
 import AdminLayout from './components/Layout/AdminLayout.jsx';   // Import Admin Layout
 import axios from 'axios';
-import Footer from './components/Footer/Footer.jsx'
 import './App.css'
 
 axios.defaults.baseURL = 'http://localhost:8080';
