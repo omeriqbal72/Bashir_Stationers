@@ -63,9 +63,8 @@ function ProductsFilterBar(props) {
       </div>
       <div className="filter-section">
         <span>Filter By:</span>
-        <FiltersDropDown placeholder={'Brand'} options={BrandOptions} onChange={props.onBrandChange}/>
-        <FiltersDropDown placeholder={'Price'} options={PriceOptions} onChange={props.onPriceChange}/>
-
+        <FiltersDropDown placeholder={'Brand'} options={BrandOptions} onChange={props.onBrandChange} />
+        <FiltersDropDown placeholder={'Price'} options={PriceOptions} onChange={props.onPriceChange} />
       </div>
 
     </div>

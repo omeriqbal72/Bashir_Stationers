@@ -1,0 +1,18 @@
+.whatsapp-link {
+    position: fixed;
+    left: 2rem;
+    bottom: 2rem;
+    z-index: 1000;
+  }
+  
+  .whatsapp-link img {
+    width: 75px; /* Adjust the size as needed */
+    height: 75px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .whatsapp-link img:hover {
+    transform: scale(1.1);
+  }
+  

@@ -5,8 +5,9 @@ import '../../css/shopdropdown.css';
 import DropdownCategories from './DropDownCategories.jsx';
 import SearchBar from './SearchBar.jsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faHouse, faShop, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
 import UserContext from '../../context/UserContext.jsx'
+import { faCartShopping, faHouse, faShop, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
+
 
 const Header = () => {
 
@@ -48,15 +49,20 @@ const Header = () => {
             ) : (
               <>
                 <Link to="/login">
-                  <button>Login</button>
+                  <button className='header-register-btn'>Login</button>
                 </Link>
                 <Link to="/register">
-                  <button>Register</button>
+                  <button className='header-register-btn'>Register</button>
                 </Link>
               </>
             )}
-            <button className="heart-icon">❤️</button>
-            <button className="cart-icon">🛒</button>
+
+
+            <Link to={'/mycart'}>
+              <FontAwesomeIcon icon={faCartShopping} size="xl" style={{ color: "#000000", }} />
+            </Link>
+
+
           </div>
         </div>
       </header>

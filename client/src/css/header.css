@@ -1,7 +1,7 @@
 .header-main {
     position: sticky;
     top: 0;
-    background-color: var(--background-color);
+    background-color: var(--primary-color);
     color: var(--text-color);
     display: flex;
     width: 100%;
@@ -27,17 +27,21 @@
     justify-content: space-evenly;
 }
 
+.header-register-btn{
+    font-weight: 700;
+    font-size: 18px;
+    border-radius: 24px;
+    border: none;
+    background-color: var(--blue-shade);
+    cursor: pointer;
+    padding: .5rem 1rem;
+
+}
 
 .actions {
     display: flex;
     align-items: center;
-}
-
-.actions button {
-    margin-left: 10px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
+    gap: 1rem;
 }
 
 .header-main-section2-dropdown{

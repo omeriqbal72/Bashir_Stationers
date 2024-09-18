@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/productdetails.css';
+import { Link } from 'react-router-dom';
 import ProductQuantity from './ProductQuantity.jsx';
+import { useCart } from '../../context/CartContext.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus, faCreditCard, faStar, faPencil, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
 
 const ProductDetails = ({ data }) => {
   const [productDetails, setProductDetails] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     if (data) {
       setProductDetails(data);
     }
   }, [data]);
-  console.log(productDetails)
+  //console.log(productDetails)
 
   if (!productDetails) {
     return <div>Loading product details...</div>;
   }
 
+  const handleAddToCart = () => {
+    // Assuming productDetails has all the required information about the product
+    addToCart(productDetails, quantity);
+  };
 
   return (
     <>
@@ -69,15 +77,25 @@ const ProductDetails = ({ data }) => {
             </div>
           )}
 
-          <ProductQuantity />
+          <div className='product-quantity'>
+            <span>Quantity: </span>
+            <ProductQuantity
+            quantity={quantity}
+            onIncrement={() => setQuantity((prev) => prev + 1)}
+            onDecrement={() => quantity > 1 && setQuantity((prev) => prev - 1)}
+          />
+          </div>
 
         </div>
 
         <div className='purchase-btns'>
-          <button className="add-to-cart-btn">
-            <FontAwesomeIcon icon={faCartPlus} style={{ color: "#ffffff" }} />
-            Add to Cart
-          </button>
+          <Link to={'/mycart'}>
+            <button className="add-to-cart-btn" onClick={handleAddToCart}>
+              <FontAwesomeIcon icon={faCartPlus} style={{ color: "#ffffff" }} />
+              Add to Cart
+            </button>
+          </Link>
+
           <button className="buy-now-btn">
             <FontAwesomeIcon icon={faCreditCard} style={{ color: "#000000" }} />
             Buy Now

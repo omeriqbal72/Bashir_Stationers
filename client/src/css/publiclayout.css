@@ -1,10 +1,3 @@
-/* Ensure the layout takes full viewport height */
-.public-layout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    overflow: hidden;
-}
 
 main {
     flex: 1; 

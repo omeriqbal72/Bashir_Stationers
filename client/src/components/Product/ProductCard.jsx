@@ -10,14 +10,14 @@ function ProductCard({ id, images, name, price, company }) {
   const companyColors = ['#d6f1ff','#fcd9d9', '#f0ecc5'];  
   // Generate a random color for each product card
   const randomColor = companyColors[Math.floor(Math.random() * companyColors.length)];
-
+  //console.log(`http://localhost:8080/${images || 'default-placeholder.png'}`)
 
   return (
     <Link to={`/product?id=${encodeURIComponent(id)}`}>
       <div className="product-card">
         <div className='product-img'>
           <img
-            src={`http://localhost:8080/${images || 'default-placeholder.png'}`}
+            src={`http://localhost:8080/${images || 'uploads/productImages/default-placeholder.png'}`}
             alt={name}
           />
         </div>

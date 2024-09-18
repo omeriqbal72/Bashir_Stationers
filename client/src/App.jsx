@@ -5,24 +5,26 @@ import Home from './components/Home/Home.jsx';
 import Products from './components/ProductPage/ProductPage.jsx';
 import AboutUs from './components/About/AboutUs.jsx';
 import Product from './components/Product/Product.jsx';
+import Cart from './components/Cart/Cart.jsx';
+
 import AdminPanel from './components/Admin/AdminPanel.jsx';
 import AdminManageProduct from './components/Admin/AdminManageProduct.jsx';
 import ProductForm from './components/Admin/ProductForm.jsx';
 import EditProductPage from './components/Admin/EditProductAdmin.jsx';
+
 import PublicLayout from './components/Layout/PublicLayout.jsx';
 import AdminLayout from './components/Layout/AdminLayout.jsx';
 import AdminSuccess from './components/Admin/AdminSuccess.jsx';
 import Login from './components/Auth/Login.jsx';
 import Signup from './components/Auth/Signup.jsx';
 import Verification from './components/Auth/Verification.jsx';
-
-
 import PrivateRoute from './routes/PrivateRoute.jsx';
 import { UserProvider } from './context/UserContext';
-
-import './App.css';
 import NotFound from './components/PageNotFound/NotFound.jsx';
+import { CartProvider } from './context/CartContext.jsx';
 
+import axios from 'axios';
+import './App.css'
 
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.withCredentials = true;
@@ -42,6 +44,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <UserProvider>
+        <CartProvider>
           <Routes>
             {/* Public routes */}
             <Route element={<PublicLayout />}>
@@ -52,6 +55,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Signup />} />
               <Route path="/verify-email" element={<Verification />} />
+              <Route path="/mycart" element={<Cart />} />
               <Route path="*" element={<NotFound />} />
             </Route>
 
@@ -66,10 +70,12 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Route>
-
             
           </Routes>
+          
+        </CartProvider>
         </UserProvider>
+            
       </Router>
     </QueryClientProvider>
   );
