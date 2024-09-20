@@ -24,7 +24,7 @@
 }
 
 .all-collections-btn:hover {
-  color: var(--green-shade);
+  color: white;
   background-color: var(--text-color);
 }
 

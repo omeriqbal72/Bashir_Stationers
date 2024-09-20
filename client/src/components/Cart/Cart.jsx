@@ -7,7 +7,7 @@ import { faCreditCard, faTrashCan, faCartShopping } from '@fortawesome/free-soli
 
 
 const Cart = () => {
-  const { cart, setCartItems, updateQuantity, removeFromCart } = useCart();  // Destructure methods from context
+  const { cart, updateQuantity, removeFromCart } = useCart();  // Destructure methods from context
 
   // Calculate total price
   const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
