@@ -22,8 +22,6 @@ import PrivateRoute from './routes/PrivateRoute.jsx';
 import { UserProvider } from './context/UserContext';
 import NotFound from './components/PageNotFound/NotFound.jsx';
 import { CartProvider } from './context/CartContext.jsx';
-
-import axios from 'axios';
 import './App.css'
 
 axios.defaults.baseURL = 'http://localhost:8080';
