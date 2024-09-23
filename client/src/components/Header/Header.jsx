@@ -4,12 +4,17 @@ import '../../css/header.css';
 import '../../css/shopdropdown.css';
 import DropdownCategories from './DropDownCategories.jsx';
 import SearchBar from './SearchBar.jsx'
+import { Badge } from 'antd';
+import { useCart } from '../../context/CartContext.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faHouse, faShop, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
 import UserContext from '../../context/UserContext.jsx'
+import {ShoppingCartOutlined} from '@ant-design/icons';
+import { faHouse, faShop, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
+
 
 const Header = () => {
 
+  const { cart } = useCart();  // Destructure methods from context
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
   const { user, logout } = useContext(UserContext);
@@ -48,15 +53,24 @@ const Header = () => {
             ) : (
               <>
                 <Link to="/login">
-                  <button>Login</button>
+                  <button className='header-register-btn'>Login</button>
                 </Link>
                 <Link to="/register">
-                  <button>Register</button>
+                  <button className='header-register-btn'>Register</button>
                 </Link>
               </>
             )}
-            <button className="heart-icon">❤️</button>
-            <button className="cart-icon">🛒</button>
+
+
+            <Link to={'/mycart'}>
+              <Badge size='small' count={cart.length}>
+
+              <ShoppingCartOutlined style={{ fontSize: '28px' }}/>
+
+              </Badge>
+            </Link>
+
+
           </div>
         </div>
       </header>

@@ -59,7 +59,7 @@ function MySlider() {
                         id={product.id}
                         name={product.name}
                         price={product.price}
-                        images={'images-1725902617417-130522952.png'}
+                        images={product.images}
                     />
                 </SwiperSlide>
             ))}
