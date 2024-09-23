@@ -8,12 +8,6 @@ const fetchProductDetails = async ({ queryKey }) => {
   return data;
 };
 
-// const fetchAdminProductDetails = async ({ queryKey }) => {
-//   const id = queryKey[1];
-//   const { data } = await axios.get(`/admin/edit-product/${id}`);
-//   return data;
-// };
-
 
 const fetchProducts = async ({ queryKey, pageParam = 1 }) => {
   const url = queryKey[1]; // Extract the URL from queryKey
@@ -40,8 +34,6 @@ export const useGetAllProducts = (url) => {
     enabled: !!url, 
     getNextPageParam: (lastPage) => {
       const { currentPage, totalPages } = lastPage;
-      //console.log(`Current Page: ${currentPage}, Total Pages: ${totalPages}`);
-
       const nextPage = currentPage < totalPages ? currentPage + 1 : undefined;
       
       return nextPage;
@@ -73,6 +65,13 @@ export const useGetProductDetails = (id) => {
   });
 };
 
+
+// const fetchAdminProductDetails = async ({ queryKey }) => {
+//   const id = queryKey[1];
+//   const { data } = await axios.get(`/admin/edit-product/${id}`);
+//   return data;
+// };
+
 // export const adminProductDetails = (id) => {
 //   return useQuery({
 //     queryKey: ['product', id],
@@ -84,3 +83,8 @@ export const useGetProductDetails = (id) => {
 //     refetchOnWindowFocus: false, // Do not refetch on window focus
 //   });
 // };
+
+
+// export const login = (email, password) => axios.post(API_URL + 'login', { email, password });
+// export const signup = (email, password) => axios.post(API_URL + 'register', { email, password });
+// export const verifyEmail = (code) => axios.post(API_URL + 'verify-email', { code });

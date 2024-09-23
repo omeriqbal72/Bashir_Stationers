@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef , useContext } from 'react';
 import { Link } from 'react-router-dom';
 import '../../css/header.css';
 import '../../css/shopdropdown.css';
@@ -6,12 +6,13 @@ import DropdownCategories from './DropDownCategories.jsx';
 import SearchBar from './SearchBar.jsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faHouse, faShop, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
-
+import UserContext from '../../context/UserContext.jsx'
 
 const Header = () => {
 
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
+  const { user, logout } = useContext(UserContext);
 
   // Close dropdown if clicked outside
   useEffect(() => {
@@ -40,7 +41,20 @@ const Header = () => {
           </Link>
           <SearchBar />
           <div className="actions">
-            <button>Login/Register</button>
+            {user ? (
+              <>
+                <button onClick={logout}>Logout</button>
+              </>
+            ) : (
+              <>
+                <Link to="/login">
+                  <button>Login</button>
+                </Link>
+                <Link to="/register">
+                  <button>Register</button>
+                </Link>
+              </>
+            )}
             <button className="heart-icon">❤️</button>
             <button className="cart-icon">🛒</button>
           </div>

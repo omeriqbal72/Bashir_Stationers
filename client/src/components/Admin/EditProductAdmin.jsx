@@ -5,6 +5,7 @@ import '../../css/editProduct.css';
 import TextEditor from './TextEditor'
 import { useGetProductDetails } from '../../Functions/GetAPI.js';
 import ColorSelector from './ColorSelector.jsx';
+import axiosInstance from '../../utils/axiosInstance.js';
 
 const categoryData = {
     'Writing Tools': {
@@ -144,10 +145,11 @@ const EditProductPage = () => {
             newImages.forEach(image => formData.append('images', image));
             formData.append('removedImages', removedImages.join(','));
 
-
-            const response = await axios.put(`/edit-product/${product._id}`, formData, {
+            const token = localStorage.getItem('token'); 
+            const response = await axiosInstance.put(`/edit-product/${product._id}`, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
                 }
             });
 

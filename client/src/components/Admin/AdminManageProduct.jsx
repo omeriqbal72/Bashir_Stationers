@@ -6,6 +6,7 @@ import '../../css/adminmanageproduct.css';
 import { toast, ToastContainer } from 'react-toastify';
 import AdminSearchbar from './AdminSearchbar';
 import { useGetAllProducts } from '../../Functions/GetAPI.js';
+import axiosInstance from '../../utils/axiosInstance.js';
 
 const AdminManageProduct = () => {
     const [searchParams, setSearchParams] = useState({});
@@ -41,15 +42,24 @@ const AdminManageProduct = () => {
 
     const handleProductDeleted = async (productId) => {
         try {
-            await axios.delete(`/delete-product/${productId}`);
+            // Retrieve the token from localStorage (or wherever you store the token)
+            const token = localStorage.getItem('token');
+    
+            await axiosInstance.delete(`/delete-product/${productId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+                },
+            });
+    
             toast.success('Product deleted successfully', {
                 position: 'bottom-center'
             });
         } catch (error) {
+            console.error('Error deleting product:', error);
             setError('Failed to delete product');
         }
     };
-
+    
     const handleDelete = (product) => {
         setProductToDelete(product);
         setIsConfirmOpen(true);
@@ -79,8 +89,6 @@ const AdminManageProduct = () => {
                 <div className="admin-manage-product-bottoms-search">
                     <AdminSearchbar onSearch={handleSearch} />
                 </div>
-
-
 
                 <div className="admin-manage-product-bottom-products">
                     {isLoading ? (
@@ -139,13 +147,8 @@ const AdminManageProduct = () => {
                     )}
                 </div>
 
-      
+
             </div>
-
-            
-
-
-
             <ConfirmationModal
                 isOpen={isConfirmOpen}
                 onClose={() => setIsConfirmOpen(false)}

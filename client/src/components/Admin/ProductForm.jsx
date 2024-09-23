@@ -7,6 +7,7 @@ import ColorSelector from './ColorSelector';
 import AdminSideBar from './AdminSideBar';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import axiosInstance from '../../utils/axiosInstance';
 
 const ProductForm = ({ onProductAdded }) => {
     const navigate = useNavigate();
@@ -96,9 +97,12 @@ const ProductForm = ({ onProductAdded }) => {
         });
 
         try {
-            const response = await axios.post('/add-product', formData, {
+            const token = localStorage.getItem('token'); 
+
+            const response = await axiosInstance.post('/add-product', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` // Include the token in the Authorization header
                 },
             });
 
@@ -115,9 +119,7 @@ const ProductForm = ({ onProductAdded }) => {
                 setQuantity(0);
                 setDescription('');
                 setError('');
-                const addedProduct = response.data;  // Assuming the API returns the added product in the response
-
-                // Redirect to success page with the message and product details
+                const addedProduct = response.data;  
                 navigate('/admin/success-page', {
                     state: {
                         message: 'Product added successfully!',
