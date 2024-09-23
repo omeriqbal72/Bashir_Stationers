@@ -1,15 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const { getTest } = require('../controllers/authControllers')
-const { getProducts ,addProduct, editProduct, deleteProduct , getProductById} = require('../controllers/adminControllers.js');
-const { getAllCategories, getProductsByCategoryName, getProductsBySubCategoryName , SearchProducts,
-    getProductsByCompanyName, getProductsByProductTypeName , SearchbyIcon , getProductsByName,
+const { getProducts, addProduct, editProduct, deleteProduct, getProductById } = require('../controllers/adminControllers.js');
+const { getAllCategories, getProductsByCategoryName, getProductsBySubCategoryName, SearchProducts,
+    getProductsByCompanyName, getProductsByProductTypeName, SearchbyIcon, getProductsByName,
     checkImagesExist, getallProducts } = require('../controllers/productControllers.js');
 
+const { register , verifyEmail , login , refreshToken , logout , requestNewCode , getMe } = require('../controllers/authControllers.js');
+const {
+    
+    verifyToken,
+    
+    
+} = require('../middlewares/jwt.js');
 
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');   
+const fs = require('fs');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -42,29 +48,37 @@ const upload = multer({
         }
         cb(null, true);
     }
-}).array('images', 5); // Allow up to 5 images, adjust as needed
+}).array('images', 5); 
 
 
-router.post('/add-product', upload, addProduct);
+router.post('/add-product', verifyToken, upload, addProduct);
 
-router.put('/edit-product/:productId', upload, editProduct);
+router.put('/edit-product/:productId',verifyToken , upload, editProduct);
 
-router.get('/test', getTest);
 router.get('/admin/edit-product/:id', getProductById);
 router.get('/product/:id', getProductById);
-router.get('/get-products' , getProducts);
-router.get('/products/category/:categoryname' , getProductsByCategoryName);
+router.get('/get-products', getProducts);
+router.get('/products/category/:categoryname', getProductsByCategoryName);
 router.get('/products/subcategory/:subcategoryname', getProductsBySubCategoryName);
-router.get('/products/company/:companyname' , getProductsByCompanyName);
+router.get('/products/company/:companyname', getProductsByCompanyName);
 router.get('/products/type/:producttypename', getProductsByProductTypeName);
-router.get('/get-categories' , getAllCategories);
+router.get('/get-categories', getAllCategories);
 router.get('/get-search-products', SearchProducts);
 router.get('/products/search/:searched', SearchbyIcon);
 router.get('/products/product/:productname', getProductsByName);
-router.get('/check-images' , checkImagesExist)
-router.get('/products/all-products', getallProducts)
+router.get('/check-images', checkImagesExist);
+router.get('/products/all-products', getallProducts);
 
+router.post('/register', register);
+router.post('/verify-email', verifyEmail);
 
-router.delete('/delete-product/:productId', deleteProduct);
+router.post('/login', login);
+router.post('/refresh-token', refreshToken);
+router.post('/logout', logout);
+router.post('/request-new-code' , requestNewCode)
+
+router.get('/me',verifyToken ,  getMe);
+
+router.delete('/delete-product/:productId', verifyToken , deleteProduct);
 
 module.exports = router;

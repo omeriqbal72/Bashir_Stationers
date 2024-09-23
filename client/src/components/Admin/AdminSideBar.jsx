@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import UserContext from '../../context/UserContext';
 import '../../css/adminSidebar.css';
-import { Link } from 'react-router-dom';
 
 const AdminSideBar = () => {
     const [showProducts, setShowProducts] = useState(false);
     const [showOrders, setShowOrders] = useState(false);
     const [showCustomers, setShowCustomers] = useState(false);
+
+    const { logout } = useContext(UserContext); // Access logout function from context
+    const navigate = useNavigate();
 
     const toggleProducts = () => {
         setShowProducts(!showProducts);
@@ -25,18 +29,23 @@ const AdminSideBar = () => {
         setShowOrders(false);
     };
 
+    const handleLogout = async (event) => {
+        event.preventDefault(); // Prevent default link behavior
+        await logout(); 
+        navigate('/login'); // Redirect to login page after logout
+    };
+
     return (
         <aside className="admin-sidebar">
+            <h1>Rasheed Stationers</h1>
             <ul>
-
-                <li><a href="/admin">Home</a></li>
+                <li><Link to="/admin">Home</Link></li>
                 <li onClick={toggleProducts}>
                     <a href="#">Products</a>
                     {showProducts && (
                         <ul>
-                            <li><a href="/admin/manage-products">Manage Products</a></li>
-                            <li><a href="/admin/add-product">Add Products</a></li>
-
+                            <li><Link to="/admin/manage-products">Manage Products</Link></li>
+                            <li><Link to="/admin/add-product">Add Products</Link></li>
                         </ul>
                     )}
                 </li>
@@ -46,7 +55,6 @@ const AdminSideBar = () => {
                         <ul>
                             <li><a href="#">View Orders</a></li>
                             <li><a href="#">Process Orders</a></li>
-
                         </ul>
                     )}
                 </li>
@@ -56,11 +64,10 @@ const AdminSideBar = () => {
                         <ul>
                             <li><a href="#">Customer List</a></li>
                             <li><a href="#">Manage Customers</a></li>
-                            {/* Add other customer sub-menu items here */}
                         </ul>
                     )}
                 </li>
-                {/* Add other menu items here */}
+                <li><a href="/" onClick={handleLogout}>Logout</a></li>
             </ul>
         </aside>
     );

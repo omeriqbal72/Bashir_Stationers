@@ -21,11 +21,18 @@ const AdminProductCard = ({ product, onDelete }) => {
                     <p>Category: {product.category?.name || 'N/A'}</p>
                     <p>SubCategory: {product.subCategory?.name || 'N/A'}</p>
                     <p>Type: {product.type?.name || 'N/A'}</p>
-                    <p>Price: {product.price}</p>
+
                 </div>
             </div>
 
-                <div className="admin-product-card-stock"></div>
+
+            <div className="admin-product-card-stock">         
+                <p>{product.price}</p>
+            </div>
+            <div className="admin-product-card-stock">
+              <p>{product.quantity}</p>
+
+            </div>
 
             <div className="admin-product-actions-buttons">
                 <Link to={`/edit-product/${product._id}`}>

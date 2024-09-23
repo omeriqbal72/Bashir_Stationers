@@ -49,14 +49,16 @@
   .search-results-section{
     display: flex;
     flex-direction: column;
-    padding: 1rem 1rem 1rem 1rem;
-    gap: 0.5rem;
     box-sizing: border-box;
-
   }
   
+
+  .search-results-heading{
+    padding: 1rem 0 0  1rem;
+  }
   .search-dropdown-item {
-    
+    height: 4vh;
+    padding: 0.5rem 0 0.5rem 1rem;
     cursor: pointer;
   }
   

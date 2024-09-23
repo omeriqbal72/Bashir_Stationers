@@ -176,13 +176,7 @@ const editProduct = async (req, res) => {
         } catch (error) {
             return res.status(400).json({ message: "Invalid colors format" });
         }
-
-        console.log('Received Product ID:', productId);
-        console.log('Request Body:', { name, price, companyName, quantity, colors, description });
-        console.log('Removed Images:', removedImages);
-        console.log('New Images:', newImages);
-
-        // Fetch the product to be edited
+      // Fetch the product to be edited
         let product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({ message: "Product not found" });

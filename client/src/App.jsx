@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Home from './components/Home/Home.jsx';
@@ -8,15 +9,24 @@ import AdminPanel from './components/Admin/AdminPanel.jsx';
 import AdminManageProduct from './components/Admin/AdminManageProduct.jsx';
 import ProductForm from './components/Admin/ProductForm.jsx';
 import EditProductPage from './components/Admin/EditProductAdmin.jsx';
-import PublicLayout from './components/Layout/PublicLayout.jsx'; // Import Public Layout
-import AdminLayout from './components/Layout/AdminLayout.jsx';   // Import Admin Layout
-import axios from 'axios';
-import './App.css'
+import PublicLayout from './components/Layout/PublicLayout.jsx';
+import AdminLayout from './components/Layout/AdminLayout.jsx';
+import AdminSuccess from './components/Admin/AdminSuccess.jsx';
+import Login from './components/Auth/Login.jsx';
+import Signup from './components/Auth/Signup.jsx';
+import Verification from './components/Auth/Verification.jsx';
+
+
+import PrivateRoute from './routes/PrivateRoute.jsx';
+import { UserProvider } from './context/UserContext';
+
+import './App.css';
+import NotFound from './components/PageNotFound/NotFound.jsx';
+
 
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.withCredentials = true;
 
-// Create a client for React Query
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -31,25 +41,35 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <Routes>
-          {/* Public routes */}
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/product" element={<Product />} />
-            <Route path="/about" element={<AboutUs />} />
-            
-          </Route>
+        <UserProvider>
+          <Routes>
+            {/* Public routes */}
+            <Route element={<PublicLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/product" element={<Product />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Signup />} />
+              <Route path="/verify-email" element={<Verification />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
 
-          {/* Admin routes */}
-          <Route element={<AdminLayout />}>
-            <Route path="/admin" element={<AdminPanel />} />
-            <Route path="/admin/manage-products" element={<AdminManageProduct />} />
-            <Route path="/admin/add-product" element={<ProductForm />} />
-            <Route path="/edit-product/:id" element={<EditProductPage />} />
-          </Route>
-        </Routes>
-        
+            {/* Private routes */}
+            <Route element={<PrivateRoute adminRoute={true} />}>
+              <Route element={<AdminLayout />}>
+                <Route path="/admin" element={<AdminPanel />} />
+                <Route path="/admin/success-page" element={<AdminSuccess />} />
+                <Route path="/admin/manage-products" element={<AdminManageProduct />} />
+                <Route path="/admin/add-product" element={<ProductForm />} />
+                <Route path="/edit-product/:id" element={<EditProductPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Route>
+
+            
+          </Routes>
+        </UserProvider>
       </Router>
     </QueryClientProvider>
   );

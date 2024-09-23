@@ -57,7 +57,6 @@ function ProductListing() {
 
   let totalProducts = data?.pages?.flatMap(page => page.totalProducts) || [0];
   totalProducts = totalProducts[0];
-  //console.log(totalProducts);
 
   const fetchedProducts = data?.pages?.flatMap(page => page.products) || [];
 
