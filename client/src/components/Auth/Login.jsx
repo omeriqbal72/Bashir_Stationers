@@ -2,22 +2,30 @@ import React, { useState, useContext } from 'react';
 import UserContext from '../../context/UserContext';
 import '../../css/login.css';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { Input } from 'antd';
+import { Input, Button } from 'antd';
 import bgImg from '../../Ui_Images/login-bg.jpg'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [btnLoading, setbtnLoading] = useState(false);
+
   const [error, setError] = useState('');
   const { login } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await login(email, password);
-    } catch (err) {
-      setError('Login failed. Please check your credentials.');
-    }
+    setbtnLoading(true);
+    // Adding a delay before the actual login process starts
+    setTimeout(async () => {
+      try {
+        await login(email, password);
+        setbtnLoading(false);
+      } catch (err) {
+        setError('Login failed. Please check your credentials.');
+        setbtnLoading(false);
+      }
+    }, 500); // 500 milliseconds delay
   };
 
   return (
@@ -48,7 +56,9 @@ const LoginPage = () => {
             />
 
 
-            <button type="submit" className="login-button">Login</button>
+            <Button type='none' htmlType="submit" size='large' className="login-button" loading={btnLoading}>
+              Login
+            </Button>
 
             <div className="additional-options">
               <a >Forget Password?</a>
