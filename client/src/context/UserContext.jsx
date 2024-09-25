@@ -28,9 +28,8 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('token', token);
 
         console.log('New token stored:', token);
-
         localStorage.setItem('refreshToken', refreshToken);
-        
+
         if (user.role === 'admin') {
           console.log(user.role)
           navigate('/admin');
@@ -141,13 +140,13 @@ export const UserProvider = ({ children }) => {
   };
 
 
-useEffect(() => {
-  if (user === null) {
-    getMe();
-  } else {
-    setLoading(false);
-  }
-}, [user, location.pathname]);
+  useEffect(() => {
+    if (user === null) {
+      getMe();
+    } else {
+      setLoading(false);
+    }
+  }, [user, location.pathname]);
 
   return (
     <UserContext.Provider value={{ user, login, signup, verifyEmail, requestNewCode, logout, loading, error }}>
