@@ -36,7 +36,7 @@ export const UserProvider = ({ children }) => {
         setUser(user);
         localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', refreshToken);
-       
+
         if (user.role === 'admin') {
           navigate('/admin');
         } else {
@@ -149,13 +149,13 @@ const verifyEmail = async (code) => {
   };
 
 
-useEffect(() => {
-  if (user === null) {
-    getMe();
-  } else {
-    setLoading(false);
-  }
-}, [user, location.pathname]);
+  useEffect(() => {
+    if (user === null) {
+      getMe();
+    } else {
+      setLoading(false);
+    }
+  }, [user, location.pathname]);
 
   return (
     <UserContext.Provider value={{ user, login, signup, verifyEmail, requestNewCode, logout, loading, error }}>

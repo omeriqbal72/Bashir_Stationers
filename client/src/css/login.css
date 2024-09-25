@@ -1,0 +1,120 @@
+/* Container Styling */
+.login-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    
+  }
+  
+  .login-container img{
+    position: absolute;
+    z-index: -1;
+    object-fit: cover;
+    opacity: .85;
+    width: 100%;
+
+  }
+
+  .login-sub-container{
+    display: flex;
+    width: 75%;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid rgb(238, 238, 238);
+    box-shadow: rgba(39, 39, 39, 0.2) 0px 2px 8px 0px;
+    color: white;
+  }
+
+  .login-left,
+  .login-right {
+    flex: 1;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  .login-left {
+    padding: 2rem;
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+ 
+  .login-left h1 {
+    margin: 1rem 0;
+    font-size: 32px;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 75%;
+    gap: 1.25rem;
+  }
+  
+.login-inputs{
+    padding: .5rem 1rem;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .login-button {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-button:active, .login-button:hover, .login-button:focus{
+    background-color: #c0392b;
+  }
+
+  .additional-options {
+    text-align: center;
+  }
+  
+  .additional-options a {
+    color: #e74c3c;
+    text-decoration: none;
+  }
+
+  .additional-options a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  /* Right Section */
+  .login-right {
+    background: url('../Ui_Images/login-right-img.jpeg') center center / cover no-repeat;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .login-right-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    z-index: 2;
+    padding: 2rem;
+    
+    margin-bottom: 2rem;
+  }
+  
+  .login-right-content h1 {
+    font-size: 36px;
+    line-height: 1.1;
+  }
+  
+ 

@@ -1,42 +1,92 @@
 import React, { useState, useContext } from 'react';
+import '../../css/login.css';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Input, Button } from 'antd';
+import bgImg from '../../Ui_Images/login-bg.jpg'
 import { useUserContext } from '../../context/UserContext.jsx'
-
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const [btnLoading, setbtnLoading] = useState(false);
+
   const { login , error} = useUserContext();
+  
+//    const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     await login(email, password); // Handle login; error is managed by context
+//   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(email, password); // Handle login; error is managed by context
+    setbtnLoading(true);
+    // Adding a delay before the actual login process starts
+    setTimeout(async () => {
+      try {
+        await login(email, password);
+        setbtnLoading(false);
+      } catch (err) {
+        setError('Login failed. Please check your credentials.');
+        setbtnLoading(false);
+      }
+    }, 500); // 500 milliseconds delay
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-        {error && <p>{error}</p>} {/* Display the error message */}
-      </form>
+
+
+    <div className="login-container">
+      <img src={bgImg} alt="Login screen" />
+      <div className="login-sub-container">
+        <div className="login-left">
+          <h1>Login</h1>
+          <form className="login-form" onSubmit={handleSubmit}>
+
+            <Input className='login-inputs'
+              placeholder="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required={true}
+            />
+
+            <Input.Password
+              className='login-inputs'
+              placeholder="Password"
+              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required={true}
+            />
+
+
+            <Button type='none' htmlType="submit" size='large' className="login-button" loading={btnLoading}>
+              Login
+            </Button>
+
+            <div className="additional-options">
+              <a >Forget Password?</a>
+              <p>Don't have an account? <a href="#signup">Sign Up Now</a></p>
+            </div>
+
+            {error && <p>{error}</p>}
+          </form>
+
+
+        </div>
+        <div className="login-right">
+          <div className="login-right-content">
+            <h1>Rasheed</h1>
+            <h1>Stationers</h1>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };
 
 export default LoginPage;
+
+

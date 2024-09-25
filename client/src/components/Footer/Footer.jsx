@@ -4,7 +4,7 @@ import Waves from 'react-wavify';
 import LineSpacer from '../Product/LineSpacer';
 import '../../css/footer.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faHouse, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faPhone, faHouse, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
 
 
 const Footer = () => {
@@ -72,7 +72,7 @@ const Footer = () => {
                         </div>
 
                         <div className='footer-location'>
-                            <FontAwesomeIcon icon={faLocationDot} />
+                            <FontAwesomeIcon icon={faPhone} />
                             <span>(+92) 3214027188</span>
                         </div>
                     </div>
