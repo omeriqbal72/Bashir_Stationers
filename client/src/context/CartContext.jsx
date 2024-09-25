@@ -1,51 +1,127 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import axiosInstance from '../utils/axiosInstance';
+import { useUserContext } from './UserContext.jsx';
 
 const CartContext = createContext();
-
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
+  const { user } = useUserContext();
   const [cart, setCart] = useState(() => {
     const storedCart = localStorage.getItem('cart');
     return storedCart ? JSON.parse(storedCart) : [];
   });
 
-  // Add to Cart function now handles product and quantity
+  // Ref to store timers for delayed backend sync
+  const syncTimers = useRef({});
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      if (user) {
+        try {
+          const response = await axiosInstance.get('/cart');
+          const cartData = response.data.cart;
+
+          if (cartData && Array.isArray(cartData.items)) {
+            const formattedCart = cartData.items.map(item => ({
+              product: filterProductData(item.product), // Filtered product data
+              quantity: item.quantity
+            }));
+            setCart(formattedCart);
+            persistCartToLocalStorage(formattedCart);
+          } else {
+            console.warn('Cart items are not available or not an array');
+            setCart([]);
+          }
+        } catch (error) {
+          console.error('Error fetching cart:', error);
+        }
+      } else {
+        const storedCart = localStorage.getItem('cart');
+        setCart(storedCart ? JSON.parse(storedCart) : []);
+      }
+    };
+
+    fetchCart();
+  }, [user]);
+
+ 
+  const filterProductData = (product) => {
+    const { _id, name, price, images } = product; // Only these fields will be stored
+    return { _id, name, price, images };
+  };
+
+  const persistCartToLocalStorage = (cart) => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  };
+
+  const syncCartWithBackend = (action, product, quantity) => {
+    if (user) {
+      // Clear any previous timer for the same product
+      if (syncTimers.current[product._id]) {
+        clearTimeout(syncTimers.current[product._id]);
+      }
+
+      syncTimers.current[product._id] = setTimeout(async () => {
+        try {
+          if (action === 'add') {
+            await axiosInstance.post('/cart/add', { productId: product._id, quantity });
+          } else if (action === 'update') {
+            await axiosInstance.put('/cart/update', { productId: product._id, quantity });
+          } else if (action === 'remove') {
+            await axiosInstance.post('/cart/remove', { productId: product._id });
+          }
+        } catch (error) {
+          console.error(`Error during ${action} cart action:`, error);
+        }
+      }, 1000);
+    }
+  };
+
   const addToCart = (product, quantity) => {
-    
-    const existingProductIndex = cart.findIndex(item => item._id === product._id);
-    console.log(existingProductIndex)
+    const existingProductIndex = cart.findIndex(item => item.product._id === product._id);
     let updatedCart;
+
     if (existingProductIndex >= 0) {
-      // If the product already exists in the cart, update its quantity
       updatedCart = cart.map(item =>
-        item._id === product._id
-          ? { ...item, quantity: item.quantity + quantity }  // Increment quantity
+        item.product._id === product._id
+          ? { ...item, quantity: item.quantity + quantity }
           : item
       );
     } else {
-      // If it's a new product, add it to the cart with the selected quantity
-      updatedCart = [...cart, { ...product, quantity }];
+      updatedCart = [...cart, { product: filterProductData(product), quantity }];
     }
 
+    persistCartToLocalStorage(updatedCart);
     setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+
+    syncCartWithBackend('add', product, quantity);
   };
 
-  const updateQuantity = (id, amount) => {
+  const updateQuantity = (productId, amount) => {
     const updatedCart = cart.map(item =>
-      item._id === id ? { ...item, quantity: item.quantity + amount } : item
+      item.product._id === productId
+        ? { ...item, quantity: item.quantity + amount }
+        : item
     );
-    console.log(id)
+
+    persistCartToLocalStorage(updatedCart);
     setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+
+    const product = updatedCart.find(item => item.product._id === productId);
+    const newQuantity = product.quantity;
+    syncCartWithBackend('update', product.product, newQuantity);
   };
 
-  const removeFromCart = (id) => {
-    const updatedCart = cart.filter(item => item._id !== id);
-    //console.log(id)
+  const removeFromCart = (productId) => {
+    const updatedCart = cart.filter(item => item.product._id !== productId);
+
+    persistCartToLocalStorage(updatedCart);
     setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+
+    // Find the product object in the cart to pass it for backend sync
+    const product = cart.find(item => item.product._id === productId);
+    if (product) syncCartWithBackend('remove', product.product);
   };
 
   return (

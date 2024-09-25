@@ -33,8 +33,6 @@ const getallProducts = async (req, res) => {
 
         const totalProducts = await Product.countDocuments();
 
-        console.log(`Page: ${pageInt}, Products returned: ${products.length}, Total Products: ${totalProducts}`);
-
         res.status(200).json({
             products,
             currentPage: pageInt,
@@ -56,8 +54,6 @@ const getProductsByCategoryName = async (req, res) => {
         const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
         const limitInt = parseInt(limit, 10);
 
-        console.log(`Fetching products for category: ${categoryname}, Page: ${page}, Limit: ${limit}`);
-
         // Find the category by name to get its ID
         const category = await Category.findOne({ name: categoryname }).exec();
         if (!category) {
@@ -73,9 +69,6 @@ const getProductsByCategoryName = async (req, res) => {
 
         // Count total products by matching category
         const totalProducts = await Product.countDocuments({ category: category._id });
-
-        console.log(`Page: ${page}, Products returned: ${products.length}, Total Products: ${totalProducts}`);
-        console.log('Products returned:', products);
 
         res.status(200).json({
             products,
@@ -96,8 +89,6 @@ const getProductsBySubCategoryName = async (req, res) => {
         const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
         const limitInt = parseInt(limit, 10);
 
-        console.log(`Fetching products for subcategory: ${subcategoryname}, Page: ${page}, Limit: ${limit}`);
-
         // Find the subcategory by name to get its ID
         const subCategory = await SubCategory.findOne({ name: subcategoryname }).exec();
         if (!subCategory) {
@@ -113,9 +104,6 @@ const getProductsBySubCategoryName = async (req, res) => {
 
         // Count total products by matching subcategory
         const totalProducts = await Product.countDocuments({ subCategory: subCategory._id });
-
-        console.log(`Page: ${page}, Products returned: ${products.length}, Total Products: ${totalProducts}`);
-        console.log('Products returned:', products);
 
         res.status(200).json({
             products,
@@ -135,9 +123,6 @@ const getProductsByCompanyName = async (req, res) => {
         const { page = 1, limit = 12 } = req.query;
         const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
         const limitInt = parseInt(limit, 10);
-
-        console.log(`Fetching products for company: ${companyname}, Page: ${page}, Limit: ${limit}`);
-
         // Find the company by name to get its ID
         const company = await Company.findOne({ name: companyname }).exec();
 
@@ -154,9 +139,6 @@ const getProductsByCompanyName = async (req, res) => {
 
         // Count total products by matching company
         const totalProducts = await Product.countDocuments({ company: company._id });
-
-        console.log(`Page: ${page}, Products returned: ${products.length}, Total Products: ${totalProducts}`);
-        console.log('Products returned:', products);
 
         res.status(200).json({
             products,
@@ -177,8 +159,6 @@ const getProductsByName = async (req, res) => {
         const pageInt = parseInt(page, 10);
         const limitInt = parseInt(limit, 10);
         const skip = (pageInt - 1) * limitInt;
-
-        console.log(`Fetching products by name: ${productname}, Page: ${pageInt}, Limit: ${limitInt}`);
 
         // Find products by name with pagination
         const products = await Product.find({ name: productname })
@@ -215,8 +195,6 @@ const getProductsByProductTypeName = async (req, res) => {
         const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
         const limitInt = parseInt(limit, 10);
 
-        console.log(`Fetching products for type: ${producttypename}, Page: ${page}, Limit: ${limit}`);
-
         // Find the product type by name to get its ID
         const productType = await ProductType.findOne({ name: producttypename }).exec();
 
@@ -233,9 +211,6 @@ const getProductsByProductTypeName = async (req, res) => {
 
         // Count total products by matching type
         const totalProducts = await Product.countDocuments({ type: productType._id });
-
-        console.log(`Page: ${page}, Products returned: ${products.length}, Total Products: ${totalProducts}`);
-        console.log('Products returned:', products);
 
         res.status(200).json({
             products,
@@ -336,8 +311,6 @@ const SearchbyIcon = async (req, res) => {
         const totalPages = Math.ceil(totalProducts / limit);
         const paginatedProducts = filteredProducts.slice(skip, skip + limit);
 
-        console.log('Number of Products:', paginatedProducts.length);
-
         // Send response with paginated products and pagination information
         res.status(200).json({
             products: paginatedProducts,
@@ -357,7 +330,7 @@ const checkFileExists = (filePath) => {
             if (err) {
                 resolve(false); // File does not exist
             } else {
-                resolve(true); // File exists
+                resolve(true);
             }
         });
     });
@@ -365,7 +338,7 @@ const checkFileExists = (filePath) => {
 
 const checkImagesExist = async (req, res) => {
     try {
-        const { images } = req.query; // Get images array from query parameters
+        const { images } = req.query;
         if (!images) {
             return res.status(400).json({ message: 'No images provided' });
         }
