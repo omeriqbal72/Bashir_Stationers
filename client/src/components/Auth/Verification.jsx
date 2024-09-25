@@ -1,15 +1,14 @@
-// src/components/VerifyEmailPage.js
-
 import React, { useState, useContext, useEffect } from 'react';
-import UserContext from '../../context/UserContext';
+import { useUserContext } from '../../context/UserContext.jsx'
 
 const Verification = () => {
-  const [code, setCode] = useState('');
-  const [error, setError] = useState('');
-  const [timer, setTimer] = useState(60); // Timer set to 60 seconds
-  const [timerActive, setTimerActive] = useState(true);
-  const { verifyEmail, requestNewCode } = useContext(UserContext);
+  const [code, setCode] = useState('');            // Store verification code
+  const [error, setError] = useState('');          // Store error messages
+  const [timer, setTimer] = useState(60);          // Countdown timer for 60 seconds
+  const [timerActive, setTimerActive] = useState(true); // Control whether timer is active or not
+  const { verifyEmail, requestNewCode } = useUserContext(); // API actions from context
 
+  // Handle timer countdown
   useEffect(() => {
     if (timer > 0 && timerActive) {
       const interval = setInterval(() => {
@@ -22,44 +21,60 @@ const Verification = () => {
     }
   }, [timer, timerActive]);
 
+  // Handle form submit to verify email
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setError('');  // Clear error before verifying
       await verifyEmail(code);
     } catch (err) {
-      setError('Verification failed. Please check the code and try again.');
+      setError(err.response?.data?.message || 'Verification failed. Please check the code and try again.');
     }
   };
 
+  // Handle request for a new verification code
   const handleRequestNewCode = async () => {
     try {
+      setError('');  // Clear any previous errors
       await requestNewCode();
-      setTimer(60); // Reset the timer
-      setTimerActive(true);
+      setTimer(60);   // Reset timer
+      setTimerActive(true);  // Activate the timer again
     } catch (err) {
-      setError('Failed to request a new code.');
+      setError('Failed to request a new code. Please try again later.');
     }
   };
 
   return (
     <div>
       <h1>Verify Your Email</h1>
+
+      {/* Verification form */}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Verification Code"
+          placeholder="Enter Verification Code"
           value={code}
           onChange={(e) => setCode(e.target.value)}
           required
-          disabled={!timerActive}
+          disabled={!timerActive}  // Disable input if the timer is inactive
         />
-        <button type="submit" disabled={!timerActive}>Verify</button>
-        {error && <p>{error}</p>}
+        <button type="submit" disabled={!timerActive}>Verify</button> {/* Button disabled if timer inactive */}
+        {error && <p style={{ color: 'red' }}>{error}</p>}  {/* Display error message */}
       </form>
+
+      {/* Button to request a new verification code, displayed when the timer expires */}
       {!timerActive && (
-        <button onClick={handleRequestNewCode}>Request New Code</button>
+        <button onClick={handleRequestNewCode}>
+          Request New Code
+        </button>
       )}
-      <p>{timerActive ? `Time remaining: ${timer}s` : 'Code expired. Request a new code.'}</p>
+
+      {/* Timer and status messages */}
+      <p>
+        {timerActive 
+          ? `Time remaining: ${timer}s`    // Display remaining time while active
+          : 'Code expired. Request a new code.'} {/* Show expiration message when the timer runs out */}
+      </p>
     </div>
   );
 };

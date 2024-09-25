@@ -4,14 +4,10 @@ const { getProducts, addProduct, editProduct, deleteProduct, getProductById } = 
 const { getAllCategories, getProductsByCategoryName, getProductsBySubCategoryName, SearchProducts,
     getProductsByCompanyName, getProductsByProductTypeName, SearchbyIcon, getProductsByName,
     checkImagesExist, getallProducts } = require('../controllers/productControllers.js');
-
+const { getCart,addToCart,removeFromCart , updateCart } = require('../controllers/cartControllers.js');
 const { register , verifyEmail , login , refreshToken , logout , requestNewCode , getMe } = require('../controllers/authControllers.js');
-const {
-    
-    verifyToken,
-    
-    
-} = require('../middlewares/jwt.js');
+const {  verifyToken} = require('../middlewares/jwt.js');
+
 
 const multer = require('multer');
 const path = require('path');
@@ -73,12 +69,15 @@ router.post('/register', register);
 router.post('/verify-email', verifyEmail);
 
 router.post('/login', login);
-router.post('/refresh-token', refreshToken);
-router.post('/logout', logout);
+router.post('/refresh-token', verifyToken , refreshToken);
+router.post('/logout', verifyToken, logout);
 router.post('/request-new-code' , requestNewCode)
 
-router.get('/me',verifyToken ,  getMe);
-
+router.get('/me', verifyToken ,  getMe);
 router.delete('/delete-product/:productId', verifyToken , deleteProduct);
 
+router.get('/cart', verifyToken, getCart);
+router.post('/cart/add', verifyToken, addToCart);
+router.post('/cart/remove', verifyToken, removeFromCart);
+router.put('/cart/update', verifyToken, updateCart);
 module.exports = router;

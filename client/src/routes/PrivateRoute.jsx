@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import UserContext from '../context/UserContext.jsx';
+import { useUserContext }  from '../context/UserContext.jsx';
 
 const PrivateRoute = ({ adminRoute = false }) => {
-  const { user, loading } = useContext(UserContext);
+  const { user, loading } = useUserContext();
 
   // Log user data for debugging
   console.log('User:', user);

@@ -1,17 +1,22 @@
 import React, { useState, useContext } from 'react';
-import UserContext from '../../context/UserContext';
 import '../../css/login.css';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Input, Button } from 'antd';
 import bgImg from '../../Ui_Images/login-bg.jpg'
+import { useUserContext } from '../../context/UserContext.jsx'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const [btnLoading, setbtnLoading] = useState(false);
 
-  const [error, setError] = useState('');
-  const { login } = useContext(UserContext);
+  const { login , error} = useUserContext();
+  
+//    const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     await login(email, password); // Handle login; error is managed by context
+//   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,6 +82,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };
