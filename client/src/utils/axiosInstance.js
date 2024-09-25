@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { refreshAccessToken } from './refereshToken';
+import { logoutUser } from './logoutUser'; // Import the logout function
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -14,17 +15,16 @@ const decodeToken = (token) => {
   return payload.exp * 1000; // Convert expiration to milliseconds
 };
 
-// Refresh token handling
-let isRefreshing = false; // Flag to prevent multiple concurrent refresh calls
-let failedQueue = []; // Queue to hold failed requests
+let isRefreshing = false;
+let failedQueue = [];
 
 const processQueue = (error, token = null) => {
-  failedQueue.forEach(prom => {
-      if (error) {
-          prom.reject(error);
-      } else {
-          prom.resolve(token);
-      }
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
   });
   failedQueue = [];
 };
@@ -32,74 +32,93 @@ const processQueue = (error, token = null) => {
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
   async (config) => {
-      const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    const refreshToken = localStorage.getItem('refreshToken');
 
-      // Check token expiration
-      if (token && decodeToken(token) < Date.now()) {
-          if (!isRefreshing) {
-              isRefreshing = true;
+    // Check if the user is logged out (no refresh token)
+    if (!refreshToken) {
+      // Clear any existing token from the headers
+      delete config.headers['Authorization'];
+      return config; // Proceed without modifying the request
+    }
 
-              try {
-                  const refreshToken = localStorage.getItem('refreshToken');
-                  const newToken = await refreshAccessToken(refreshToken);
-                  localStorage.setItem('token', newToken);
-                  processQueue(null, newToken);
-              } catch (err) {
-                  processQueue(err, null);
-                  console.error('Failed to refresh token:', err);
-                  return Promise.reject(err); // Redirect to login or handle error
-              } finally {
-                  isRefreshing = false;
-              }
-          }
+    // Check token expiration
+    if (token && decodeToken(token) < Date.now()) {
+      if (!isRefreshing) {
+        isRefreshing = true;
 
-          return new Promise((resolve, reject) => {
-              failedQueue.push({ resolve, reject });
-          }).then(token => {
-              config.headers['Authorization'] = `Bearer ${token}`;
-              return config;
-          });
+        try {
+          const newToken = await refreshAccessToken(); // Call refreshAccessToken without passing refreshToken
+          localStorage.setItem('token', newToken);
+          processQueue(null, newToken);
+        } catch (err) {
+          processQueue(err, null);
+          console.error('Failed to refresh token:', err);
+          // If refresh fails, log out the user
+          await logoutUser(); 
+          window.location.href = '/login';
+          return Promise.reject(err);
+        } finally {
+          isRefreshing = false;
+        }
       }
 
-      if (token) {
-          config.headers['Authorization'] = `Bearer ${token}`;
-      }
-      return config;
+      return new Promise((resolve, reject) => {
+        failedQueue.push({ resolve, reject });
+      }).then((newToken) => {
+        config.headers['Authorization'] = `Bearer ${newToken}`;
+        return config;
+      });
+    }
+
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
   },
   (error) => {
-      console.error('Request Interceptor Error:', error);
-      return Promise.reject(error);
+    console.error('Request Interceptor Error:', error);
+    return Promise.reject(error);
   }
 );
+
 
 // Response interceptor
 axiosInstance.interceptors.response.use(
-  response => response,
+  (response) => response,
   async (error) => {
-      const originalRequest = error.config;
+    const originalRequest = error.config;
 
-      if (error.response?.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
+    // Handle 401 errors
+    if (error.response?.status === 401) {
+      const errorMessage = error.response.data.message;
 
+      if (errorMessage === 'TokenExpired') {
+        // Token expired, try to refresh
+        originalRequest._retry = true;
+
+        try {
           const refreshToken = localStorage.getItem('refreshToken');
-          if (!refreshToken) {
-              console.error('Response Interceptor: No refresh token available.');
-              return Promise.reject(error);
-          }
-
-          try {
-              const newToken = await refreshAccessToken(refreshToken);
-              localStorage.setItem('token', newToken);
-              originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
-              return axiosInstance(originalRequest);
-          } catch (refreshError) {
-              console.error('Failed to refresh token:', refreshError);
-              return Promise.reject(refreshError); 
-          }
+          const newToken = await refreshAccessToken(refreshToken);
+          localStorage.setItem('token', newToken);
+          originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+          return axiosInstance(originalRequest);
+        } catch (err) {
+          console.error('Refresh failed:', err);
+          // If refresh fails, log out the user via backend
+          await logoutUser();
+          return Promise.reject(err);
+        }
+      } else if (errorMessage === 'InvalidToken') {
+        // Token is manipulated, log out the user via backend
+        const refreshToken = localStorage.getItem('refreshToken');
+        await logoutUser(); // Call the backend logout API
+        return Promise.reject(error);
       }
+    }
 
-      return Promise.reject(error);
+    return Promise.reject(error);
   }
 );
 
-export default axiosInstance; 
+export default axiosInstance;

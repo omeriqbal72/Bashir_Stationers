@@ -5,13 +5,13 @@ import { useCart } from '../../context/CartContext.jsx';  // Import the CartCont
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCreditCard, faTrashCan, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
-
 const Cart = () => {
-  const { cart, updateQuantity, removeFromCart } = useCart();  // Destructure methods from context
+  const { cart, updateQuantity, removeFromCart } = useCart(); // Destructure methods from context
 
-  // Calculate total price
-  const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  //console.log(cart)
+  console.log(cart);
+  const totalPrice = cart.reduce((total, item) => {
+    return total + (item.product.price || 0) * (item.quantity || 0);
+  }, 0);
 
   return (
     <div className="cart-container">
@@ -22,35 +22,36 @@ const Cart = () => {
         </div>
         <p>Total items: {cart.length}</p>
         <div className="cart-item-list">
-          {cart.map(item => (
-            <div className="cart-item" key={item._id}>
-              <div className="item-details">
-                <img
-                  src={`http://localhost:8080/${item.images[0] || 'uploads/productImages/default-placeholder.png'}`}
-                  alt={item.name}
-                />
-                <span>{item.name}</span>
-              </div>
-
-              {/* Use ProductQuantity for quantity control, assuming it accepts props for updating quantity */}
-
-              <div className='cart-items-info'>
-                <ProductQuantity
-                  quantity={item.quantity}
-                  onIncrement={() => updateQuantity(item._id, 1)}
-                  onDecrement={() => item.quantity > 1 && updateQuantity(item._id, -1)}
-                />
-
-                <div className="item-price">
-                  {`Rs. ${item.price.toFixed(2)}`}
+          {cart.length > 0 ? (
+            cart.map(item => (
+              <div className="cart-item" key={item.product._id}> {/* Add key prop here */}
+                <div className="item-details">
+                  <img
+                    src={`http://localhost:8080/${(item.product.images && item.product.images.length > 0) ? item.product.images[0] : 'uploads/productImages/default-placeholder.png'}`}
+                    alt={item.name}
+                  />
+                  <span>{item.product.name}</span>
                 </div>
 
-                <FontAwesomeIcon className='remove-cart-item' icon={faTrashCan} size='lg' style={{ color: "#511f1f" }} onClick={() => removeFromCart(item._id)} />
+                <div className='cart-items-info'>
+                  <ProductQuantity
+                    quantity={item.quantity}
+                    onIncrement={() => updateQuantity(item.product._id, 1)}
+                    onDecrement={() => item.quantity > 1 && updateQuantity(item.product._id, -1)}
+                  />
 
+                  <div className="item-price">
+                    {`Rs. ${(item.product.price || 0).toFixed(2)}`}
+                  </div>
+
+                  <FontAwesomeIcon className='remove-cart-item' icon={faTrashCan} size='lg' style={{ color: "#511f1f" }} onClick={() => removeFromCart(item.product._id)} />
+
+                </div>
               </div>
-
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>Your cart is empty.</p>
+          )}
         </div>
         <a href="/" className="back-to-shop">← Back to shop</a>
       </div>
@@ -58,10 +59,9 @@ const Cart = () => {
       <div className="cart-summary">
         <h3>Summary</h3>
         <div className='cart-summary-container'>
-
           <div className='cart-summary-details'>
             <span>{`ITEMS (${cart.length})`} </span>
-            <span>Rs. {totalPrice.toFixed(2)}</span>
+            <span>Rs. {(totalPrice || 0).toFixed(2)}</span>
           </div>
 
           <div className="cart-shipping">
@@ -71,7 +71,7 @@ const Cart = () => {
 
           <div className="cart-total-price">
             <span>Total Price:</span>
-            <span>Rs. {(totalPrice + 250).toFixed(2)}</span>
+            <span>Rs. {(totalPrice + 250 || 0).toFixed(2)}</span>
           </div>
 
           <div className="cart-checkout-btn-container">
@@ -82,9 +82,9 @@ const Cart = () => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };
 
 export default Cart;
+

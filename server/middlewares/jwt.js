@@ -15,44 +15,53 @@ const signToken = (payload, secret, expiresIn) => {
   
 
   const getTokenFromHeaderOrCookie = (req) => {
-    // Check the Authorization header first for access token
+    
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       return {
-        accessToken: authHeader.split(' ')[1], // Return access token from header
-        refreshToken: null // No refresh token found in header
+        token: authHeader.split(' ')[1],
+        refreshToken: null 
       };
     }
-  
-    // Fallback to cookies for both access and refresh tokens
-    const accessToken = req.cookies.accessToken || null;
+
+    const token = req.cookies.token || null;
     const refreshToken = req.cookies.refreshToken || null;
-    console.log(accessToken)
-    console.log(refreshToken)
+    
+    
     return {
-      accessToken,
-      refreshToken // Return refresh token from cookies if available
+      token,
+      refreshToken 
     };
   };
   
-  
   // Usage in a route
- const verifyToken = async (req, res, next) => {
-    const { accessToken, refreshToken } = getTokenFromHeaderOrCookie(req); // Get tokens from headers or cookies
-
-    if (!accessToken) {
+  const verifyToken = async (req, res, next) => {
+    const { token, refreshToken } = getTokenFromHeaderOrCookie(req);
+   
+    if (!token) {
         return res.status(401).json({ message: 'Authentication token missing' });
     }
 
     try {
-        const decoded = await promisify(jwt.verify)(accessToken, process.env.JWT_SECRET);
-        req.user = decoded; // Attach decoded token to the request object
-        next(); // Proceed to the next middleware
+        const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+        if (!decoded.userId) {
+          return res.status(401).json({ message: 'User ID not found in token' });
+      }
+        req.user = decoded; 
+        next(); 
     } catch (error) {
-        return res.status(401).json({ message: 'Invalid or expired token' }); // Handle manipulated or expired tokens
+        // Token is expired
+        if (error.name === 'TokenExpiredError') {
+            if (!refreshToken) {
+                return res.status(401).json({ message: 'Refresh token missing. Please log in again.' });
+            }
+            
+            return res.status(401).json({ message: 'TokenExpired' });
+        }
+
+        return res.status(401).json({ message: 'InvalidToken' });
     }
 };
-
 
 const generateVerificationCode = () => {
   return crypto.randomBytes(3).toString('hex'); // 6 characters
@@ -60,7 +69,6 @@ const generateVerificationCode = () => {
 
 const sendVerificationEmail = async (email, code) => {
     const message = `Your verification code is ${code}`;
-    console.log('Sending email with details:', { email, code });
     try {
       await sendEmail({
         to: email,

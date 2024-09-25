@@ -7,17 +7,17 @@ import SearchBar from './SearchBar.jsx'
 import { Badge } from 'antd';
 import { useCart } from '../../context/CartContext.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import UserContext from '../../context/UserContext.jsx'
+import { useUserContext } from '../../context/UserContext.jsx'
 import {ShoppingCartOutlined} from '@ant-design/icons';
 import { faHouse, faShop, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
 
 
 const Header = () => {
 
-  const { cart } = useCart();  // Destructure methods from context
+  const { cart } = useCart(); 
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
-  const { user, logout } = useContext(UserContext);
+  const { user, logout } = useUserContext();
 
   // Close dropdown if clicked outside
   useEffect(() => {

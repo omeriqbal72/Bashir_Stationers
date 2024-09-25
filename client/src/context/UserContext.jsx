@@ -1,8 +1,9 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect , useContext } from 'react';
 import axiosInstance from '../utils/axiosInstance.js';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const UserContext = createContext();
+export const useUserContext = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -13,47 +14,50 @@ export const UserProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axiosInstance.post('/login', { email, password });
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+  
+      // Get cart from local storage
+      const cart = JSON.parse(localStorage.getItem('cart')) || { items: [] };
+      console.log('Cart to be sent:', cart); // Log cart to verify its contents
+  
+      // Send login request with cart
+      const response = await axiosInstance.post('/login', { email, password, cart });
       const { user, token, refreshToken, message, status } = response.data;
-
+  
       if (status === 'unverified') {
         setError(message);
-        localStorage.setItem('email', user.email); // Store email in localStorage to use during verification
-        navigate('/verify-email'); // Redirect to verification page
+        localStorage.setItem('email', user.email);
+        navigate('/verify-email');
         return;
       }
-
+  
       if (user && user.isVerified) {
         setUser(user);
         localStorage.setItem('token', token);
-
-        console.log('New token stored:', token);
-
         localStorage.setItem('refreshToken', refreshToken);
-        
+       
         if (user.role === 'admin') {
-          console.log(user.role)
           navigate('/admin');
         } else {
-          console.log(user.role)
           navigate('/');
         }
-      }
-
-      else {
+      } else {
         console.log('Unexpected status:', status);
         setError('Unexpected status');
       }
     } catch (error) {
-      console.error('Login error:', error.response?.data || error.message);
+      console.error('Login error:', error.response ? error.response.data : error.message);
       setError(error.response?.data?.message || 'Login failed');
     }
   };
+  
+  
 
-  const signup = async (email, password) => {
+  const signup = async (userData) => {
     try {
-      await axiosInstance.post('/register', { email, password });
-      localStorage.setItem('email', email);
+      await axiosInstance.post('/register', userData);
+      localStorage.setItem('email', userData.email);
       navigate('/verify-email');
     } catch (error) {
       setError(error.response?.data?.message || 'Signup failed');
@@ -61,23 +65,27 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const verifyEmail = async (code) => {
-    try {
-      const storedEmail = localStorage.getItem('email'); // Retrieve stored email
-      if (!storedEmail) {
-        throw new Error('Email is missing for verification');
-      }
-
-      const response = await axiosInstance.post('/verify-email', { email: storedEmail, code }, { withCredentials: true });
-      if (response.status === 200) {
-        localStorage.removeItem('email');
-        navigate('/login');
-      }
-    } catch (error) {
-      setError(error.response?.data?.message || 'Verification failed');
-      console.error('Verification failed', error);
+  // Frontend: verifyEmail function
+const verifyEmail = async (code) => {
+  try {
+    const storedEmail = localStorage.getItem('email'); // Retrieve stored email
+    if (!storedEmail) {
+      throw new Error('Email is missing for verification');
     }
-  };
+
+    const response = await axiosInstance.post('/verify-email', { email: storedEmail, code }, { withCredentials: true });
+    if (response.status === 200) {
+      localStorage.removeItem('email');
+      navigate('/login');
+    }
+  } catch (error) {
+    
+    const errorMessage = error.response?.data?.message || 'Verification failed';
+    setError(errorMessage); // Display the error message in your UI
+    console.error('Verification failed:', errorMessage);
+  }
+};
+
 
   const requestNewCode = async () => {
     try {
@@ -156,4 +164,4 @@ useEffect(() => {
   );
 };
 
-export default UserContext;
+

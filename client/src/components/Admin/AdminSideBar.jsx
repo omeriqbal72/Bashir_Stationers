@@ -1,14 +1,14 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import UserContext from '../../context/UserContext';
 import '../../css/adminSidebar.css';
+import { useUserContext } from '../../context/UserContext.jsx'
 
 const AdminSideBar = () => {
     const [showProducts, setShowProducts] = useState(false);
     const [showOrders, setShowOrders] = useState(false);
     const [showCustomers, setShowCustomers] = useState(false);
 
-    const { logout } = useContext(UserContext); // Access logout function from context
+    const { logout } = useUserContext();// Access logout function from context
     const navigate = useNavigate();
 
     const toggleProducts = () => {
