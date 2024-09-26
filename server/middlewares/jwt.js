@@ -27,14 +27,12 @@ const signToken = (payload, secret, expiresIn) => {
     const token = req.cookies.token || null;
     const refreshToken = req.cookies.refreshToken || null;
     
-    
     return {
       token,
       refreshToken 
     };
   };
-  
-  // Usage in a route
+
   const verifyToken = async (req, res, next) => {
     const { token, refreshToken } = getTokenFromHeaderOrCookie(req);
    
@@ -81,11 +79,28 @@ const sendVerificationEmail = async (email, code) => {
       throw new Error('Failed to send verification email');
     }
   };
+
+  const sendResetPasswordEmail = async (email, resetCode) => {
+    const message = `Your password reset code is ${resetCode}. Please use this code to reset your password.`;
+    try {
+      await sendEmail({
+        to: email,
+        subject: 'Password Reset Confirmation',
+        text: message,
+      });
+      console.log('Password reset email sent successfully');
+    } catch (error) {
+      console.error('Failed to send password reset email:', error);
+      throw new Error('Failed to send password reset email');
+    }
+  };
+  
   
 module.exports = {
   signToken,
   verifyToken,
   generateVerificationCode,
   sendVerificationEmail,
-  getTokenFromHeaderOrCookie
+  getTokenFromHeaderOrCookie,
+  sendResetPasswordEmail
 };

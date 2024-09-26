@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCreditCard, faTrashCan, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 const Cart = () => {
-  const { cart, updateQuantity, removeFromCart } = useCart(); // Destructure methods from context
+  const { cart, updateQuantity, removeFromCart , checkout } = useCart(); // Destructure methods from context
 
   console.log(cart);
   const totalPrice = cart.reduce((total, item) => {
@@ -75,7 +75,7 @@ const Cart = () => {
           </div>
 
           <div className="cart-checkout-btn-container">
-            <button className="cart-checkout-btn">
+            <button className="cart-checkout-btn" onClick={checkout}>
               <FontAwesomeIcon icon={faCreditCard} style={{ color: "#000" }} />
               CHECKOUT
             </button>
