@@ -2,6 +2,7 @@ import axios from 'axios';
 import { refreshAccessToken } from './refereshToken';
 import { logoutUser } from './logoutUser'; // Import the logout function
 
+
 // Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8080',
@@ -29,26 +30,34 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
+
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refreshToken');
 
-    // Check if the user is logged out (no refresh token)
+    if (config.url === '/login' || config.url === '/register') {
+      return config;
+    }
+
+    if(!token){
+      window.location.href = '/login';
+    }
+
     if (!refreshToken) {
       // Clear any existing token from the headers
       delete config.headers['Authorization'];
       return config; // Proceed without modifying the request
     }
 
-    // Check token expiration
+
     if (token && decodeToken(token) < Date.now()) {
       if (!isRefreshing) {
         isRefreshing = true;
 
         try {
-          const newToken = await refreshAccessToken(); // Call refreshAccessToken without passing refreshToken
+          const newToken = await refreshAccessToken(); 
           localStorage.setItem('token', newToken);
           processQueue(null, newToken);
         } catch (err) {

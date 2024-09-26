@@ -4,6 +4,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Input, Button } from 'antd';
 import bgImg from '../../Ui_Images/login-bg.jpg'
 import { useUserContext } from '../../context/UserContext.jsx'
+import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -12,24 +13,15 @@ const LoginPage = () => {
   const [btnLoading, setbtnLoading] = useState(false);
 
   const { login , error} = useUserContext();
-  
-//    const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     await login(email, password); // Handle login; error is managed by context
-//   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setbtnLoading(true);
     // Adding a delay before the actual login process starts
     setTimeout(async () => {
-      try {
-        await login(email, password);
-        setbtnLoading(false);
-      } catch (err) {
-        setError('Login failed. Please check your credentials.');
-        setbtnLoading(false);
-      }
+      await login(email, password);
+      setbtnLoading(false);
     }, 500); // 500 milliseconds delay
   };
 
@@ -66,7 +58,7 @@ const LoginPage = () => {
             </Button>
 
             <div className="additional-options">
-              <a >Forget Password?</a>
+            <Link to="/forgot-password">Forgot Password?</Link>
               <p>Don't have an account? <a href="#signup">Sign Up Now</a></p>
             </div>
 

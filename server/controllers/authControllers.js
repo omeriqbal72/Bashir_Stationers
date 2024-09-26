@@ -3,10 +3,10 @@ const User = require('../models/user');
 const Cart = require('../models/cart.js')
 const {
     signToken,
-    verifyToken,
     generateVerificationCode,
     sendVerificationEmail,
-    getTokenFromHeaderOrCookie
+    getTokenFromHeaderOrCookie,
+    sendResetPasswordEmail,
 } = require('../middlewares/jwt.js');
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
@@ -223,21 +223,32 @@ const requestNewCode = async (req, res) => {
     }
 };
 
-// Refresh access token
 const refreshToken = async (req, res) => {
     try {
         const refreshTokenFromCookie = req.cookies.refreshToken;
-        if (!refreshTokenFromCookie) return res.status(401).json({ message: 'No refresh token provided' });
+        if (!refreshTokenFromCookie) {
+            console.log('No refresh token provided');
+            return res.status(401).json({ message: 'No refresh token provided' });
+        }
 
         let decoded;
         try {
             decoded = await promisify(jwt.verify)(refreshTokenFromCookie, process.env.JWT_REFRESH_SECRET);
+            console.log('Decoded Token:', decoded);
         } catch (error) {
+            console.log('Invalid or expired refresh token:', error.message);
             return res.status(401).json({ message: 'Invalid or expired refresh token' });
         }
 
         const user = await User.findById(decoded.userId);
-        if (!user || user.refreshToken !== refreshTokenFromCookie) {
+        if (!user) {
+            console.log('User not found');
+            return res.status(403).json({ message: 'Invalid refresh token' });
+        }
+
+        console.log('User from Database:', user);
+        if (user.refreshToken !== refreshTokenFromCookie) {
+            console.log('Refresh token mismatch');
             return res.status(403).json({ message: 'Invalid refresh token' });
         }
 
@@ -308,6 +319,83 @@ const getMe = async (req, res) => {
     }
 };
 
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+    
+        // Generate a reset code and expiry
+        const resetCode = generateVerificationCode(); // Your function for generating the code
+        const resetCodeExpiry = new Date(Date.now() + 60 * 1000 * 10); // 10-minute expiry
+    
+        // Update the user's document with the reset code and expiry
+        user.resetPasswordCode = resetCode;
+        user.resetPasswordCodeExpiry = resetCodeExpiry;
+        await user.save();
+    
+        // Send the reset code via email
+        await sendResetPasswordEmail(user.email, resetCode);
+    
+        res.status(200).json({ message: 'Reset code sent successfully' });
+      } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+      }
+  };
+
+  const verifyResetCode = async (req, res) => {
+    try {
+        const { email, code } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+    
+        if (!user.resetPasswordCode || !user.resetPasswordCodeExpiry) {
+          return res.status(400).json({ message: 'No reset code found, request a new one' });
+        }
+    
+        if (user.resetPasswordCode.trim() !== code.trim()) {
+          return res.status(400).json({ message: 'Invalid reset code' });
+        }
+    
+        if (user.resetPasswordCodeExpiry.getTime() < Date.now()) {
+          return res.status(400).json({ message: 'Expired reset code' });
+        }
+    
+        res.status(200).json({ message: 'Code verified successfully' });
+      } catch (error) {
+        console.error('Error in verifyResetCode:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+      }
+};
+
+
+  const resetPassword = async (req, res) => {
+    try {
+      const { email, newPassword } = req.body;
+  
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      user.password = newPassword;
+      user.resetPasswordCode = null;  
+      user.resetPasswordCodeExpiry = null; 
+      await user.save();
+  
+      res.status(200).json({ message: 'Password reset successfully' });
+    } catch (error) {
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  };
+  
+  
+
 module.exports = {
     register,
     verifyEmail,
@@ -315,5 +403,8 @@ module.exports = {
     refreshToken,
     logout,
     requestNewCode,
-    getMe
+    getMe,
+    resetPassword,
+    verifyResetCode,
+    forgotPassword
 }
