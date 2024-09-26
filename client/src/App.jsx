@@ -11,14 +11,18 @@ import AdminPanel from './components/Admin/AdminPanel.jsx';
 import AdminManageProduct from './components/Admin/AdminManageProduct.jsx';
 import ProductForm from './components/Admin/ProductForm.jsx';
 import EditProductPage from './components/Admin/EditProductAdmin.jsx';
-import ForgotPassword from './components/Auth/ForgotPassword.jsx';
-import ResetPassword from './components/Auth/ResetPassword.jsx';
+
 import PublicLayout from './components/Layout/PublicLayout.jsx';
 import AdminLayout from './components/Layout/AdminLayout.jsx';
 import AdminSuccess from './components/Admin/AdminSuccess.jsx';
-import Login from './components/Auth/Login.jsx';
-import Signup from './components/Auth/Signup.jsx';
-import Verification from './components/Auth/Verification.jsx';
+
+import UserAuth from './components/Auth/UserAuth.jsx';
+import UserLogin from './components/Auth/UserLoginForm.jsx';
+import UserForgotPassword from './components/Auth/UserForgotPassword.jsx';
+import UserResetPassword from './components/Auth/UserResetPassword.jsx';
+import UserSignup from './components/Auth/UserSignUpForm.jsx';
+import UserEmailVerification from './components/Auth/UserEmailVerification.jsx';
+
 import Orders from './components/Order/Orders.jsx';
 import PrivateRoute from './routes/PrivateRoute.jsx';
 import { UserProvider } from './context/UserContext';
@@ -54,11 +58,11 @@ function App() {
                 <Route path="/products" element={<Products />} />
                 <Route path="/product" element={<Product />} />
                 <Route path="/about" element={<AboutUs />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Signup />} />
-                <Route path="/verify-email" element={<Verification />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/login" element={<UserAuth form='Login' component={<UserLogin/>}/>} />
+                <Route path="/register" element={<UserAuth form='Sign Up' component={<UserSignup/>}/>} />
+                <Route path="/verify-email" element={<UserAuth form='Verify Email' component={<UserEmailVerification/>}/>} />
+                <Route path="/forgot-password" element={<UserAuth form='Forgot Password' component={<UserForgotPassword/>}/>} />
+                <Route path="/reset-password" element={<UserAuth form='Reset Password' component={<UserResetPassword/>}/>} />
                 <Route path="/mycart" element={<Cart />} />
                 <Route path="/order-summary" element={<OrderSummary />} />
                 <Route path="/myorders" element={<Orders />} />
