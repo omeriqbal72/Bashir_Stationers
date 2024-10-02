@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { useUserContext } from '../../context/UserContext.jsx';
-import { useLocation , useNavigate} from 'react-router-dom';
+import { Input, Button } from 'antd';
+import '../../css/userauth.css';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const ResetPassword = () => {
+const UserResetPassword = () => {
+
+  const [btnLoading, setbtnLoading] = useState(false);
   const { resetPassword, error } = useUserContext();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -12,45 +16,53 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setbtnLoading(true);
     if (newPassword !== confirmPassword) {
       setMessage('Passwords do not match');
+      setbtnLoading(false);
       return;
     }
+    setTimeout(async () => {
+      try {
+        const msg = await resetPassword(email, newPassword);
+        setbtnLoading(false);
+        setMessage(msg);
+      } catch (err) {
+        setbtnLoading(false);
+        console.error(err);
+      }
+    }, 500);
 
-    try {
-      const msg = await resetPassword(email, newPassword);
-      setMessage(msg); 
-      
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   return (
-    <div>
-      <h1>Reset Password</h1>
-      <form onSubmit={handleSubmit}>
-        <input
+    <>
+      <form className="login-form" onSubmit={handleSubmit}>
+        <Input className='login-inputs'
           type="password"
           placeholder="New Password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
-          required
+          required={true}
         />
-        <input
+
+        <Input className='login-inputs'
           type="password"
           placeholder="Confirm Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          required
+          required={true}
         />
-        <button type="submit">Reset Password</button>
+        <Button type='none' htmlType="submit" size='large' className="login-button" loading={btnLoading}>
+          Reset Password
+        </Button>
+
       </form>
 
       {message && <p>{message}</p>}
       {error && <p>{error}</p>}
-    </div>
+    </>
   );
 };
 
-export default ResetPassword;
+export default UserResetPassword;

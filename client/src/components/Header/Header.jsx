@@ -46,6 +46,13 @@ const Header = () => {
           </Link>
           <SearchBar />
           <div className="actions">
+
+          <Link to={'/mycart'}>
+              <Badge size='small' count={cart.length}>
+              <ShoppingCartOutlined style={{ fontSize: '28px' }}/>
+              </Badge>
+            </Link>
+
             {user ? (
               <>
                 <button onClick={logout}>Logout</button>
@@ -55,21 +62,8 @@ const Header = () => {
                 <Link to="/login">
                   <button className='header-register-btn'>Login</button>
                 </Link>
-                <Link to="/register">
-                  <button className='header-register-btn'>Register</button>
-                </Link>
               </>
-            )}
-
-
-            <Link to={'/mycart'}>
-              <Badge size='small' count={cart.length}>
-
-              <ShoppingCartOutlined style={{ fontSize: '28px' }}/>
-
-              </Badge>
-            </Link>
-
+            )}    
 
           </div>
         </div>
