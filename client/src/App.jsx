@@ -15,14 +15,9 @@ import EditProductPage from './components/Admin/EditProductAdmin.jsx';
 import PublicLayout from './components/Layout/PublicLayout.jsx';
 import AdminLayout from './components/Layout/AdminLayout.jsx';
 import AdminSuccess from './components/Admin/AdminSuccess.jsx';
-
-import UserAuth from './components/Auth/UserAuth.jsx';
-import UserLogin from './components/Auth/UserLoginForm.jsx';
-import UserForgotPassword from './components/Auth/UserForgotPassword.jsx';
-import UserResetPassword from './components/Auth/UserResetPassword.jsx';
-import UserSignup from './components/Auth/UserSignUpForm.jsx';
-import UserEmailVerification from './components/Auth/UserEmailVerification.jsx';
-
+import Login from './components/Auth/Login.jsx';
+import Signup from './components/Auth/Signup.jsx';
+import Verification from './components/Auth/Verification.jsx';
 import Orders from './components/Order/Orders.jsx';
 import PrivateRoute from './routes/PrivateRoute.jsx';
 import { UserProvider } from './context/UserContext';
@@ -30,6 +25,7 @@ import NotFound from './components/PageNotFound/NotFound.jsx';
 import { CartProvider } from './context/CartContext.jsx';
 import { OrderProvider } from './context/OrderContext.jsx';
 import './App.css'
+import ErrorBoundary from './ErrorBoundaries/ErrorBoundary.jsx';
 
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.withCredentials = true;
@@ -51,37 +47,43 @@ function App() {
         <UserProvider>
           <CartProvider>
             <OrderProvider>
-            <Routes>
-              {/* Public routes */}
-              <Route element={<PublicLayout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/product" element={<Product />} />
-                <Route path="/about" element={<AboutUs />} />
-                <Route path="/login" element={<UserAuth form='Login' component={<UserLogin/>}/>} />
-                <Route path="/register" element={<UserAuth form='Sign Up' component={<UserSignup/>}/>} />
-                <Route path="/verify-email" element={<UserAuth form='Verify Email' component={<UserEmailVerification/>}/>} />
-                <Route path="/forgot-password" element={<UserAuth form='Forgot Password' component={<UserForgotPassword/>}/>} />
-                <Route path="/reset-password" element={<UserAuth form='Reset Password' component={<UserResetPassword/>}/>} />
-                <Route path="/mycart" element={<Cart />} />
-                <Route path="/order-summary" element={<OrderSummary />} />
-                <Route path="/myorders" element={<Orders />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
+              <ErrorBoundary>
+                <Routes>
+                  {/* Public routes */}
+                  <Route element={<PublicLayout />}>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/product" element={<Product />} />
+                    <Route path="/about" element={<AboutUs />} />
+                    <Route path="/login" element={<UserAuth form='Login' component={<UserLogin />} />} />
+                    <Route path="/register" element={<UserAuth form='Sign Up' component={<UserSignup />} />} />
+                    <Route path="/verify-email" element={<UserAuth form='Verify Email' component={<UserEmailVerification />} />} />
+                    <Route path="/forgot-password" element={<UserAuth form='Forgot Password' component={<UserForgotPassword />} />} />
+                    <Route path="/reset-password" element={<UserAuth form='Reset Password' component={<UserResetPassword />} />} />
+                    <Route path="/mycart" element={<Cart />} />
+                    <Route element={<PrivateRoute />}>
+                      <Route path="/order-summary" element={<OrderSummary />} />
+                      <Route path="/myorders" element={<Orders />} />
+                    </Route>
+                    <Route path="*" element={<NotFound />} />
+                  </Route>
 
-              {/* Private routes */}
-              <Route element={<PrivateRoute adminRoute={true} />}>
-                <Route element={<AdminLayout />}>
-                  <Route path="/admin" element={<AdminPanel />} />
-                  <Route path="/admin/success-page" element={<AdminSuccess />} />
-                  <Route path="/admin/manage-products" element={<AdminManageProduct />} />
-                  <Route path="/admin/add-product" element={<ProductForm />} />
-                  <Route path="/edit-product/:id" element={<EditProductPage />} />
-                  <Route path="*" element={<NotFound />} />
-                </Route>
-              </Route>
+                  {/* Private routes */}
+                  <Route element={<PrivateRoute adminRoute={true} />}>
+                    <Route element={<AdminLayout />}>
+                      <Route path="/admin" element={<AdminPanel />} />
+                      <Route path="/admin/success-page" element={<AdminSuccess />} />
+                      <Route path="/admin/manage-products" element={<AdminManageProduct />} />
+                      <Route path="/admin/add-product" element={<ProductForm />} />
+                      <Route path="/edit-product/:id" element={<EditProductPage />} />
+                      <Route path="/admin/view-orders" element={<AdminViewOrders />} />
+                      <Route path="/admin/manage-orders/:id" element={<AdminManageOrder />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Route>
+                  </Route>
 
-            </Routes>
+                </Routes>
+              </ErrorBoundary>
             </OrderProvider>
 
           </CartProvider>

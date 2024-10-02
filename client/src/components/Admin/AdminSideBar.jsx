@@ -53,7 +53,7 @@ const AdminSideBar = () => {
                     <a href="#">Orders</a>
                     {showOrders && (
                         <ul>
-                            <li><a href="#">View Orders</a></li>
+                            <li><Link to="/admin/view-orders">View Orders</Link></li>
                             <li><a href="#">Process Orders</a></li>
                         </ul>
                     )}
