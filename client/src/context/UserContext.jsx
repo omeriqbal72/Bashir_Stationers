@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect , useContext } from 'react';
 import axiosInstance from '../utils/axiosInstance.js';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, replace } from 'react-router-dom';
 
 const UserContext = createContext();
 export const useUserContext = () => useContext(UserContext);
@@ -37,11 +37,7 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', refreshToken);
 
-        if (user.role === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/');
-        }
+        navigate(user.role === 'admin' ? '/admin' : '/', { replace: true });
       } else {
         console.log('Unexpected status:', status);
         setError('Unexpected status');
@@ -138,7 +134,6 @@ const verifyEmail = async (code) => {
     }
   };
 
-  // Function to reset the password after code verification
   const resetPassword = async (email, newPassword) => {
     try {
       const response = await axiosInstance.post('/reset-password', { email, newPassword });
@@ -149,8 +144,6 @@ const verifyEmail = async (code) => {
       throw err;
     }
   };
-
-
 
   const getMe = async () => {
     if (location.pathname === '/verify-email') {

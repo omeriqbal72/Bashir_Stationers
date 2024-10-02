@@ -5,11 +5,6 @@ import { useUserContext }  from '../context/UserContext.jsx';
 const PrivateRoute = ({ adminRoute = false }) => {
   const { user, loading } = useUserContext();
 
-  // Log user data for debugging
-  console.log('User:', user);
-  console.log('Loading:', loading);
-
-  
   // Show a loading spinner or message while loading user data
   if (loading) {
     return <div>Loading...</div>;

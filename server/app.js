@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(cors({
     origin: 'http://localhost:5173', // or your frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' , 'PATCH'],
     credentials: true, 
     allowedHeaders: ['Authorization', 'Content-Type'] // Allow Authorization header
 }));

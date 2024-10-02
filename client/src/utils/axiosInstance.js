@@ -41,10 +41,6 @@ axiosInstance.interceptors.request.use(
       return config;
     }
 
-    if(!token){
-      window.location.href = '/login';
-    }
-
     if (!refreshToken) {
       // Clear any existing token from the headers
       delete config.headers['Authorization'];
