@@ -1,8 +1,20 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect } from 'react';
 import '../../css/userauth.css';
 import bgImg from '../../Ui_Images/login-bg.jpg'
+import {  useNavigate } from 'react-router-dom';
+import { useUserContext } from '../../context/UserContext.jsx'
 
 const UserAuth = (props) => {
+
+  const { user } = useUserContext();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      if (user) {
+          navigate('/', { replace: true });
+      }
+  }, [user, navigate]);
 
   return (
 
