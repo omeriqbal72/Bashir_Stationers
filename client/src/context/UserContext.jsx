@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect , useContext } from 'react';
 import axiosInstance from '../utils/axiosInstance.js';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, replace } from 'react-router-dom';
 
 const UserContext = createContext();
 export const useUserContext = () => useContext(UserContext);
@@ -37,11 +37,7 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', refreshToken);
 
-        if (user.role === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/');
-        }
+        navigate(user.role === 'admin' ? '/admin' : '/', { replace: true });
       } else {
         console.log('Unexpected status:', status);
         setError('Unexpected status');
@@ -110,11 +106,42 @@ const verifyEmail = async (code) => {
       setUser(null);
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
-      navigate('/'); // Redirect to login after logout
+      navigate('/'); 
     } catch (error) {
       console.error('Logout failed', error);
       // Optionally set an error state to show a message to the user
       setError('Logout failed, please try again.');
+    }
+  };
+
+  const forgotPassword = async (email) => {
+    try {
+      const response = await axiosInstance.post('/forgot-password', { email });
+      return response.data.message;
+    } catch (err) {
+      setError(err.response?.data?.message || 'Error sending reset password email');
+      throw err;
+    }
+  };
+
+  const verifyResetCode = async (email, code) => {
+    try {
+      const response = await axiosInstance.post('/verify-reset-code', { email, code });
+      return response.data.message;  // Return success message
+    } catch (err) {
+      setError(err.response?.data?.message || 'Invalid or expired reset code');
+      throw err;
+    }
+  };
+
+  const resetPassword = async (email, newPassword) => {
+    try {
+      const response = await axiosInstance.post('/reset-password', { email, newPassword });
+      navigate('/login'); 
+      return response.data.message;  // Return success message
+    } catch (err) {
+      setError(err.response?.data?.message || 'Error resetting password');
+      throw err;
     }
   };
 
@@ -158,7 +185,7 @@ const verifyEmail = async (code) => {
   }, [user, location.pathname]);
 
   return (
-    <UserContext.Provider value={{ user, login, signup, verifyEmail, requestNewCode, logout, loading, error }}>
+    <UserContext.Provider value={{ user, login, signup, verifyEmail, requestNewCode, logout, loading, error , verifyResetCode ,forgotPassword ,resetPassword }}>
       {children}
     </UserContext.Provider>
   );

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import { useUserContext } from './UserContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
@@ -14,6 +15,7 @@ export const CartProvider = ({ children }) => {
 
   // Ref to store timers for delayed backend sync
   const syncTimers = useRef({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -78,6 +80,16 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const checkout = () => {
+    if (user) {
+      // User is logged in, navigate to order summary
+      navigate('/order-summary');
+    } else {
+      // User is not logged in, navigate to login page
+      navigate('/login');
+    }
+  };
+
   const addToCart = (product, quantity) => {
     const existingProductIndex = cart.findIndex(item => item.product._id === product._id);
     let updatedCart;
@@ -125,7 +137,7 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart , checkout}}>
       {children}
     </CartContext.Provider>
   );
