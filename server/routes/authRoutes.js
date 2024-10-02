@@ -7,7 +7,7 @@ const { getAllCategories, getProductsByCategoryName, getProductsBySubCategoryNam
 const { getCart,addToCart,removeFromCart , updateCart } = require('../controllers/cartControllers.js');
 const { register , verifyEmail , login , refreshToken , logout , requestNewCode , getMe , resetPassword , forgotPassword , verifyResetCode } = require('../controllers/authControllers.js');
 const {  verifyToken} = require('../middlewares/jwt.js');
-const { placeOrder , getUserOrders } = require('../controllers/orderControllers.js')
+const { placeOrder , getUserOrders , getAllOrders , getOrderbyId , updateOrderStatus} = require('../controllers/orderControllers.js')
 
 const multer = require('multer');
 const path = require('path');
@@ -87,5 +87,8 @@ router.put('/cart/update', verifyToken, updateCart);
 
 
 router.get('/order/myorders', verifyToken, getUserOrders);
-router.post('/order/placeorder' , verifyToken , placeOrder )
+router.post('/order/placeorder' , verifyToken , placeOrder );
+router.get('/getorders',getAllOrders )
+router.get('/getorder/:id', getOrderbyId);
+router.patch('/update-order-status/:id', updateOrderStatus);
 module.exports = router;

@@ -1,5 +1,35 @@
 const Order = require('../models/order');
 
+
+const getAllOrders = async (req , res) =>{
+    try {
+        const orders = await Order.find().populate('user');
+        res.json(orders);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+}
+
+const getOrderbyId = async (req , res) =>{
+    try {
+        const order = await Order.findById(req.params.id).populate('user');
+        if (!order) return res.status(404).json({ message: 'Order not found' });
+        res.json(order);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+}
+
+const updateOrderStatus = async (req , res) =>{
+    try {
+        const order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!order) return res.status(404).json({ message: 'Order not found' });
+        res.json(order);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+}
+
 const getUserOrders = async (req, res) => {
     try {
         const userId = req.user.userId; // Get user ID from the decoded token
@@ -55,5 +85,9 @@ const placeOrder = async (req, res) => {
 
 module.exports = {
     placeOrder,
-    getUserOrders
+    getUserOrders,
+    getAllOrders,
+    getOrderbyId,
+    updateOrderStatus
+
 }

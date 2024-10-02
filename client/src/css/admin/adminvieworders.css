@@ -1,0 +1,77 @@
+/* src/components/Admin/ViewOrders.css */
+
+.admin-view-orders {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-view-orders h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .admin-view-orders table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .admin-view-orders th,
+  .admin-view-orders td {
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: left;
+  }
+  
+  .admin-view-orders th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .admin-view-orders tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .admin-view-orders tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .admin-view-orders button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  .admin-view-orders button:hover {
+    background-color: #0056b3;
+  }
+  
+  .admin-view-orders td a {
+    text-decoration: none;
+  }
+  
+  .admin-view-orders td a button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .admin-view-orders .loading,
+  .admin-view-orders .no-orders {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+    padding: 20px 0;
+  }
+  

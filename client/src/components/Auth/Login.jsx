@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../css/login.css';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Input, Button } from 'antd';
 import bgImg from '../../Ui_Images/login-bg.jpg'
 import { useUserContext } from '../../context/UserContext.jsx'
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -12,7 +12,14 @@ const LoginPage = () => {
 
   const [btnLoading, setbtnLoading] = useState(false);
 
-  const { login , error} = useUserContext();
+  const { user, login, loading , error } = useUserContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/', { replace: true }); 
+    }
+  }, [user, navigate]);
 
 
   const handleSubmit = async (e) => {
