@@ -19,8 +19,8 @@ const TextEditor = ({ value, onChange, placeholder }) => {
                 }}
                 init={{
                     plugins: [
-                        'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
-                        'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'mentions', 'autocorrect'
+                        'anchor', 'autolink', 'charmap', 'emoticons', 'link', 'lists', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+                        
                     ],
                     toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | checklist numlist bullist | emoticons charmap | removeformat',
                     menubar: false,

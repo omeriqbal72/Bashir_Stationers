@@ -1,0 +1,40 @@
+/* src/Dashboard.css */
+.admin-dashboard {
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f0fbff;
+  }
+  
+
+  
+  .admin-dashboard-boxes {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .admin-dashboard-box {
+    background-color:white ;
+   font-size: 20px;
+    padding: 20px;
+    text-align: center;
+    width: 20%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  
+  .admin-dashboard-graphs {
+    display: flex;
+  
+    gap: 1rem;
+  }
+  
+  .admin-dashboard-graph {
+    width: 33%; 
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  

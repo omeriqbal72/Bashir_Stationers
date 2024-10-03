@@ -5,6 +5,7 @@ const ProductType = require('../models/productType');
 const SubCategory = require('../models/subcategory');
 const path = require('path');
 const fs = require('fs');
+const company = require('../models/company');
 
 const getAllCategories = async (req, res) => {
     try {
@@ -362,6 +363,50 @@ const checkImagesExist = async (req, res) => {
     }
 };
 
+const getFeaturedProducts = async (req, res) => {
+    try {
+        const products = await Product.find({})
+            .sort({ date: -1 }) // Sort by date in descending order
+            .limit(10) // Limit to 15 latest products
+            .populate('company'); // Populate the company field
+        
+        res.status(200).json(products);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+};
+
+
+const getYouMayAlsoLike = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const product = await Product.findById(id).populate('company'); // Populate company for the current product
+        
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Find similar products by category or subcategory or type (adjust as needed)
+        const similarProducts = await Product.find({
+            _id: { $ne: product._id },  // Exclude the current product
+            $or: [
+                { category: product.category },
+                { subCategory: product.subCategory },
+                { type: product.type },
+                { company: product.company}
+            ]
+        })
+        .populate('company') // Populate company for similar products
+        .limit(10);
+
+        res.status(200).json(similarProducts);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+};
+
+
 module.exports = {
     getallProducts,
     getAllCategories,
@@ -372,6 +417,8 @@ module.exports = {
     getProductsByName,
     SearchProducts,
     SearchbyIcon,
-    checkImagesExist
+    checkImagesExist,
+    getFeaturedProducts,
+    getYouMayAlsoLike
 
 };

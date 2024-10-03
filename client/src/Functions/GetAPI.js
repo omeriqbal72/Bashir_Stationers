@@ -16,6 +16,13 @@ const fetchProducts = async ({ queryKey, pageParam = 1 }) => {
   return data;
 };
 
+const fetchYouMayLikeProduct = async ({ queryKey }) => {
+  const id = queryKey[1];
+  console.log('Fetching you may also like products...'); // Update console log
+  const { data } = await axios.get(`/you-may-also-like/${encodeURIComponent(id)}`);
+  return data;
+};
+
 // Custom hook using useInfiniteQuery for paginated fetching
 export const useGetAllProducts = (url) => {
   const queryKey = ['products', url]; 
@@ -57,6 +64,18 @@ export const useGetProductDetails = (id) => {
   return useQuery({
     queryKey: ['product', id],
     queryFn: fetchProductDetails,
+    enabled: !!id, 
+    staleTime: 1000 * 60 * 5, 
+    cacheTime: 1000 * 60 * 10,
+    retry: 2, 
+    refetchOnWindowFocus: false, 
+  });
+};
+
+export const useYouMayLikeProduct = (id) => {
+  return useQuery({
+    queryKey: ['you-may-also-like', id], // Changed query key
+    queryFn: fetchYouMayLikeProduct,
     enabled: !!id, 
     staleTime: 1000 * 60 * 5, 
     cacheTime: 1000 * 60 * 10,

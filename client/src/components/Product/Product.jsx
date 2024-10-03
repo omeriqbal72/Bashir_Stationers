@@ -4,7 +4,7 @@ import ProductImageGallery from './ProductImageGallery';
 import ProductDetails from './ProductDetails';
 import LineSpacer from './LineSpacer.jsx';
 import SimilarProductSlider from './SimilarProductsSlider.jsx'
-import { useGetProductDetails } from '../../Functions/GetAPI.js';
+import { useGetProductDetails , useYouMayLikeProduct } from '../../Functions/GetAPI.js';
 import DOMPurify from 'dompurify';
 import '../../css/product.css';
 
@@ -17,6 +17,7 @@ const Product = () => {
   const id = queryParams.get('id');
   //console.log(id);
   const { data: product, isLoading, isError, error } = useGetProductDetails(id);
+  const { data: youMayLikeProduct, isLoading: loadingYouMayLike, isError: errorYouMayLike, error: errorYouMayLikeDetails } = useYouMayLikeProduct(id);
 
   if (isLoading) {
     return <div>Loading...</div>; // Display loading state
@@ -54,7 +55,12 @@ const Product = () => {
       <div className="slider-section">
         <h2>You may also like</h2>
         <div className="similar-products-slider-container">
-          <SimilarProductSlider />
+        <SimilarProductSlider 
+                        products={youMayLikeProduct}
+                        isLoading={loadingYouMayLike}
+                        isError={errorYouMayLike}
+                        error={errorYouMayLikeDetails}
+                    />
         </div>
       </div>
     </>

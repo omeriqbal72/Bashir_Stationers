@@ -1,4 +1,3 @@
-// src/components/OrderSummary.jsx
 import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext.jsx'; 
 import { useOrder } from '../../context/OrderContext.jsx';
@@ -14,6 +13,7 @@ const OrderSummary = () => {
     zipCode: '',
   });
   const [paymentMethod, setPaymentMethod] = useState('cash-on-delivery');
+  const [contactNumber, setContactNumber] = useState(''); // New state for contact number
 
   const handleAddressChange = (e) => {
     setAddress({ ...address, [e.target.name]: e.target.value });
@@ -22,8 +22,7 @@ const OrderSummary = () => {
   const handleSubmitOrder = (e) => {
     e.preventDefault();
 
-    // Call placeOrder from OrderContext
-    placeOrder(cart, address, paymentMethod);
+    placeOrder(cart, address, paymentMethod, contactNumber);
   };
 
   if (orderError) {
@@ -90,6 +89,19 @@ const OrderSummary = () => {
               name="zipCode"
               value={address.zipCode}
               onChange={handleAddressChange}
+              required
+            />
+          </label>
+          <br />
+
+          {/* New Contact Number Field */}
+          <label>
+            Contact Number:
+            <input
+              type="text"
+              name="contactNumber"
+              value={contactNumber}
+              onChange={(e) => setContactNumber(e.target.value)}
               required
             />
           </label>

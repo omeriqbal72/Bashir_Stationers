@@ -3,11 +3,11 @@ const router = express.Router();
 const { getProducts, addProduct, editProduct, deleteProduct, getProductById } = require('../controllers/adminControllers.js');
 const { getAllCategories, getProductsByCategoryName, getProductsBySubCategoryName, SearchProducts,
     getProductsByCompanyName, getProductsByProductTypeName, SearchbyIcon, getProductsByName,
-    checkImagesExist, getallProducts } = require('../controllers/productControllers.js');
-const { getCart,addToCart,removeFromCart , updateCart } = require('../controllers/cartControllers.js');
-const { register , verifyEmail , login , refreshToken , logout , requestNewCode , getMe , resetPassword , forgotPassword , verifyResetCode } = require('../controllers/authControllers.js');
-const {  verifyToken} = require('../middlewares/jwt.js');
-const { placeOrder , getUserOrders , getAllOrders , getOrderbyId , updateOrderStatus} = require('../controllers/orderControllers.js')
+    checkImagesExist, getallProducts,getYouMayAlsoLike,getFeaturedProducts } = require('../controllers/productControllers.js');
+const { getCart, addToCart, removeFromCart, updateCart } = require('../controllers/cartControllers.js');
+const { register, verifyEmail, login, refreshToken, logout, requestNewCode, getMe, resetPassword, forgotPassword, verifyResetCode } = require('../controllers/authControllers.js');
+const { verifyToken } = require('../middlewares/jwt.js');
+const { placeOrder, getUserOrders, getAllOrders, getOrderbyId, updateOrderStatus, orderStats, salesperMonth , orderStatusStats} = require('../controllers/orderControllers.js')
 
 const multer = require('multer');
 const path = require('path');
@@ -44,12 +44,12 @@ const upload = multer({
         }
         cb(null, true);
     }
-}).array('images', 5); 
+}).array('images', 5);
 
 
 router.post('/add-product', verifyToken, upload, addProduct);
 
-router.put('/edit-product/:productId',verifyToken , upload, editProduct);
+router.put('/edit-product/:productId', verifyToken, upload, editProduct);
 
 router.get('/admin/edit-product/:id', getProductById);
 router.get('/product/:id', getProductById);
@@ -58,6 +58,9 @@ router.get('/products/category/:categoryname', getProductsByCategoryName);
 router.get('/products/subcategory/:subcategoryname', getProductsBySubCategoryName);
 router.get('/products/company/:companyname', getProductsByCompanyName);
 router.get('/products/type/:producttypename', getProductsByProductTypeName);
+router.get('/you-may-also-like/:id', getYouMayAlsoLike);
+router.get('/featured-products', getFeaturedProducts);
+
 router.get('/get-categories', getAllCategories);
 router.get('/get-search-products', SearchProducts);
 router.get('/products/search/:searched', SearchbyIcon);
@@ -69,16 +72,16 @@ router.post('/register', register);
 router.post('/verify-email', verifyEmail);
 
 router.post('/login', login);
-router.post('/refresh-token' , refreshToken);
+router.post('/refresh-token', refreshToken);
 router.post('/logout', verifyToken, logout);
-router.post('/request-new-code' , requestNewCode);
+router.post('/request-new-code', requestNewCode);
 
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 router.post('/verify-reset-code', verifyResetCode);
 
-router.get('/me', verifyToken ,  getMe);
-router.delete('/delete-product/:productId', verifyToken , deleteProduct);
+router.get('/me', verifyToken, getMe);
+router.delete('/delete-product/:productId', verifyToken, deleteProduct);
 
 router.get('/cart', verifyToken, getCart);
 router.post('/cart/add', verifyToken, addToCart);
@@ -87,8 +90,11 @@ router.put('/cart/update', verifyToken, updateCart);
 
 
 router.get('/order/myorders', verifyToken, getUserOrders);
-router.post('/order/placeorder' , verifyToken , placeOrder );
-router.get('/getorders',getAllOrders )
+router.post('/order/placeorder', verifyToken, placeOrder);
+router.get('/getorders', getAllOrders)
 router.get('/getorder/:id', getOrderbyId);
 router.patch('/update-order-status/:id', updateOrderStatus);
+router.get('/order-stats', verifyToken, orderStats)
+router.get('/sales-per-month', verifyToken, salesperMonth)
+router.get('/order-status-stats', verifyToken, orderStatusStats)
 module.exports = router;
