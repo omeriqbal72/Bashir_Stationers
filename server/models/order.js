@@ -24,13 +24,13 @@ const OrderSchema = new Schema({
         type: Number,
         required: true,
       },
-      selectedColor: String, // Optional: Product color if applicable
+      selectedColor: String, 
     },
   ],
   shippingAddress: {
     street: { type: String, required: true },
     city: { type: String, required: true },
-    postalCode: { type: String, required: true },
+    postalCode: { type: Number, required: true },
     country: { type: String, required: true },
   },
   totalAmount: {
@@ -61,12 +61,17 @@ const OrderSchema = new Schema({
     enum: ['Not Shipped', 'Shipped', 'Delivered'],
     default: 'Not Shipped',
   },
+  trackingId:{
+    type: Number,
+    default:0
+  },
+
   deliveryDate: {
     type: Date,
   },
   transactionDetails: {
     transactionId: String,
-    paymentGateway: String, // e.g., 'Stripe'
+    paymentGateway: String,
   },
 });
 

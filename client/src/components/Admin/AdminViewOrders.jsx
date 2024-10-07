@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../../css/admin/adminvieworders.css'; // Import the CSS file
 
-const ViewOrders = () => {
+const AdminViewOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,7 +35,7 @@ const ViewOrders = () => {
         <thead>
           <tr>
             <th>Order ID</th>
-            <th>User ID</th>
+            <th>User</th>
             <th>Total Amount</th>
             <th>Order Status</th>
             <th>Action</th>
@@ -45,7 +45,7 @@ const ViewOrders = () => {
           {orders.map((order) => (
             <tr key={order._id}>
               <td>{order._id}</td>
-              <td>{order.user}</td>
+              <td>{order.user.firstName} {order.user.lastName}</td>
               <td>${order.totalAmount}</td>
               <td>{order.orderStatus}</td>
               <td>
@@ -61,4 +61,4 @@ const ViewOrders = () => {
   );
 };
 
-export default ViewOrders;
+export default AdminViewOrders;
