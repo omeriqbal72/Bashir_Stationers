@@ -23,7 +23,7 @@
     display: flex;
     width: 100%;
     align-items: center;
-    background-color:  var(--secondary-color);;
+    background-color:  var(--secondary-color);
     justify-content: space-evenly;
 }
 
