@@ -6,17 +6,15 @@
   min-height: 75vh;
   gap: 1rem;
   height: auto;
-  background-color: var(--secondary-color)
+  background-color: white;
 }
 
 /* Cart Items Section */
 .cart-items {
-  backdrop-filter: blur(14px) saturate(131%);
-  -webkit-backdrop-filter: blur(14px) saturate(131%);
-  background-color: rgba(255, 255, 255, 1);
+  /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
   border-radius: 12px;
   border: none;
-  width: 60%;
+  width: 70%;
   padding: 1rem;
 }
 
@@ -43,14 +41,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   padding: 10px 0;
-
   border-bottom: 1px solid #ddd;
 }
 
 .cart-items-info{
   display: flex;
   gap: 1rem;
+  flex: 1;
   align-items: center;
 }
 
@@ -59,6 +58,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  flex: 1;
   gap: 1rem;
 }
 
@@ -77,14 +77,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-weight: bold;
 }
 
 .item-price {
+  display: flex;
+  flex: 3;
+  
+  width: 100%;
   font-size: 16px;
-  margin-right: 20px;
 }
 
 .remove-cart-item {
+  display: flex;
+  flex: 1;
+  width: 100%;
   cursor: pointer;
 }
 
@@ -98,18 +105,32 @@
 }
 
 /* Summary Section */
-.cart-summary {
 
-  backdrop-filter: blur(14px) saturate(131%);
-  -webkit-backdrop-filter: blur(14px) saturate(131%);
-  background-color: rgba(255, 255, 255, 1);
+
+.cart-summary {
   border-radius: 12px;
   border: none;
-
+  width: 30%;
+  box-sizing: border-box;
+  height: 95vh;
   display: flex;
-  flex-direction: column;
-  width: 35%;
+  flex-direction: column; 
   padding: 1rem;
+  background-color: #313131;
+  color: white;
+}
+
+.cart-summary-img{
+  
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-summary-img img{
+  object-fit: cover;
+  width: 70%;
 }
 
 .cart-summary h3 {
@@ -136,6 +157,11 @@
   font-weight: bold;
 }
 
+.cart-shipping-msg{
+  font-weight: 300;
+  font-size: small;
+}
+
 .cart-checkout-btn-container {
   display: flex;
   align-items: center;
@@ -159,8 +185,4 @@
   border-radius: 4px;
   transition: .2s ease-in-out;
 
-}
-
-.checkout-btn:hover {
-  background-color: #333;
 }

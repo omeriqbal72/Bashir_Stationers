@@ -420,5 +420,4 @@ module.exports = {
     checkImagesExist,
     getFeaturedProducts,
     getYouMayAlsoLike
-
 };

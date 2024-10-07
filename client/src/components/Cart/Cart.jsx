@@ -4,11 +4,12 @@ import '../../css/cart.css';
 import { useCart } from '../../context/CartContext.jsx';  // Import the CartContext
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCreditCard, faTrashCan, faCartShopping } from '@fortawesome/free-solid-svg-icons';
-
+import checkoutBoy from '../../Ui_Images/checkout-boy.png'
+import brownPaper from '../../Ui_Images/brown-paper.jpg'
 const Cart = () => {
-  const { cart, updateQuantity, removeFromCart , checkout } = useCart(); // Destructure methods from context
+  const { cart, updateQuantity, removeFromCart, checkout } = useCart(); // Destructure methods from context
 
-  console.log(cart);
+  //console.log(cart);
   const totalPrice = cart.reduce((total, item) => {
     return total + (item.product.price || 0) * (item.quantity || 0);
   }, 0);
@@ -44,7 +45,9 @@ const Cart = () => {
                     {`Rs. ${(item.product.price || 0).toFixed(2)}`}
                   </div>
 
-                  <FontAwesomeIcon className='remove-cart-item' icon={faTrashCan} size='lg' style={{ color: "#511f1f" }} onClick={() => removeFromCart(item.product._id)} />
+                  <div className='remove-cart-item'>
+                    <FontAwesomeIcon icon={faTrashCan} size='lg' style={{ color: "#511f1f" }} onClick={() => removeFromCart(item.product._id)} />
+                  </div>
 
                 </div>
               </div>
@@ -56,23 +59,25 @@ const Cart = () => {
         <a href="/" className="back-to-shop">← Back to shop</a>
       </div>
 
+
       <div className="cart-summary">
-        <h3>Summary</h3>
+    
+        <div className='cart-summary-img'>
+          <img src={checkoutBoy} alt="checkout" />
+        </div>
+
         <div className='cart-summary-container'>
           <div className='cart-summary-details'>
             <span>{`ITEMS (${cart.length})`} </span>
-            <span>Rs. {(totalPrice || 0).toFixed(2)}</span>
-          </div>
-
-          <div className="cart-shipping">
-            <span>Shipping: </span>
-            <span>Rs. 250.00</span>
           </div>
 
           <div className="cart-total-price">
-            <span>Total Price:</span>
-            <span>Rs. {(totalPrice + 250 || 0).toFixed(2)}</span>
+            <span style={{ fontWeight: 'bold' }}>SubTotal: </span>
+            <span > Rs. {(totalPrice || 0).toFixed(2)}</span>
           </div>
+
+          <span className='cart-shipping-msg'>No hidden fees. Taxes and delivery charges are calculated and added to your total at checkout.</span>
+
 
           <div className="cart-checkout-btn-container">
             <button className="cart-checkout-btn" onClick={checkout}>
@@ -82,8 +87,10 @@ const Cart = () => {
           </div>
         </div>
       </div>
+
+
     </div>
-  );
+  );  
 };
 
 export default Cart;

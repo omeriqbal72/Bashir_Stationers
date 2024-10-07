@@ -11,21 +11,21 @@ function HomeProductsSection() {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const response = await axios.get('/featured-products'); // Adjust the URL if needed
-        setData(response.data); // Set the fetched data
+        const response = await axios.get('/featured-products');
+        setData(response.data);
       } catch (error) {
-        setIsError(true); 
-        console.error('Error fetching products:', error.message); // Log the error
+        setIsError(true);
+        console.error('Error fetching products:', error.message); 
       } finally {
-        setIsLoading(false); // Set loading state to false after the request completes
+        setIsLoading(false);
       }
     };
 
-    fetchFeaturedProducts(); // Call the function to fetch products
-  }, []); // Empty dependency array to run once on mount
+    fetchFeaturedProducts(); 
+  }, []); 
 
   if (isLoading) {
-    return <div>Loading products...</div>; // Display loading message
+    return <div>Loading products...</div>;
   }
 
   // Handling error state
@@ -46,10 +46,10 @@ function HomeProductsSection() {
           <ProductCard
             key={product._id}
             id={product._id}
-            images={product.images?.[0]} // Fallback to the first image
+            images={product.images?.[0]}
             name={product.name}
             price={product.price}
-            company={product.company?.name} // Safely access company name
+            company={product.company?.name}
           />
         ))}
       </div>
