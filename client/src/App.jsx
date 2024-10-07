@@ -6,7 +6,7 @@ import Products from './components/ProductPage/ProductPage.jsx';
 import AboutUs from './components/About/AboutUs.jsx';
 import Product from './components/Product/Product.jsx';
 import Cart from './components/Cart/Cart.jsx';
-import OrderSummary from './components/Order/OrderSummary.jsx';
+import Checkout from './components/Cart/Checkout.jsx';
 import AdminPanel from './components/Admin/AdminPanel.jsx';
 import AdminManageProduct from './components/Admin/AdminManageProduct.jsx';
 import AdminViewOrders from './components/Admin/AdminViewOrders.jsx';
@@ -66,8 +66,8 @@ function App() {
                     <Route path="/forgot-password" element={<UserAuth form='Forgot Password' component={<UserForgotPassword />} />} />
                     <Route path="/reset-password" element={<UserAuth form='Reset Password' component={<UserResetPassword />} />} />
                     <Route path="/mycart" element={<Cart />} />
+                    <Route path="/order-summary" element={<Checkout />} />
                     <Route element={<PrivateRoute />}>
-                      <Route path="/order-summary" element={<OrderSummary />} />
                       <Route path="/myorders" element={<Orders />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />

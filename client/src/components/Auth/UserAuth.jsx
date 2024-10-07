@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import '../../css/userauth.css';
-import bgImg from '../../Ui_Images/login-bg.jpg'
+import bgImg from '../../Ui_Images/login-bg.jpg';
 import {  useNavigate } from 'react-router-dom';
-import { useUserContext } from '../../context/UserContext.jsx'
+import { useUserContext } from '../../context/UserContext.jsx';
 
 const UserAuth = (props) => {
 
