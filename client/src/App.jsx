@@ -29,6 +29,7 @@ import { UserProvider } from './context/UserContext';
 import NotFound from './components/PageNotFound/NotFound.jsx';
 import { CartProvider } from './context/CartContext.jsx';
 import { OrderProvider } from './context/OrderContext.jsx';
+import GuestEnterCode from './components/Cart/GuestEnterCode.jsx';
 import './App.css'
 import ErrorBoundary from './ErrorBoundaries/ErrorBoundary.jsx';
 
@@ -67,6 +68,7 @@ function App() {
                     <Route path="/reset-password" element={<UserAuth form='Reset Password' component={<UserResetPassword />} />} />
                     <Route path="/mycart" element={<Cart />} />
                     <Route path="/order-summary" element={<Checkout />} />
+                    <Route path="/enter-order-code" element={<GuestEnterCode />} />
                     <Route element={<PrivateRoute />}>
                       <Route path="/myorders" element={<Orders />} />
                     </Route>

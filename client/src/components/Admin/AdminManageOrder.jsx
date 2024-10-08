@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../../css/admin/adminmanageorder.css';
+import Loader from '../Loader/Loader';
 
 const AdminManageOrders = () => {
     const { id } = useParams();
@@ -47,7 +48,7 @@ const AdminManageOrders = () => {
         }
     };
 
-    if (loading) return <div className="loading">Loading...</div>;
+    if (loading) return <Loader />;
     if (!order) return <div className="loading">Order not found</div>;
 
     return (
@@ -59,7 +60,7 @@ const AdminManageOrders = () => {
                 <p><strong>User :</strong> {order.user.firstName} {order.user.lastName}</p>
                 <p><strong>Customer Contact Number:</strong> {order.user.contactNumber}</p>
                 <p><strong>Order Date:</strong> {new Date(order.orderDate).toLocaleDateString()}</p>
-                <p><strong>Total Amount:</strong> ${order.totalAmount}</p>
+                <p><strong>Total Amount:</strong> Rs.{order.totalAmount}</p>
 
                 <h4>Products</h4>
                 <ul>

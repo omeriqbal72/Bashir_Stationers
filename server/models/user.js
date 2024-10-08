@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
-
+    default: 'Guest'
   },
 
   lastName: {
@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin'],
+    enum: ['user', 'admin' , 'guest'],
     default: 'user',
   },
 
