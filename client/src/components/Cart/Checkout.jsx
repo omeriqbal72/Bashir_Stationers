@@ -7,6 +7,8 @@ const OrderSummary = () => {
     const { cart } = useCart(); // Fetch cartItems from CartContext
     const { placeOrder, orderError } = useOrder(); // Fetch placeOrder from OrderContext
     const [deliveryCharges, setDeliveryChatges] = useState(250);
+    const [emailAddress, setEmailAddress] = useState(''); 
+    const [contactNumber, setContactNumber] = useState(''); 
 
     const subtotal = cart.reduce((total, item) => {
         return total + (item.product.price || 0) * (item.quantity || 0);
@@ -26,9 +28,23 @@ const OrderSummary = () => {
         setAddress({ ...address, [e.target.name]: e.target.value });
     };
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        // Debugging log
+        console.log(`Input changed: ${name} = ${value}`);
+
+        // Update state based on input name
+        if (name === "emailaddress") {
+            setEmailAddress(value); // Update emailAddress state
+        } else if (name === "contactNumber") {
+            setContactNumber(value); // Update contactNumber state
+        }
+    };
+
     const handleSubmitOrder = (e) => {
         e.preventDefault();
-        placeOrder(cart, address, paymentMethod);
+        placeOrder(cart, address, paymentMethod, contactNumber, emailAddress);
     };
 
     if (orderError) {
@@ -43,7 +59,7 @@ const OrderSummary = () => {
 
             <div className="order-summary-container">
                 <div className="order-summary-left">
-                    <h3 style={{fontWeight: '500'}}>Cart Summary</h3>
+                    <h3 style={{ fontWeight: '500' }}>Cart Summary</h3>
                     <h1>PKR {totalPrice.toFixed(2)}</h1>
                     <div className="checkout-items-list">
 
@@ -93,6 +109,28 @@ const OrderSummary = () => {
                 <div className="order-summary-right">
                     <h2>Shipping Information</h2>
                     <form onSubmit={handleSubmitOrder} className="order-form">
+                        <label>
+                            Email:
+                            <input
+                                type="text"
+                                name="emailaddress"
+                                value={emailAddress}
+                                onChange={handleChange}
+                                required
+                                className="input-field"
+                            />
+                        </label>
+                        <label>
+                            Contact Number:
+                            <input
+                                type="text"
+                                name="contactNumber"
+                                value={contactNumber}
+                                onChange={handleChange}
+                                required
+                                className="input-field"
+                            />
+                        </label>
                         <label>
                             Street:
                             <input

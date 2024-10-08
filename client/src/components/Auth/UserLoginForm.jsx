@@ -27,6 +27,7 @@ const UserLoginForm = (props) => {
         <form className="login-form" onSubmit={handleSubmit}>
             <Input className='login-inputs'
                 placeholder="Email"
+                name="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -35,6 +36,7 @@ const UserLoginForm = (props) => {
 
             <Input.Password
                 className='login-inputs'
+                name="password"
                 placeholder="Password"
                 iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                 value={password}
