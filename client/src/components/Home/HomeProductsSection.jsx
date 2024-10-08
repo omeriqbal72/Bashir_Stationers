@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import ProductCard from '../Product/ProductCard.jsx';
 import '../../css/homeproductssection.css';
 import axios from 'axios';
+import Loader from '../Loader/Loader.jsx';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay, Scrollbar, A11y } from 'swiper/modules';
 
 function HomeProductsSection() {
   const [data, setData] = useState([]); // State to hold the products
@@ -15,43 +18,56 @@ function HomeProductsSection() {
         setData(response.data);
       } catch (error) {
         setIsError(true);
-        console.error('Error fetching products:', error.message); 
+        console.error('Error fetching products:', error.message);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchFeaturedProducts(); 
-  }, []); 
+    fetchFeaturedProducts();
+  }, []);
 
   if (isLoading) {
-    return <div>Loading products...</div>;
+    return <Loader />;
   }
 
   // Handling error state
   if (isError) {
-    return <div>Error fetching products. Please try again later.</div>; 
+    return <div>Error fetching products. Please try again later.</div>;
   }
 
   if (!Array.isArray(data) || data.length === 0) {
     return <div>No products available</div>;
   }
 
+
   return (
-    <div className="best-selling-section">
+    <div className="home-product-section">
       <h2>Our Top Picks</h2>
       <p>Essential Office Supplies In Our Online Stationery Shop That Keep Your Office Operations Smooth And Efficient</p>
-      <div className="product-grid">
-        {data.map(product => (
-          <ProductCard
-            key={product._id}
-            id={product._id}
-            images={product.images?.[0]}
-            name={product.name}
-            price={product.price}
-            company={product.company?.name}
-          />
-        ))}
+      <div className="home-product-section-slider">
+        <Swiper
+          modules={[Navigation, Pagination, Scrollbar, Autoplay, A11y]}
+          spaceBetween={25}
+          slidesPerView={4}
+          autoplay={{ delay: 1000 }}
+          loop
+          navigation
+        >
+          {data.map((product) => (
+            <SwiperSlide key={product.id}>
+              <ProductCard
+                key={product._id}
+                id={product._id}
+                images={product.images?.[0]}
+                name={product.name}
+                price={product.price}
+                company={product.company.name}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
       </div>
     </div>
   );

@@ -3,12 +3,13 @@ import { useCart } from '../../context/CartContext.jsx';
 import { useOrder } from '../../context/OrderContext.jsx';
 import '../../css/checkout.css'; // Import the CSS file for styling
 
-const OrderSummary = () => {
+const Checkout = () => {
     const { cart } = useCart(); // Fetch cartItems from CartContext
     const { placeOrder, orderError } = useOrder(); // Fetch placeOrder from OrderContext
     const [deliveryCharges, setDeliveryChatges] = useState(250);
     const [emailAddress, setEmailAddress] = useState(''); 
     const [contactNumber, setContactNumber] = useState(''); 
+
 
     const subtotal = cart.reduce((total, item) => {
         return total + (item.product.price || 0) * (item.quantity || 0);
@@ -212,4 +213,4 @@ const OrderSummary = () => {
     );
 };
 
-export default OrderSummary;
+export default Checkout;

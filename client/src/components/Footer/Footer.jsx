@@ -56,11 +56,12 @@ const Footer = () => {
                                     About
                                 </li>
                             </Link>
-
-                            <li>
-                                <FontAwesomeIcon icon={faAddressBook} size="sm" />
-                                Contact
-                            </li>
+                            <Link to={'/contact-us'}>
+                                <li>
+                                    <FontAwesomeIcon icon={faAddressBook} size="sm" />
+                                    Contact
+                                </li>
+                            </Link>
                         </ul>
                     </div>
 

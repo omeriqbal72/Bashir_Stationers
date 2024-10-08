@@ -54,6 +54,10 @@
     gap: .5rem;
   }
 
+  .footer-links-list li:hover{
+    text-decoration: underline;
+  }
+
   .footer-location-section{
     display: flex;
     justify-content: start;

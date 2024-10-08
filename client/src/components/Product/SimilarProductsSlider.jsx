@@ -2,11 +2,12 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, Scrollbar, A11y } from 'swiper/modules';
-import ProductCard from './ProductCard';
+import ProductCard from './ProductCard.jsx';
+import Loader from '../Loader/Loader.jsx';
 
 const SimilarProductSlider = ({ products, isLoading, isError, error }) => {
     if (isLoading) {
-        return <div>Loading similar products...</div>;
+        return <Loader/>;
     }
 
     if (isError) {
@@ -22,10 +23,12 @@ const SimilarProductSlider = ({ products, isLoading, isError, error }) => {
             modules={[Navigation, Pagination, Scrollbar, Autoplay, A11y]}
             spaceBetween={20}
             slidesPerView={4}
-            autoplay={{ delay: 3000 }}
+            autoplay={{ delay: 1000 }}
             navigation
+            loop
         >
             {products.map((product) => (
+                
                 <SwiperSlide key={product.id}>
                     <ProductCard
                         key={product._id}

@@ -1,20 +1,21 @@
-import React, { useState, useEffect, useRef , useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import '../../css/header.css';
 import '../../css/shopdropdown.css';
 import DropdownCategories from './DropDownCategories.jsx';
+import DropDownProfile from './DropDownProfile.jsx';
 import SearchBar from './SearchBar.jsx'
 import { Badge } from 'antd';
 import { useCart } from '../../context/CartContext.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useUserContext } from '../../context/UserContext.jsx'
-import {ShoppingCartOutlined} from '@ant-design/icons';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 import { faHouse, faShop, faBoxOpen, faAddressCard, faAddressBook } from '@fortawesome/free-solid-svg-icons';
 
 
 const Header = () => {
 
-  const { cart } = useCart(); 
+  const { cart } = useCart();
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
   const { user, logout } = useUserContext();
@@ -45,25 +46,23 @@ const Header = () => {
             </div>
           </Link>
           <SearchBar />
-          <div className="actions">
+          <div className="header-actions">
 
-          <Link to={'/mycart'}>
+            <Link to={'/mycart'}>
               <Badge size='small' count={cart.length}>
-              <ShoppingCartOutlined style={{ fontSize: '28px' }}/>
+                <ShoppingCartOutlined style={{ fontSize: '28px' }} />
               </Badge>
             </Link>
 
             {user ? (
               <>
-                <button onClick={logout}>Logout</button>
+              <DropDownProfile isLoggedIn={true}/>
               </>
             ) : (
               <>
-                <Link to="/login">
-                  <button className='header-register-btn'>Login</button>
-                </Link>
+                <DropDownProfile isLoggedIn={false}/>
               </>
-            )}    
+            )}
 
           </div>
         </div>
