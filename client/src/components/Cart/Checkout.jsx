@@ -6,7 +6,7 @@ import '../../css/checkout.css'; // Import the CSS file for styling
 const OrderSummary = () => {
     const { cart } = useCart(); // Fetch cartItems from CartContext
     const { placeOrder, orderError } = useOrder(); // Fetch placeOrder from OrderContext
-    const [deliveryCharges, setDeliveryChatges] = useState(250);
+    const [deliveryCharges, setDeliveryCharges] = useState(250);
 
     const subtotal = cart.reduce((total, item) => {
         return total + (item.product.price || 0) * (item.quantity || 0);

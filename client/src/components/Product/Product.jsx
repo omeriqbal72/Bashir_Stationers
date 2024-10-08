@@ -52,7 +52,7 @@ const Product = () => {
         <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }}></div>
       </div>
 
-      <div className="slider-section">
+      <div className="similar-products-slider-section">
         <h2>You may also like</h2>
         <div className="similar-products-slider-container">
         <SimilarProductSlider 

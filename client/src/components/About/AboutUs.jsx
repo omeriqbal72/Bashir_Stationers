@@ -20,16 +20,7 @@ const AboutUs = () => {
                             business to achieve its full potential"
                         </p>
                     </div>
-
-                    <div className="about-first-button">
-                        <button>Info</button>
-                    </div>
-
-
                 </div>
-
-
-
 
             </div>
 

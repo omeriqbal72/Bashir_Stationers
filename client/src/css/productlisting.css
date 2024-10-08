@@ -5,9 +5,9 @@
 }
 
 .product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
   padding: 1rem 2rem;
   box-sizing: border-box;
 }
