@@ -81,13 +81,14 @@ export const CartProvider = ({ children }) => {
   };
 
   const checkout = () => {
-    if (user) {
-      // User is logged in, navigate to order summary
-      navigate('/order-summary');
-    } else {
-      // User is not logged in, navigate to login page
-      navigate('/login');
-    }
+    // if (user) {
+    //   // User is logged in, navigate to order summary
+    //   navigate('/order-summary');
+    // } else {
+    //   // User is not logged in, navigate to login page
+    //   navigate('/login');
+    // }
+    navigate('/order-summary');
   };
 
   const addToCart = (product, quantity) => {

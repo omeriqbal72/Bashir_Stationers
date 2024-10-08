@@ -7,7 +7,8 @@ const { getAllCategories, getProductsByCategoryName, getProductsBySubCategoryNam
 const { getCart, addToCart, removeFromCart, updateCart } = require('../controllers/cartControllers.js');
 const { register, verifyEmail, login, refreshToken, logout, requestNewCode, getMe, resetPassword, forgotPassword, verifyResetCode } = require('../controllers/authControllers.js');
 const { verifyToken } = require('../middlewares/jwt.js');
-const { placeOrder, getUserOrders, getAllOrders, getOrderbyId, updateOrderStatus, orderStats, salesperMonth , orderStatusStats} = require('../controllers/orderControllers.js')
+const { placeOrder, getUserOrders, getAllOrders, getOrderbyId, updateOrderStatus, orderStats, salesperMonth , orderStatusStats ,
+     enterOrderVerifyCode , sendOrderVerifyCode} = require('../controllers/orderControllers.js')
 
 const multer = require('multer');
 const path = require('path');
@@ -91,10 +92,12 @@ router.put('/cart/update', verifyToken, updateCart);
 
 router.get('/order/myorders', verifyToken, getUserOrders);
 router.post('/order/placeorder', verifyToken, placeOrder);
-router.get('/getorders', getAllOrders)
+router.get('/getorders', getAllOrders);
 router.get('/getorder/:id', getOrderbyId);
 router.patch('/update-order-status/:id', updateOrderStatus);
 router.get('/order-stats', verifyToken, orderStats)
 router.get('/sales-per-month', verifyToken, salesperMonth)
 router.get('/order-status-stats', verifyToken, orderStatusStats)
+router.post('/order/verify' , sendOrderVerifyCode)
+router.post('/order/confirm' , enterOrderVerifyCode)
 module.exports = router;

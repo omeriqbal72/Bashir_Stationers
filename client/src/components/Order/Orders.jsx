@@ -1,14 +1,22 @@
 // src/pages/OrderPage.jsx
 import React, { useEffect } from 'react';
 import { useOrder } from '../../context/OrderContext.jsx';
+import Loader from '../Loader/Loader.jsx'
 
 const Orders = () => {
-    const { fetchUserOrders, orders, orderError } = useOrder();
+    const { fetchUserOrders, orders, loading , orderError } = useOrder();
 
     useEffect(() => {
         fetchUserOrders(); 
     }, []);
 
+    if (loading) {
+        return <Loader />;
+    }
+
+    if (orderError) {
+        return <p>Error: {orderError}</p>;
+    }
     return (
         <div>
             <h1>Your Orders</h1>

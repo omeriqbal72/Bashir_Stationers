@@ -16,7 +16,7 @@ const sendEmail = async (options) => {
         to: options.to,
         subject: options.subject,
         text: options.text,
-        // html: options.html, // Optional: HTML version
+        html: options.html,
     };
 
     try {
