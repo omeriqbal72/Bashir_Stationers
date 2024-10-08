@@ -2,8 +2,6 @@ const Order = require('../models/order');
 const Product = require('../models/products');
 const User = require('../models/user');
 const { sendOrderConfirmationEmail, generateVerificationCode, sendOrderVerificationEmail } = require('../middlewares/jwt.js');
-const { sendVerificationSms } = require('../middlewares/smsHelper.js')
-
 
 const pendingOrders = {};
 const getAllOrders = async (req, res) => {
