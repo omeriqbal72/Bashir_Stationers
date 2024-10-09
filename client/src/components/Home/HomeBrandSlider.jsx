@@ -27,27 +27,27 @@ const HomeBrandSlider = () => {
                 className="brand-logo-slider"
             >
                 <SwiperSlide>
-                    <div className="slider-item">
+                    <div className="home-brand-slider-item">
                         <img src={Dux} alt="Books & Stationery" />
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div className="slider-item">
+                    <div className="home-brand-slider-item">
                         <img src={Dollar} alt="Books & Stationery" />
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div className="slider-item">
+                    <div className="home-brand-slider-item">
                         <img src={Oro} alt="Books & Stationery" />
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div className="slider-item">
+                    <div className="home-brand-slider-item">
                         <img src={Deer} alt="Books & Stationery" />
                     </div>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <div className="slider-item">
+                    <div className="home-brand-slider-item">
                         <img src={Dux} alt="Books & Stationery" />
                     </div>
                 </SwiperSlide>

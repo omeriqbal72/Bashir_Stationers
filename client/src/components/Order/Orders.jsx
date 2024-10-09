@@ -3,6 +3,9 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { useOrder } from '../../context/OrderContext.jsx';
 import Loader from '../Loader/Loader.jsx';
+import '../../css/orders/orders.css';
+import { Avatar } from 'antd';
+
 
 const Orders = () => {
     const { fetchUserOrders, orders, loading, orderError } = useOrder();
@@ -32,21 +35,39 @@ const Orders = () => {
             {orders.length === 0 ? (
                 <p>No orders found.</p>
             ) : (
-                <ul>
+
+                <div className='user-orders-container'>
                     {orders.map((order, index) => (
-                        <li 
-                            key={order._id} 
-                            style={{ cursor: 'pointer', border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}
-                            onClick={() => handleOrderClick(order)} // Pass the entire order object
-                        >
-                            <h3>Order No: {index + 1}</h3>
-                            <p>Total Amount: ${order.totalAmount}</p>
-                            <p>Status: {order.orderStatus}</p>
-                            <p>Tracking Id: {order.trackingId}</p>
-                            {/* Add more order details as needed */}
-                        </li>
+                        <div className='user-orders-card'>
+                            <div className='user-orders-card-id'>
+                                <Avatar size={64} style={{ backgroundColor: '#fde3cf', color: '#f56a00' }}>
+                                    {index + 1}
+                                </Avatar>
+                            </div>
+                            <div className='user-orders-card-id'>
+                                <b>Order ID</b>
+                                <span>{order._id}</span>
+                            </div>
+                            <div className='user-orders-card-amount'>
+                                <b>Total Amount</b>
+                                <span>Rs.{order.totalAmount}</span>
+                            </div>
+                            <div className='user-orders-card-status'>
+                                <b>Status</b>
+                                <span>{order.orderStatus}</span>
+                            </div>
+                            <div className='user-orders-card-tracking-id'>
+                                <b>Tracking ID</b>
+                                <span>{order.trackingId}</span>
+                            </div>
+                            <div className='user-orders-card-btn'>
+                                <button  onClick={() => handleOrderClick(order)} >See Order</button>
+                            </div>
+
+                        </div>
+
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );

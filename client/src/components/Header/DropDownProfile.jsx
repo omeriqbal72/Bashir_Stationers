@@ -13,9 +13,10 @@ const DropDownProfile = (props) => {
     const items = [
         ...(isLoggedIn
             ? [{
-                  label: 'Profile', // Only show Profile if logged in
-                  key: '1',
-              }]
+                label: 'My Profile', // Only show Profile if logged in
+                key: '1',
+                onClick: ()=>{navigate('/profile')}
+            }]
             : []),
         {
             label: isLoggedIn ? 'Logout' : 'Login',
@@ -36,7 +37,7 @@ const DropDownProfile = (props) => {
                 items,
             }}
         >
-            <UserOutlined style={{ fontSize: '26px', cursor: 'pointer' }} />
+            <UserOutlined style={{ fontSize: '26px', cursor: 'pointer', marginBottom: '.2em' }} />
         </Dropdown>
     );
 };
