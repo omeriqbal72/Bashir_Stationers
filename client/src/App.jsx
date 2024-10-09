@@ -23,6 +23,7 @@ import UserSignup from './components/Auth/UserSignUpForm.jsx';
 import UserEmailVerification from './components/Auth/UserEmailVerification.jsx';
 import UserForgotPassword from './components/Auth/UserForgotPassword.jsx';
 import UserResetPassword from './components/Auth/UserResetPassword.jsx';
+import ProfilePage from './components/ProfilePage/ProfilePage.jsx';
 import Orders from './components/Order/Orders.jsx';
 import PrivateRoute from './routes/PrivateRoute.jsx';
 import { UserProvider } from './context/UserContext';
@@ -67,6 +68,7 @@ function App() {
                     <Route path="/forgot-password" element={<UserAuth form='Forgot Password' component={<UserForgotPassword />} />} />
                     <Route path="/reset-password" element={<UserAuth form='Reset Password' component={<UserResetPassword />} />} />
                     <Route path="/mycart" element={<Cart />} />
+                    <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/order-summary" element={<Checkout />} />
                     <Route path="/enter-order-code" element={<GuestEnterCode />} />
                     <Route element={<PrivateRoute />}>

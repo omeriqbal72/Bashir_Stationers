@@ -1,0 +1,43 @@
+.user-orders-container{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 1rem 0;
+    gap: 1.5rem;
+}
+
+.user-orders-card{
+    cursor: default;
+    display: flex;
+    width: 55rem;
+    gap: 2rem;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    padding: 1rem;
+    transition: transform 0.25s ease-in-out;
+}
+
+.user-orders-card:hover {
+  transform: scale(1.02);
+}
+
+.user-orders-card-id, .user-orders-card-amount, .user-orders-card-status, .user-orders-card-tracking-id, .user-orders-card-btn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-orders-card-btn button{
+    padding: 0.5rem 1rem;
+    background-color: rgb(63, 140, 255);
+    border-radius: 5px;
+    border: none;
+    color: white;
+}
+
+.user-orders-card-btn button:hover{
+    cursor: pointer;
+}
