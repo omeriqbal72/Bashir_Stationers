@@ -32,6 +32,8 @@ import { OrderProvider } from './context/OrderContext.jsx';
 import GuestEnterCode from './components/Cart/GuestEnterCode.jsx';
 import './App.css'
 import ErrorBoundary from './ErrorBoundaries/ErrorBoundary.jsx';
+import AddReview from './components/Order/AddReview.jsx';
+import OrderInformation from './components/Order/OrderInformation.jsx';
 
 axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.withCredentials = true;
@@ -69,8 +71,11 @@ function App() {
                     <Route path="/mycart" element={<Cart />} />
                     <Route path="/order-summary" element={<Checkout />} />
                     <Route path="/enter-order-code" element={<GuestEnterCode />} />
+                    
                     <Route element={<PrivateRoute />}>
                       <Route path="/myorders" element={<Orders />} />
+                      <Route path="add-review" element={<AddReview /> } />
+                      <Route path="/order-information" element={<OrderInformation />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Route>

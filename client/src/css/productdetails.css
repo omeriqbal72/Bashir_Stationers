@@ -91,7 +91,8 @@
 
 
 .add-to-cart-btn,
-.buy-now-btn {
+.buy-now-btn ,
+.sold-out-btn{
   width: 18rem;
   height: 4rem;
   display: flex;
@@ -117,4 +118,9 @@
 .add-to-cart-btn:hover,
 .buy-now-btn:hover {
   opacity: .83;
+}
+.sold-out-btn{
+  background-color: rgb(178, 88, 88);
+  width: 48rem;
+  cursor:default;
 }

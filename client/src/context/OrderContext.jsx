@@ -16,6 +16,7 @@ export const OrderProvider = ({ children }) => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false); // Loading state
     const navigate = useNavigate();
+    const [singleOrder, setSingleOrder] = useState(null);
     const { user } = useUserContext();
 
     const placeOrder = async (cart, address, paymentMethod, contactNumber, emailAddress) => {
@@ -79,12 +80,29 @@ export const OrderProvider = ({ children }) => {
         }
     };
 
+    const getSingleOrderById = async (id) => {
+        setLoading(true);
+        setOrderError(null);
+        try {
+            const response = await axiosInstance.get(`/order-by-id/${id}`);
+            setSingleOrder(response.data); // Set the singleOrder state with the fetched data
+        } catch (err) {
+            console.error('Error fetching order:', err);
+            setOrderError('Failed to fetch order.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     const value = {
         placeOrder,
         fetchUserOrders,
+        getSingleOrderById,
+        singleOrder,
         orders,
         orderError,
-        loading // Expose the loading state
+        loading 
     };
 
     return (

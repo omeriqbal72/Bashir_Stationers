@@ -23,7 +23,6 @@ const DropDownProfile = (props) => {
             onClick: () => {
                 if (isLoggedIn) {
                     logout(); 
-                    window.location.reload();
                 } else {
                     navigate('/login'); // Navigate to login page if the user is not logged in
                 }

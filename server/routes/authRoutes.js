@@ -8,7 +8,8 @@ const { getCart, addToCart, removeFromCart, updateCart } = require('../controlle
 const { register, verifyEmail, login, refreshToken, logout, requestNewCode, getMe, resetPassword, forgotPassword, verifyResetCode } = require('../controllers/authControllers.js');
 const { verifyToken } = require('../middlewares/jwt.js');
 const { placeOrder, getUserOrders, getAllOrders, getOrderbyId, updateOrderStatus, orderStats, salesperMonth , orderStatusStats ,
-     enterOrderVerifyCode , sendOrderVerifyCode} = require('../controllers/orderControllers.js')
+     enterOrderVerifyCode , sendOrderVerifyCode , getSingleOrderbyId} = require('../controllers/orderControllers.js')
+const { getComments ,postComment } = require ('../controllers/commentControllers.js')
 
 const multer = require('multer');
 const path = require('path');
@@ -39,6 +40,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
+    limits: {
+        fileSize: 3 * 1024 * 1024 // 3MB limit
+    },
     fileFilter: (req, file, cb) => {
         if (!file) {
             return cb(new Error('No file uploaded'));
@@ -100,4 +104,8 @@ router.get('/sales-per-month', verifyToken, salesperMonth)
 router.get('/order-status-stats', verifyToken, orderStatusStats)
 router.post('/order/verify' , sendOrderVerifyCode)
 router.post('/order/confirm' , enterOrderVerifyCode)
+router.get('/order-by-id/:id' , getSingleOrderbyId)
+
+router.post('/products/:productId/comments' ,verifyToken, upload, postComment)
+router.get('/get-comments-products/:id', getComments)
 module.exports = router;
