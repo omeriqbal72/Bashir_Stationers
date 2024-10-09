@@ -56,11 +56,11 @@ const Header = () => {
 
             {user ? (
               <>
-              <DropDownProfile isLoggedIn={true}/>
+                <DropDownProfile isLoggedIn={true} />
               </>
             ) : (
               <>
-                <DropDownProfile isLoggedIn={false}/>
+                <DropDownProfile isLoggedIn={false} />
               </>
             )}
 

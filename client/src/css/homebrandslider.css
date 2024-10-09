@@ -24,15 +24,15 @@
   }
 
     
-  .slider-item {
+  .home-brand-slider-item {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
   }
   
-  .slider-item img {
-    width: 100%;
+  .home-brand-slider-item img {
+    width: 5rem;
     object-fit: cover;
     object-position: center;
    
