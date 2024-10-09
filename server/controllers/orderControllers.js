@@ -40,11 +40,8 @@ const getUserOrders = async (req, res) => {
   try {
     const userId = req.user.userId;
 
-    const orders = await Order.find({ user: userId })
-      .populate({
-        path: 'products.product', // Specify the path to populate
-        select: 'name images price' // Specify the fields to select from the Product model
-      });
+    const orders = await Order.find({ user: userId });
+      
 
     if (!orders.length) {
       return res.status(404).json({ message: 'No orders found for this user.' });
@@ -332,6 +329,28 @@ const orderStatusStats = async (req, res) => {
   }
 }
 
+const getSingleOrderbyId = async (req, res) => {
+  try {
+    // Find the order by ID and populate the user and product details
+    const order = await Order.findById(req.params.id)
+      .populate('user', 'firstName lastName email') // Populate user details
+      .populate({
+        path: 'products.product', // Populate the products array
+        model: 'Product', // Specify the model to populate
+        select: 'name price images', // Select specific fields from Product model
+      });
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.json(order); // Send the populated order back to the client
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 
 module.exports = {
   placeOrder,
@@ -343,5 +362,6 @@ module.exports = {
   salesperMonth,
   orderStatusStats,
   enterOrderVerifyCode,
-  sendOrderVerifyCode
+  sendOrderVerifyCode,
+  getSingleOrderbyId
 }

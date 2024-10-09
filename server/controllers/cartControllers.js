@@ -4,35 +4,52 @@ const Product = require('../models/products');
 // Add to Cart API
 const addToCart = async (req, res) => {
   try {
-    const { productId, quantity } = req.body;
+    const { productId, quantity, selectedColor } = req.body;
     const userId = req.user.userId;
-
+    console.log(selectedColor)
     // Find the user's cart or create one if it doesn't exist
     let cart = await Cart.findOne({ user: userId });
     if (!cart) {
       cart = new Cart({ user: userId, items: [] });
     }
 
+    // Find the product
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    const existingItemIndex = cart.items.findIndex(item => item.product.toString() === productId);
+    // Check if the requested quantity exceeds available stock
+    const existingItemIndex = cart.items.findIndex(
+      item => item.product.toString() === productId && item.selectedColor === selectedColor
+    );
+    const currentCartQuantity = existingItemIndex >= 0 ? cart.items[existingItemIndex].quantity : 0;
+    const totalRequestedQuantity = currentCartQuantity + quantity;
+
+    if (totalRequestedQuantity > product.quantity) {
+      return res.status(400).json({
+        message: `Requested quantity exceeds available stock. Only ${product.quantity - currentCartQuantity} item(s) left in stock.`,
+      });
+    }
+
+    // Add to cart or update the quantity based on color
     if (existingItemIndex >= 0) {
-      // Update the quantity of the existing item
-      cart.items[existingItemIndex].quantity += quantity;
+      // Update the quantity of the existing item with the same color
+      cart.items[existingItemIndex].quantity = totalRequestedQuantity;
     } else {
-      // Add new product to the cart
-      cart.items.push({ product: productId, quantity });
+      // Add new product with a new color to the cart
+      cart.items.push({ product: productId, quantity, selectedColor });
     }
 
     await cart.save();
+
     res.status(200).json({ message: 'Item added to cart successfully', cart });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
+
 
 const removeFromCart = async (req, res) => {
     try {
@@ -86,7 +103,7 @@ const getCart = async (req, res) => {
 
 const updateCart = async (req, res) => {
   try {
-    const { productId, quantity, selectedColor } = req.body; 
+    const { productId, quantity } = req.body; 
     const userId = req.user.userId;
 
     let cart = await Cart.findOne({ user: userId });
@@ -98,10 +115,7 @@ const updateCart = async (req, res) => {
     if (itemIndex !== -1) {
 
       cart.items[itemIndex].quantity = quantity; 
-      if (selectedColor) {
-        cart.items[itemIndex].selectedColor = selectedColor; 
-      }
-
+      
       if (cart.items[itemIndex].quantity < 1) {
         return res.status(400).json({ message: 'Quantity cannot be less than one' });
       }
@@ -112,7 +126,7 @@ const updateCart = async (req, res) => {
         return res.status(404).json({ message: 'Product not found' });
       }
 
-      cart.items.push({ product: productId, quantity, selectedColor });
+      cart.items.push({ product: productId, quantity });
     }
 
     await cart.save();

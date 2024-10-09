@@ -51,6 +51,15 @@ const productSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+    }],
+    averageRating: {
+        type: Number,
+        default: 0
+    },
     
 });
 

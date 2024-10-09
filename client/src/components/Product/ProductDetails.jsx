@@ -5,27 +5,38 @@ import ProductQuantity from './ProductQuantity.jsx';
 import { useCart } from '../../context/CartContext.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus, faCreditCard, faStar, faPencil, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+import { Rate } from 'antd'
+import axios from 'axios'
 
-
-const ProductDetails = ({ data }) => {
+const ProductDetails = ({ data, rating }) => {
   const [productDetails, setProductDetails] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useCart();
+  const { addToCart , error } = useCart();
+  const [productRating, setRating] = useState(5);
+  const [ratingCount, setRatingCount] = useState(0);
+  const [selectedColor, setSelectedColor] = useState(null); // Track the selected color
 
   useEffect(() => {
     if (data) {
       setProductDetails(data);
+      setRating(data.averageRating || 5);
+      setRatingCount(Array.isArray(rating) ? rating.length : 0);
+      setSelectedColor(data.colors[0] || null); // Default to the first color
     }
-  }, [data]);
-  //console.log(productDetails)
+  }, [data, rating]);
 
   if (!productDetails) {
     return <div>Loading product details...</div>;
   }
 
   const handleAddToCart = () => {
-    // Assuming productDetails has all the required information about the product
-    addToCart(productDetails, quantity);
+    addToCart(productDetails, quantity, selectedColor); // Send selectedColor when adding to cart
+  };
+
+  const isOutOfStock = productDetails.quantity === 0;
+
+  const handleColorSelect = (color) => {
+    setSelectedColor(color); // Set selected color when user clicks on a color option
   };
 
   return (
@@ -38,11 +49,8 @@ const ProductDetails = ({ data }) => {
         <div className='product-info'>
 
           <div className="rating">
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B", }} />
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B", }} />
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B", }} />
-            <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B", }} />
-            <span>(437 reviews)</span>
+            <Rate value={productRating} disabled />
+            <span>({ratingCount} reviews)</span>
           </div>
 
           <div className="product-category-and-company">
@@ -70,40 +78,56 @@ const ProductDetails = ({ data }) => {
                   <span
                     key={index}
                     className="color"
-                    style={{ backgroundColor: color }}  // Apply inline styling to set background color
+                    style={{ 
+                      backgroundColor: color, 
+                      border: selectedColor === color ? '2px solid #000' : '1px solid #ccc', // Highlight selected color
+                      cursor: 'pointer' // Indicate clickable colors
+                    }}
+                    onClick={() => handleColorSelect(color)} // Handle color selection
                   ></span>
                 ))}
               </div>
             </div>
           )}
 
-          <div className='product-quantity'>
-            <span>Quantity: </span>
-            <ProductQuantity
-            quantity={quantity}
-            onIncrement={() => setQuantity((prev) => prev + 1)}
-            onDecrement={() => quantity > 1 && setQuantity((prev) => prev - 1)}
-          />
-          </div>
+          {!isOutOfStock && (
+            <div className='product-quantity'>
+              <span>Quantity: </span>
+              <ProductQuantity
+                quantity={quantity}
+                onIncrement={() => setQuantity((prev) => prev + 1)}
+                onDecrement={() => quantity > 1 && setQuantity((prev) => prev - 1)}
+              />
 
+              <div>{error}</div>
+            </div>
+            
+          )}
         </div>
 
         <div className='purchase-btns'>
-          <Link to={'/mycart'}>
-            <button className="add-to-cart-btn" onClick={handleAddToCart}>
-              <FontAwesomeIcon icon={faCartPlus} style={{ color: "#ffffff" }} />
-              Add to Cart
-            </button>
-          </Link>
+          {!isOutOfStock ? (
+            <>
+             
+                <button className="add-to-cart-btn" onClick={handleAddToCart}>
+                  <FontAwesomeIcon icon={faCartPlus} style={{ color: "#ffffff" }} />
+                  Add to Cart
+                </button>
+              
 
-          <button className="buy-now-btn">
-            <FontAwesomeIcon icon={faCreditCard} style={{ color: "#000000" }} />
-            Buy Now
-          </button>
+              <button className="buy-now-btn">
+                <FontAwesomeIcon icon={faCreditCard} style={{ color: "#000000" }} />
+                Buy Now
+              </button>
+            </>
+          ) : (
+            <button className="sold-out-btn" disabled>
+              Sold Out
+            </button>
+          )}  
         </div>
 
       </div>
-
 
     </>
   );

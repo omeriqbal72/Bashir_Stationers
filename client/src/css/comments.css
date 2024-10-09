@@ -1,0 +1,77 @@
+.comments-section {
+    padding: 16px;
+    box-sizing: border-box;
+    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+.comments-section-wrap{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.rating-distribution {
+    align-items: center;
+    width: 50%;
+    margin-bottom: 20px;
+}
+
+.distribution-title {
+    width: 50%;
+    margin-bottom: 16px;
+}
+
+.rating-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    width: 100%;
+}
+
+.rating-stars {
+    margin-right: 8px;
+}
+
+.progress-bar {
+    flex: 1;
+    width: 50%;
+    
+    margin: 0 auto;
+    
+}
+
+.rating-count {
+    margin-left: 8px;
+    min-width: 40px;
+    text-align: right;
+}
+
+.comments-list {
+    list-style: none;
+    width: 90%;
+    padding: 0;
+}
+
+.comment-item {
+    border-bottom: 1px solid #e8e8e8;
+    padding: 8px 0;
+}
+
+.comment-author {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+   
+}
+
+.comment-rating {
+    margin-left: 8px;
+}
+
+.comment-content {
+    margin-top: 4px;
+}

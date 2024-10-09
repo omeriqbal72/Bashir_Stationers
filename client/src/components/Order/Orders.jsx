@@ -1,16 +1,24 @@
 // src/pages/OrderPage.jsx
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { useOrder } from '../../context/OrderContext.jsx';
 import Loader from '../Loader/Loader.jsx';
 import '../../css/orders/orders.css';
 import { Avatar } from 'antd';
 
+
 const Orders = () => {
     const { fetchUserOrders, orders, loading, orderError } = useOrder();
-    //console.log(orders)
+    const navigate = useNavigate(); 
+
     useEffect(() => {
         fetchUserOrders();
     }, []);
+
+    const handleOrderClick = (order) => {
+        // Pass orderId and other order details via state
+        navigate('/order-information', { state: { orderId: order._id, order } });
+    };
 
     if (loading) {
         return <Loader />;
@@ -19,6 +27,7 @@ const Orders = () => {
     if (orderError) {
         return <p>Error: {orderError}</p>;
     }
+
     return (
         <div>
             <h1>Your Orders</h1>
@@ -26,6 +35,7 @@ const Orders = () => {
             {orders.length === 0 ? (
                 <p>No orders found.</p>
             ) : (
+
                 <div className='user-orders-container'>
                     {orders.map((order, index) => (
                         <div className='user-orders-card'>
@@ -51,7 +61,7 @@ const Orders = () => {
                                 <span>{order.trackingId}</span>
                             </div>
                             <div className='user-orders-card-btn'>
-                                <button>See Order</button>
+                                <button  onClick={() => handleOrderClick(order)} >See Order</button>
                             </div>
 
                         </div>
