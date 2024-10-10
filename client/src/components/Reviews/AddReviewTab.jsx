@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import axios from 'axios';
-import Loader from '../Loader/Loader';
+import Loader from '../Loader/Loader.jsx';
+import '../../css/reviews/addreviewtab.css';
 
-const UnReviewedProducts = () => {
+const AddReviewTab = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
   const [error, setError] = useState(null); // Added error state
@@ -13,8 +14,9 @@ const UnReviewedProducts = () => {
     // Fetch unreviewed products from the API
     const fetchProductsToReview = async () => {
       try {
-        const response = await axios.get('/get-unreviewd-products');
+        const response = await axios.get('/get-unreviewed-products');
         setProducts(response.data.unreviewedProducts);
+
       } catch (error) {
         console.error('Error fetching products to review:', error);
         setError('Failed to fetch products.'); // Set error message
@@ -27,30 +29,31 @@ const UnReviewedProducts = () => {
   }, []);
 
   const handleAddReview = async (product) => {
-      navigate('/add-review', { state: { product } }); 
+    navigate('/add-review', { state: { product } });
   };
-
+  //console.log(products)
   if (loading) {
-    return <Loader />; 
+    return <Loader height={60} />;
   }
 
   if (error) {
-    return <p>{error}</p>; 
+    return <p>{error}</p>;
   }
 
   return (
-    <div className="unreviewed-products">
+    <div className="add-review-tab">
       <h2>Products to Review</h2>
-      <div className="unreviewed-products-list">
+      <div className="add-review-tab-products-list">
         {products.length > 0 ? (
           products.map((product) => (
-            <div key={product._id} className="unreviewed-products-card">
-              <img src={product.imageUrl || 'placeholder-image-url.jpg'} alt={product.name} />
-              <h3>{product.name}</h3>
-              <p>Price: ${product.priceAtPurchase}</p>
-              <p>Quantity: {product.quantity}</p>
+            <div key={product._id} className="add-review-tab-product-card">
+              <img
+                src={`http://localhost:8080/${(product.product.images && product.product.images.length > 0) ? product.product.images[0] : 'uploads/productImages/default-placeholder.png'}`}
+                alt={product.name}
+              />
+              <span style={{ fontWeight: '700', fontSize: '16px' }}>{product.product.name}</span>
               <button
-                className="add-review-button"
+                className="add-review-tab-btn"
                 onClick={() => handleAddReview(product.product)} // Pass product ID to handleAddReview
               >
                 Add Review
@@ -65,4 +68,4 @@ const UnReviewedProducts = () => {
   );
 };
 
-export default UnReviewedProducts;
+export default AddReviewTab;

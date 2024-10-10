@@ -40,4 +40,5 @@
 
 .user-orders-card-btn button:hover{
     cursor: pointer;
+    background-color: rgb(14, 109, 252);
 }
