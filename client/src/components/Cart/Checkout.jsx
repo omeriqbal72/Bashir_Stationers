@@ -66,8 +66,8 @@ const Checkout = () => {
                     <h1>PKR {totalPrice.toFixed(2)}</h1>
                     <div className="checkout-items-list">
 
-                        {cart.map(item => (
-                            <div className="checkout-items" key={item.product._id}> {/* Add key prop here */}
+                        {cart.map((item,index) => (
+                            <div className="checkout-items" key={`${item.product._id}-${index}`}> {/* Add key prop here */}
                                 <div className="checkout-item-details">
                                     <img
                                         src={`http://localhost:8080/${(item.product.images && item.product.images.length > 0) ? item.product.images[0] : 'uploads/productImages/default-placeholder.png'}`}
