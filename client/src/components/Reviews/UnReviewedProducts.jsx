@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Loader from '../Loader/Loader';
 
 const UnReviewedProducts = () => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); // Added loading state
-  const [error, setError] = useState(null); // Added error state
-  const navigate = useNavigate(); // Initialize useNavigate for navigation
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); 
+  const navigate = useNavigate(); 
 
   useEffect(() => {
-    // Fetch unreviewed products from the API
     const fetchProductsToReview = async () => {
       try {
         const response = await axios.get('/get-unreviewd-products');
         setProducts(response.data.unreviewedProducts);
       } catch (error) {
         console.error('Error fetching products to review:', error);
-        setError('Failed to fetch products.'); // Set error message
+        setError('Failed to fetch products.'); 
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     };
 
@@ -28,10 +27,11 @@ const UnReviewedProducts = () => {
 
   const handleAddReview = async (product) => {
       navigate('/add-review', { state: { product } }); 
+    
   };
 
   if (loading) {
-    return <Loader />; 
+    return <Loader />;
   }
 
   if (error) {
@@ -51,7 +51,7 @@ const UnReviewedProducts = () => {
               <p>Quantity: {product.quantity}</p>
               <button
                 className="add-review-button"
-                onClick={() => handleAddReview(product.product)} // Pass product ID to handleAddReview
+                onClick={() => handleAddReview(product.product)} 
               >
                 Add Review
               </button>

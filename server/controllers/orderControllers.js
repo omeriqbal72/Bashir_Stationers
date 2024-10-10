@@ -103,15 +103,17 @@ const placeOrder = async (req, res) => {
       cart.map(async (item) => {
         const product = await Product.findById(item.product._id);
         if (!product) {
-          console.error(`Product with ID ${item.product._id} not found`);  // Log error
+          console.error(`Product with ID ${item.product._id} not found`);
           throw new Error(`Product with ID ${item.product._id} not found`);
         }
-        product.quantity -= item.quantity; // Subtract ordered quantity
-        if (product.quantity < 0) {
-          product.quantity = 0;  // Ensure quantity doesn't go negative
-        }
-        await product.save();
-        console.log(`Updated quantity for product ID ${product._id}`);  // Debugging
+    
+        await Product.findOneAndUpdate(
+          { _id: item.product._id },
+          { $inc: { quantity: -item.quantity } }, 
+          { new: true, useFindAndModify: false }
+        );
+    
+        console.log(`Updated quantity for product ID ${item.product._id}`);
       })
     );
 

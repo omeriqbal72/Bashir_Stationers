@@ -9,8 +9,8 @@ import brownPaper from '../../Ui_Images/brown-paper.jpg'
 import Loader from '../Loader/Loader.jsx';
 const Cart = () => {
   const { cart, updateQuantity, removeFromCart, checkout, loading } = useCart(); // Destructure methods from context
+console.log(cart)
 
-  
   const totalPrice = cart.reduce((total, item) => {
     return total + (item.product.price || 0) * (item.quantity || 0);
   }, 0);
@@ -25,8 +25,8 @@ const Cart = () => {
         <p>Total items: {cart.length}</p>
         <div className="cart-item-list">
           {cart.length > 0 ? (
-            cart.map(item => (
-              <div className="cart-item" key={item.product._id}> {/* Add key prop here */}
+            cart.map((item, index) => (
+              <div className="cart-item" key={`${item.product._id}-${item.color || 'default'}-${index}`}> {/* Ensure unique key */}
                 <div className="item-details">
                   <img
                     src={`http://localhost:8080/${(item.product.images && item.product.images.length > 0) ? item.product.images[0] : 'uploads/productImages/default-placeholder.png'}`}
@@ -38,8 +38,8 @@ const Cart = () => {
                 <div className='cart-items-info'>
                   <ProductQuantity
                     quantity={item.quantity}
-                    onIncrement={() => updateQuantity(item.product._id, 1)}
-                    onDecrement={() => item.quantity > 1 && updateQuantity(item.product._id, -1)}
+                    onIncrement={() => updateQuantity(item.product._id , 1 , item.selectedColor )}
+                    onDecrement={() => item.quantity > 1 && updateQuantity(item.product._id, -1 , item.selectedColor)}
                   />
 
                   <div className="item-price">
@@ -47,7 +47,7 @@ const Cart = () => {
                   </div>
 
                   <div className='remove-cart-item'>
-                    <FontAwesomeIcon icon={faTrashCan} size='lg' style={{ color: "#511f1f" }} onClick={() => removeFromCart(item.product._id)} />
+                    <FontAwesomeIcon icon={faTrashCan} size='lg' style={{ color: "#511f1f" }} onClick={() => removeFromCart(item.product._id , item.selectedColor)} />
                   </div>
 
                 </div>
@@ -62,7 +62,7 @@ const Cart = () => {
 
 
       <div className="cart-summary">
-    
+
         <div className='cart-summary-img'>
           <img src={checkoutBoy} alt="checkout" />
         </div>
@@ -91,7 +91,7 @@ const Cart = () => {
 
 
     </div>
-  );  
+  );
 };
 
 export default Cart;
