@@ -9,7 +9,7 @@ const { register, verifyEmail, login, refreshToken, logout, requestNewCode, getM
 const { verifyToken } = require('../middlewares/jwt.js');
 const { placeOrder, getUserOrders, getAllOrders, getOrderbyId, updateOrderStatus, orderStats, salesperMonth , orderStatusStats ,
      enterOrderVerifyCode , sendOrderVerifyCode , getSingleOrderbyId} = require('../controllers/orderControllers.js')
-const { getComments ,postComment } = require ('../controllers/commentControllers.js')
+const { getComments ,postComment , getUnreviewedProducts} = require ('../controllers/commentControllers.js')
 
 const multer = require('multer');
 const path = require('path');
@@ -104,7 +104,8 @@ router.get('/sales-per-month', verifyToken, salesperMonth)
 router.get('/order-status-stats', verifyToken, orderStatusStats)
 router.post('/order/verify' , sendOrderVerifyCode)
 router.post('/order/confirm' , enterOrderVerifyCode)
-router.get('/order-by-id/:id' , getSingleOrderbyId)
+router.get('/order-by-id/:id' ,verifyToken, getSingleOrderbyId)
+router.get('/get-unreviewd-products' , verifyToken, getUnreviewedProducts)
 
 router.post('/products/:productId/comments' ,verifyToken, upload, postComment)
 router.get('/get-comments-products/:id', getComments)
