@@ -66,7 +66,6 @@ export const CartProvider = ({ children }) => {
 
   const syncCartWithBackend = (action, product, quantity , selectedColor) => {
     if (user) {
-      console.log(selectedColor)
       if (syncTimers.current[product._id]) {
         clearTimeout(syncTimers.current[product._id]);
       }
@@ -98,7 +97,7 @@ export const CartProvider = ({ children }) => {
           }
         }
         finally {
-          setLoading(false); // Set loading to false after sync attempt
+          setLoading(false);
         }
       }, 1000);
     }

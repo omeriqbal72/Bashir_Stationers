@@ -24,7 +24,11 @@ const OrderSchema = new Schema({
         type: Number,
         required: true,
       },
-      selectedColor: String, 
+      selectedColor: String,
+      reviewed: {
+        type: Boolean,
+        default: false
+      },
     },
   ],
   shippingAddress: {
@@ -61,9 +65,9 @@ const OrderSchema = new Schema({
     enum: ['Not Shipped', 'Shipped', 'Delivered'],
     default: 'Not Shipped',
   },
-  trackingId:{
+  trackingId: {
     type: Number,
-    default:0
+    default: 0
   },
 
   deliveryDate: {

@@ -33,7 +33,7 @@ import { OrderProvider } from './context/OrderContext.jsx';
 import GuestEnterCode from './components/Cart/GuestEnterCode.jsx';
 import './App.css'
 import ErrorBoundary from './ErrorBoundaries/ErrorBoundary.jsx';
-import AddReview from './components/Order/AddReview.jsx';
+import AddReview from './components/Reviews/AddReview.jsx';
 import OrderInformation from './components/Order/OrderInformation.jsx';
 
 axios.defaults.baseURL = 'http://localhost:8080';
@@ -58,7 +58,6 @@ function App() {
             <OrderProvider>
               <ErrorBoundary>
                 <Routes>
-                  {/* Public routes */}
                   <Route element={<PublicLayout />}>
                     <Route path="/" element={<Home />} />
                     <Route path="/products" element={<Products />} />
@@ -73,16 +72,13 @@ function App() {
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/order-summary" element={<Checkout />} />
                     <Route path="/enter-order-code" element={<GuestEnterCode />} />
-                    
                     <Route element={<PrivateRoute />}>
                       <Route path="/myorders" element={<Orders />} />
-                      <Route path="add-review" element={<AddReview /> } />
+                      <Route path="/add-review" element={<AddReview /> } />
                       <Route path="/order-information" element={<OrderInformation />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Route>
-
-                  {/* Private routes */}
                   <Route element={<PrivateRoute adminRoute={true} />}>
                     <Route element={<AdminLayout />}>
                       <Route path="/admin" element={<AdminPanel />} />
@@ -99,7 +95,6 @@ function App() {
                 </Routes>
               </ErrorBoundary>
             </OrderProvider>
-
           </CartProvider>
         </UserProvider>
 

@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { useCart } from '../../context/CartContext.jsx';
 import { useOrder } from '../../context/OrderContext.jsx';
 import '../../css/checkout.css'; // Import the CSS file for styling
-
+import { useUserContext } from '../../context/UserContext.jsx';
 const Checkout = () => {
     const { cart } = useCart(); // Fetch cartItems from CartContext
     const { placeOrder, orderError } = useOrder(); // Fetch placeOrder from OrderContext
     const [deliveryCharges, setDeliveryChatges] = useState(250);
     const [emailAddress, setEmailAddress] = useState(''); 
     const [contactNumber, setContactNumber] = useState(''); 
+    const { user } = useUserContext();
 
+     // Set emailAddress to the user's email if logged in
+     useEffect(() => {
+        if (user) {
+            setEmailAddress(user.email); // Assuming user has an 'email' property
+        }
+    }, [user]);
 
     const subtotal = cart.reduce((total, item) => {
         return total + (item.product.price || 0) * (item.quantity || 0);
@@ -31,11 +38,6 @@ const Checkout = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        // Debugging log
-        console.log(`Input changed: ${name} = ${value}`);
-
-        // Update state based on input name
         if (name === "emailaddress") {
             setEmailAddress(value); // Update emailAddress state
         } else if (name === "contactNumber") {
@@ -110,7 +112,7 @@ const Checkout = () => {
                 <div className="order-summary-right">
                     <h2>Shipping Information</h2>
                     <form onSubmit={handleSubmitOrder} className="order-form">
-                        <label>
+                    <label>
                             Email:
                             <input
                                 type="text"
@@ -119,6 +121,7 @@ const Checkout = () => {
                                 onChange={handleChange}
                                 required
                                 className="input-field"
+                                disabled={!!user} 
                             />
                         </label>
                         <label>
