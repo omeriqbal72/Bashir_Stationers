@@ -61,7 +61,7 @@ const Orders = () => {
                                 <span>{order.trackingId}</span>
                             </div>
                             <div className='user-orders-card-btn'>
-                                <button  onClick={() => handleOrderClick(order)} >See Order</button>
+                                <button onClick={() => handleOrderClick(order)} >See Order</button>
                             </div>
 
                         </div>
