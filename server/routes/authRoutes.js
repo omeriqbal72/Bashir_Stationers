@@ -105,7 +105,7 @@ router.get('/order-status-stats', verifyToken, orderStatusStats)
 router.post('/order/verify' , sendOrderVerifyCode)
 router.post('/order/confirm' , enterOrderVerifyCode)
 router.get('/order-by-id/:id' ,verifyToken, getSingleOrderbyId)
-router.get('/get-unreviewd-products' , verifyToken, getUnreviewedProducts)
+router.get('/get-unreviewed-products' , verifyToken, getUnreviewedProducts)
 
 router.post('/products/:productId/comments' ,verifyToken, upload, postComment)
 router.get('/get-comments-products/:id', getComments)

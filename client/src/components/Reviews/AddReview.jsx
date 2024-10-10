@@ -1,21 +1,21 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Rate, Button, Upload } from 'antd';
-import { UploadOutlined } from '@ant-design/icons'; 
+import { UploadOutlined } from '@ant-design/icons';
 import { useLocation } from 'react-router-dom'; // Import useLocation
-import '../../css/addreview.css'; 
+import '../../css/reviews/addreview.css';
 import Loader from '../Loader/Loader';
 
 const AddReview = () => {
     const location = useLocation(); // Get location object
     const { product } = location.state || {}; // Access product from state
     const [loading, setLoading] = useState(true);
-    const [comments, setComments] = useState([]); 
-    const [newComment, setNewComment] = useState(''); 
-    const [rating, setRating] = useState(0); 
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
+    const [rating, setRating] = useState(0);
     const [errorMsg, setErrorMsg] = useState('');
-    const [images, setImages] = useState([]); 
-  console.log(product)
+    const [images, setImages] = useState([]);
+    console.log(product)
     const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
 
     const handleImageChange = ({ fileList }) => {
@@ -78,19 +78,19 @@ const AddReview = () => {
     };
 
     useEffect(() => {
-      // Check if product data exists after the component mounts
-      if (product) {
-          setLoading(false); // Set loading to false if product is found
-      }
-  }, [product]); // Dependency on product
+        // Check if product data exists after the component mounts
+        if (product) {
+            setLoading(false); // Set loading to false if product is found
+        }
+    }, [product]); // Dependency on product
 
-  if (loading) {
-      return <Loader height={100} />; // Show loader while waiting for product
-  }
+    if (loading) {
+        return <Loader height={100} />; // Show loader while waiting for product
+    }
 
-  if (!product) {
-      return <p>No product information available.</p>; // Fallback for no product
-  }
+    if (!product) {
+        return <p>No product information available.</p>; // Fallback for no product
+    }
 
 
     return (
@@ -105,14 +105,14 @@ const AddReview = () => {
                     <textarea
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
-                        placeholder="Write your comment here"
+                        placeholder="Write your review here...."
                         required
                         className="add-review-description"
                     />
-                    
+
                     {/* Image Upload with UploadOutlined button */}
                     <div className="add-review-image-upload">
-                        <Upload 
+                        <Upload
                             multiple
                             accept="image/*"
                             beforeUpload={() => false} // Disable auto-upload
@@ -126,7 +126,7 @@ const AddReview = () => {
                     <div className="add-review-submit">
                         <button type="submit">Publish Review</button>
                     </div>
-                   
+
                     {errorMsg && <p className="add-review-error">{errorMsg}</p>}
                 </form>
             </div>

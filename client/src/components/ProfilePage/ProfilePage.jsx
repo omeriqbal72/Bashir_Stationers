@@ -5,7 +5,7 @@ import { Avatar, Tabs } from 'antd';
 import Orders from '../Order/Orders';
 import { useUserContext } from '../../context/UserContext';
 import Loader from '../Loader/Loader';
-import UnReviewedProducts from '../Reviews/UnReviewedProducts';
+import AddReviewTab from '../Reviews/AddReviewTab';
 
 const ProfilePage = () => {
     const { user, logout } = useUserContext();
@@ -28,7 +28,7 @@ const ProfilePage = () => {
         {
             key: '2',
             label: 'Add Review',
-            children: <UnReviewedProducts />,
+            children: <AddReviewTab />,
         }
     ];
 
@@ -37,7 +37,7 @@ const ProfilePage = () => {
             <div className='profile-page-sidebar'>
                 <div className='profile-page-sidebar-container'>
                     <Avatar 
-                        size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 164, xxl: 180 }}
+                        size={{ xs: 90, sm: 110, md: 128, lg: 140, xl: 164, xxl: 180 }}
                         icon={<UserOutlined />}
                     />
                     <div className='profile-page-sidebar-container-info'>
@@ -48,7 +48,7 @@ const ProfilePage = () => {
                             {user.email}
                         </span>
                         <span className='profile-page-sidebar-container-info-email'>
-                            Contact: {user.contactNumber}
+                            +92{user.contactNumber}
                         </span>
                     </div>
 
