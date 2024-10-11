@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/productdetails.css';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 import ProductQuantity from './ProductQuantity.jsx';
 import { useCart } from '../../context/CartContext.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus, faCreditCard, faStar, faPencil, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 import { Rate } from 'antd'
 import axios from 'axios'
+import { useUserContext } from '../../context/UserContext.jsx';
 
 const ProductDetails = ({ data, rating }) => {
   const [productDetails, setProductDetails] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart , error } = useCart();
+  const {user} = useUserContext();
   const [productRating, setRating] = useState(5);
   const [ratingCount, setRatingCount] = useState(0);
-  const [selectedColor, setSelectedColor] = useState(null); // Track the selected color
+  const [selectedColor, setSelectedColor] = useState(null); 
+  const navigate = useNavigate();
 
+
+  
   useEffect(() => {
     if (data) {
       setProductDetails(data);
@@ -25,18 +30,24 @@ const ProductDetails = ({ data, rating }) => {
     }
   }, [data, rating]);
 
+  console.log(productDetails)
+
   if (!productDetails) {
     return <div>Loading product details...</div>;
   }
 
-  const handleAddToCart = () => {
-    addToCart(productDetails, quantity, selectedColor); // Send selectedColor when adding to cart
+  const handleAddToCart = async () => {
+    addToCart(productDetails, quantity, selectedColor, () => navigate('/mycart'));
   };
+  
+  const handleBuynowClick = () => {
+    navigate('/order-summary', { state: { productDetails } });
+  }
 
-  const isOutOfStock = productDetails.quantity === 0;
+  const isOutOfStock = productDetails.quantity <= 0;
 
   const handleColorSelect = (color) => {
-    setSelectedColor(color); // Set selected color when user clicks on a color option
+    setSelectedColor(color); 
   };
 
   return (
@@ -99,11 +110,12 @@ const ProductDetails = ({ data, rating }) => {
                 onDecrement={() => quantity > 1 && setQuantity((prev) => prev - 1)}
               />
 
-              <div>{error}</div>
+             
             </div>
             
           )}
         </div>
+        <div className={`product-details-error-message ${error ? 'visible' : ''}`}>{error}</div>
 
         <div className='purchase-btns'>
           {!isOutOfStock ? (
@@ -115,7 +127,7 @@ const ProductDetails = ({ data, rating }) => {
                 </button>
               
 
-              <button className="buy-now-btn">
+              <button className="buy-now-btn" onClick={handleBuynowClick}>
                 <FontAwesomeIcon icon={faCreditCard} style={{ color: "#000000" }} />
                 Buy Now
               </button>

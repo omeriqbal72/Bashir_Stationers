@@ -88,7 +88,7 @@ export const CartProvider = ({ children }) => {
               return;
             } else if (response.status === 200){
               setError(null); 
-              navigate('/mycart')
+              
             }
           } else if (action === 'update') {
             console.log(selectedColor)
@@ -123,18 +123,33 @@ export const CartProvider = ({ children }) => {
     navigate('/order-summary');
   };
 
-  const addToCart = (product, quantity, selectedColor) => {
-    console.log(product.quantity);
+  const addToCart = (product, quantity, selectedColor, navigateToCart) => {
+
+  
     if (quantity > product.quantity) {
-      setError(`Only ${product.quantity} items available in stock.`);
-      return;
+      setError("Qunatity not avaialable in Stock");
+      setTimeout(() => setError(null), 3000);
+      return; 
     }
   
     const existingProductIndex = cart.findIndex(
       item => item.product._id === product._id && item.selectedColor === selectedColor
     );
-    
+  
     let updatedCart;
+  
+    const totalQuantityInCart = cart.reduce((total, item) => {
+      if (item.product._id === product._id) {
+        return total + item.quantity;
+      }
+      return total;
+    }, 0);
+  
+    if (totalQuantityInCart + quantity > product.quantity) {
+      setError(`Qunatity not avaialable in Stock`);
+      setTimeout(() => setError(null), 3000);
+      return;
+    }
   
     if (existingProductIndex >= 0) {
       updatedCart = cart.map(item =>
@@ -145,16 +160,20 @@ export const CartProvider = ({ children }) => {
     } else {
       updatedCart = [...cart, { product: filterProductData(product), quantity, selectedColor }];
     }
-  
+
     persistCartToLocalStorage(updatedCart);
     setCart(updatedCart);
   
     if (user) {
       syncCartWithBackend('add', product, quantity, selectedColor);
-    } else {
-      navigate('/mycart');
+    }
+    if (existingProductIndex < 0 || (existingProductIndex >= 0 && updatedCart)) {
+      if (navigateToCart) {
+        navigateToCart();
+      }
     }
   };
+  
   
 
   const updateQuantity = (productId , amount , selectedColor) => {

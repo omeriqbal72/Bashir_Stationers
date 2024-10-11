@@ -105,11 +105,14 @@ const sendOrderConfirmationEmail = async (email, order) => {
     <p><strong>Total Amount:</strong> Rs.${order.totalAmount}</p>
     <p><strong>Payment Method:</strong> ${order.paymentMethod}</p>
     
-    <p><strong>Shipping Address:</strong><br>
-    ${order.shippingAddress.street},<br> 
-    ${order.shippingAddress.city},<br>
-    ${order.shippingAddress.postalCode},<br>
+    <p><strong>Shipping Address: </strong>
+    ${order.shippingAddress.street}, 
+    ${order.shippingAddress.city},
     ${order.shippingAddress.country}</p>
+
+    <p><strong>Zip Code: </strong> 
+    ${order.shippingAddress.postalCode}.</p>
+    
     
     <p>We will notify you once your order is on its way.</p>
     

@@ -121,6 +121,24 @@
 }
 .sold-out-btn{
   background-color: rgb(178, 88, 88);
-  width: 48rem;
+  width: 100%;
   cursor:default;
+}
+
+.product-details-error-message {
+  opacity: 0; 
+  visibility: hidden; 
+  transform: scale(0.7); /* Start slightly smaller */
+  transition: opacity 0.9s ease-in-out, transform 0.9s ease-in-out; /* Include transform in transition */
+  background-color: #f8d7da; 
+  color: #721c24; 
+  border: 1px solid #f5c6cb; 
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.product-details-error-message.visible {
+  opacity: 1; 
+  visibility: visible;
+  transform: scale(1); /* Grow to normal size */
 }
