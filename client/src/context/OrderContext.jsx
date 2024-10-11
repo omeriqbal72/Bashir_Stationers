@@ -33,7 +33,7 @@ export const OrderProvider = ({ children }) => {
                 };
 
                 // Navigate immediately without waiting for the response
-                navigate('/profile');
+               // navigate('/profile');
 
                 // Perform the order request asynchronously
                 const response = await axiosInstance.post('/order/placeorder', orderDetails);

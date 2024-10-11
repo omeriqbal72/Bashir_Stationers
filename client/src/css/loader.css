@@ -5,5 +5,5 @@
     align-items: center;
     width: 100%;
     background-color: transparent; /* Optional: to dim the background */
-    z-index: 9999; /* To ensure it's above all content */
+    z-index: 300; /* To ensure it's above all content */
 }
