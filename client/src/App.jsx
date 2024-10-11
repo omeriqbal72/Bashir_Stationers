@@ -13,7 +13,7 @@ import AdminViewOrders from './components/Admin/AdminViewOrders.jsx';
 import AdminManageOrder from './components/Admin/AdminManageOrder.jsx';
 import ProductForm from './components/Admin/ProductForm.jsx';
 import EditProductPage from './components/Admin/EditProductAdmin.jsx';
-
+import ScrollTop from './components/ScrollTop/ScrollTop.jsx';
 import PublicLayout from './components/Layout/PublicLayout.jsx';
 import AdminLayout from './components/Layout/AdminLayout.jsx';
 import AdminSuccess from './components/Admin/AdminSuccess.jsx';
@@ -57,6 +57,7 @@ function App() {
           <CartProvider>
             <OrderProvider>
               <ErrorBoundary>
+                <ScrollTop />
                 <Routes>
                   <Route element={<PublicLayout />}>
                     <Route path="/" element={<Home />} />
@@ -74,7 +75,7 @@ function App() {
                     <Route path="/enter-order-code" element={<GuestEnterCode />} />
                     <Route element={<PrivateRoute />}>
                       <Route path="/myorders" element={<Orders />} />
-                      <Route path="/add-review" element={<AddReview /> } />
+                      <Route path="/add-review" element={<AddReview />} />
                       <Route path="/order-information" element={<OrderInformation />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
@@ -91,7 +92,6 @@ function App() {
                       <Route path="*" element={<NotFound />} />
                     </Route>
                   </Route>
-
                 </Routes>
               </ErrorBoundary>
             </OrderProvider>

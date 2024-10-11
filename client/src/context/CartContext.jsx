@@ -29,7 +29,8 @@ export const CartProvider = ({ children }) => {
           if (cartData && Array.isArray(cartData.items)) {
             const formattedCart = cartData.items.map(item => ({
               product: filterProductData(item.product), // Filtered product data
-              quantity: item.quantity
+              quantity: item.quantity,
+              selectedColor:item.selectedColor,
             }));
             setCart(formattedCart);
             persistCartToLocalStorage(formattedCart);
@@ -74,6 +75,7 @@ export const CartProvider = ({ children }) => {
         try {
           setLoading(true); 
           if (action === 'add') {
+            console.log(selectedColor)
             let response = await axiosInstance.post('/cart/add', { productId: product._id, quantity , selectedColor });
             if (response.status === 400) {
               // Set error for insufficient stock
@@ -82,18 +84,20 @@ export const CartProvider = ({ children }) => {
             } else if (response.status === 200){
               setError(null); 
               navigate('/mycart')
-              console.log('i am navigating in backend')
             }
           } else if (action === 'update') {
-            await axiosInstance.put('/cart/update', { productId: product._id, quantity });
+            console.log(selectedColor)
+            console.log(quantity)
+            await axiosInstance.put('/cart/update', { productId: product._id, quantity , selectedColor });
           } else if (action === 'remove') {
-            await axiosInstance.post('/cart/remove', { productId: product._id });
+            console.log(selectedColor)
+            await axiosInstance.post('/cart/remove', { productId: product._id , selectedColor});
           }
         } catch (error) {
           if (error.response && error.response.data && error.response.data.message) {
-            setError(error.response.data.message); // Extracting error message from the catch block
+            setError(error.response.data.message); 
           } else {
-            setError('An error occurred. Please try again later.'); // Fallback error message
+            setError('An error occurred. Please try again later.'); 
           }
         }
         finally {
@@ -148,31 +152,45 @@ export const CartProvider = ({ children }) => {
   };
   
 
-  const updateQuantity = (productId, amount) => {
+  const updateQuantity = (productId , amount , selectedColor) => {
+   
     const updatedCart = cart.map(item =>
-      item.product._id === productId
+      item.product._id === productId && item.selectedColor === selectedColor
         ? { ...item, quantity: item.quantity + amount }
         : item
     );
-
+  
     persistCartToLocalStorage(updatedCart);
     setCart(updatedCart);
-
-    const product = updatedCart.find(item => item.product._id === productId);
-    const newQuantity = product.quantity;
-    syncCartWithBackend('update', product.product, newQuantity);
+  
+    const product = updatedCart.find(
+      item => item.product._id === productId && item.selectedColor === selectedColor
+    );
+  
+    if (product) {
+      const newQuantity = product.quantity;
+      syncCartWithBackend('update', product.product, newQuantity , selectedColor);
+    }
   };
+  
 
-  const removeFromCart = (productId) => {
-    const updatedCart = cart.filter(item => item.product._id !== productId);
+  const removeFromCart = (productId, selectedColor) => {
+  const updatedCart = cart.filter(
+    item => !(item.product._id === productId && item.selectedColor === selectedColor)
+  );
 
-    persistCartToLocalStorage(updatedCart);
-    setCart(updatedCart);
+  persistCartToLocalStorage(updatedCart);
+  setCart(updatedCart);
 
-    // Find the product object in the cart to pass it for backend sync
-    const product = cart.find(item => item.product._id === productId);
-    if (product) syncCartWithBackend('remove', product.product);
-  };
+  const product = cart.find(
+    item => item.product._id === productId && item.selectedColor === selectedColor
+  );
+
+  if (product) {
+    syncCartWithBackend('remove', product.product , 0 , selectedColor);
+  }
+};
+
 
   return (
     <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart , checkout , error , loading}}>
