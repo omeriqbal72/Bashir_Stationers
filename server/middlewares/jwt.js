@@ -122,7 +122,6 @@ const sendOrderConfirmationEmail = async (email, order) => {
       subject: 'Order Confirmation',
       html: message,
     });
-    console.log('Order confirmation email sent successfully');
   } catch (error) {
     console.error('Failed to send order confirmation email:', error);
     throw new Error('Failed to send order confirmation email');
@@ -136,7 +135,6 @@ const sendOrderVerificationEmail = async (email, code) => {
       subject: 'Email Verification',
       text: message,
     });
-    console.log('Email sent successfully');
   } catch (error) {
     console.error('Failed to send verification email:', error);
     throw new Error('Failed to send verification email');

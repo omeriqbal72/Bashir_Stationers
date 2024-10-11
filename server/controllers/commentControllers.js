@@ -40,7 +40,7 @@ const postComment = async (req, res) => {
         const order = await Order.findOne({
             user: userId,
             'products.product': productId,
-            'products.reviewed': false, 
+            // 'products.reviewed': false, 
             orderStatus: 'Completed' 
         });
         
@@ -103,7 +103,7 @@ const getUnreviewedProducts = async (req, res) => {
             order.products
                 .filter(product => product.reviewed === false)
                 .map(product => ({
-                    _id: product._id, // Include the order item ID
+                    _id: product._id,
                     product: product.product, // The populated product details
                     priceAtPurchase: product.priceAtPurchase, // Include the purchase price
                     quantity: product.quantity // Include the quantity

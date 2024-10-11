@@ -27,7 +27,6 @@ const OrderInformation = () => {
     }
 
     const displayOrder = singleOrder;
-    //console.log(displayOrder);
     if (!displayOrder) {
         return <p>No order details available.</p>;
     }
@@ -52,7 +51,7 @@ const OrderInformation = () => {
             <div className="order-info-container">
                 <div className="order-info-header">
                     <div className='order-info-header-order-id'>
-                        <span style={{fontWeight: '700', fontSize: '28px'}}>Order ID: <span style={{fontWeight: '400', fontSize: '24px'}}>{displayOrder._id}</span></span>
+                        <span style={{ fontWeight: '700', fontSize: '28px' }}>Order ID: <span style={{ fontWeight: '400', fontSize: '24px' }}>{displayOrder._id}</span></span>
                         <button onClick={copyToClipboard}>
                             <FontAwesomeIcon icon={faCopy} style={{ color: "#ffffff", }} />
                             Tracking ID: {displayOrder.trackingId || 'N/A'}</button>
@@ -85,12 +84,17 @@ const OrderInformation = () => {
                     {displayOrder.products && displayOrder.products.length > 0 ? (
 
                         <div className="ordered-products-list">
-                            {displayOrder.products.map((product, index) => (
+                            {displayOrder.products
+                                .filter(product => product && product.product) // Filter out null or undefined products
+                                .map((product, index) => (
                                 <div key={index} className="ordered-products-items">
                                     <div className="ordered-products-item-details">
                                         <img
-                                            src={`http://localhost:8080/${(product.product.images && product.product.images.length > 0) ? product.product.images[0] : 'uploads/productImages/default-placeholder.png'}`}
-                                            alt={product.name}
+                                            src={`http://localhost:8080/${product.product && product.product.images && product.product.images.length > 0
+                                                    ? product.product.images[0]
+                                                    : 'uploads/productImages/default-placeholder.png'
+                                                }`}
+                                            alt={product.product ? product.product.name : 'Unknown Product'}
                                         />
                                         <span style={{ fontWeight: '500' }}>{product.product.name}</span>
                                     </div>

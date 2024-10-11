@@ -27,11 +27,13 @@ export const CartProvider = ({ children }) => {
           const cartData = response.data.cart;
 
           if (cartData && Array.isArray(cartData.items)) {
-            const formattedCart = cartData.items.map(item => ({
-              product: filterProductData(item.product), // Filtered product data
-              quantity: item.quantity,
-              selectedColor:item.selectedColor,
-            }));
+            const formattedCart = cartData.items
+              .filter(item => item.product !== null) // Filter out null products
+              .map(item => ({
+                product: filterProductData(item.product), 
+                quantity: item.quantity,
+                selectedColor: item.selectedColor,
+              }));
             setCart(formattedCart);
             persistCartToLocalStorage(formattedCart);
           } else {
@@ -43,7 +45,7 @@ export const CartProvider = ({ children }) => {
           setError('Failed to fetch cart. Please try again later.');
         }
         finally {
-          setLoading(false); // Set loading to false after fetch attempt
+          setLoading(false);
         }
         
       } else {
@@ -57,6 +59,9 @@ export const CartProvider = ({ children }) => {
 
  
   const filterProductData = (product) => {
+    if (!product) {
+      return null; // Return null if product is deleted
+    }
     const { _id, name, price, images } = product; // Only these fields will be stored
     return { _id, name, price, images };
   };

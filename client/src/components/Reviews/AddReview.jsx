@@ -2,22 +2,21 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Rate, Button, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { useLocation } from 'react-router-dom'; // Import useLocation
+import { useLocation } from 'react-router-dom';
 import '../../css/reviews/addreview.css';
 import Loader from '../Loader/Loader';
 
 const AddReview = () => {
-    const location = useLocation(); // Get location object
-    const { product } = location.state || {}; // Access product from state
+    const location = useLocation();
+    const { product = null } = location.state || {};
     const [loading, setLoading] = useState(true);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [rating, setRating] = useState(0);
     const [errorMsg, setErrorMsg] = useState('');
     const [images, setImages] = useState([]);
-    console.log(product)
     const MAX_FILE_SIZE = 3 * 1024 * 1024; // 3MB
-
+    console.log(product)
     const handleImageChange = ({ fileList }) => {
         const validImages = [];
         let hasError = false;
@@ -55,13 +54,10 @@ const AddReview = () => {
         });
 
         try {
-            // Ensure product is defined before using it
-            if (!product) {
+            if (!product._id) {
                 setErrorMsg('Invalid product data');
                 return;
             }
-
-            // Assuming your API endpoint expects the product data in a specific way
             const res = await axios.post(`/products/${product._id}/comments`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
@@ -78,18 +74,18 @@ const AddReview = () => {
     };
 
     useEffect(() => {
-        // Check if product data exists after the component mounts
         if (product) {
-            setLoading(false); // Set loading to false if product is found
+            setLoading(false);
         }
-    }, [product]); // Dependency on product
+    }, [product]);
 
     if (loading) {
-        return <Loader height={100} />; // Show loader while waiting for product
+        return <Loader height={100} />;
     }
 
-    if (!product) {
-        return <p>No product information available.</p>; // Fallback for no product
+
+    if (!product || !product._id) {
+        return <p className="error-message">Product not available. It may have been deleted or removed</p>;
     }
 
 
@@ -110,12 +106,11 @@ const AddReview = () => {
                         className="add-review-description"
                     />
 
-                    {/* Image Upload with UploadOutlined button */}
                     <div className="add-review-image-upload">
                         <Upload
                             multiple
                             accept="image/*"
-                            beforeUpload={() => false} // Disable auto-upload
+                            beforeUpload={() => false}
                             fileList={images}
                             listType='picture'
                             onChange={handleImageChange}
@@ -131,11 +126,28 @@ const AddReview = () => {
                 </form>
             </div>
             <div className="add-review-right">
-                <h3>Product Details</h3>
+                <h2>Product Details</h2>
+
                 <div className="add-review-product-info">
-                    <p>Name: {product.name}</p>
-                    <p>Price: ${product.price}</p>
-                    <p>Description: {product.description}</p>
+                <div className="add-review-right-img">
+                        {product?.images?.length > 0 ? (
+                            <img
+                                src={`http://localhost:8080/${product.images[0]}`}
+                                alt={product.name || 'Unknown Product'}
+                            />
+                        ) : (
+                            <p>No images available</p>
+                        )}
+                    </div>
+
+                    <p><strong>Name:</strong> {product.name}</p>
+                    <p><strong>Price: </strong>RS.{product.price}</p>
+
+
+                </div>
+
+                <div>
+                    <Rate value={product.averageRating || 5} disabled />
                 </div>
             </div>
         </div>
