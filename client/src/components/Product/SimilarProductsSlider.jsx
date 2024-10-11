@@ -37,6 +37,7 @@ const SimilarProductSlider = ({ products, isLoading, isError, error }) => {
                         name={product.name}
                         price={product.price}
                         company={product.company.name}
+                        quantity={product.quantity}
                     />
                 </SwiperSlide>
             ))}

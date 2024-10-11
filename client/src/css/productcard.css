@@ -6,7 +6,7 @@
     padding: 1rem;
     border: none;
     /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
-    width: 90%;
+    width: 16rem;
     height: 25rem;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
@@ -68,7 +68,8 @@
   }
 
   .product-card-add-to-cart-btn,
-  .product-card-buy-now-btn {
+  .product-card-buy-now-btn ,
+  .product-card-sold-out-btn{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -84,7 +85,13 @@
     gap: .5em;
   }
 
+  .product-card-sold-out-btn{
+    background-color: rgb(216, 84, 84);
+    width: 100%;
+  }
   .product-card-buy-now-btn {
     background-color: var(--green-shade);
     color: black;
   }
+
+ 

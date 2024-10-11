@@ -55,10 +55,10 @@ const getUserOrders = async (req, res) => {
 
 const placeOrder = async (req, res) => {
   try {
-    const { cart, address, paymentMethod, contactNumber } = req.body;
+    const { cart, address, paymentMethod, contactNumber , totalPrice  } = req.body;
     const userId = req.user.userId;
 
-    console.log('Starting placeOrder...');  // Debugging
+    console.log('Starting placeOrder...');  
 
     let user = await User.findById(userId);
     if (!user) {
@@ -73,8 +73,23 @@ const placeOrder = async (req, res) => {
     }
 
     // Calculate the total amount
-    const totalAmount = cart.reduce((sum, item) => sum + item.quantity * item.product.price, 0);
-    console.log('Total amount calculated:', totalAmount);  // Debugging
+    const totalAmount = totalPrice;
+
+    for (let item of cart) {
+      const product = await Product.findById(item.product._id);
+
+      if (!product) {
+        console.error(`Product with ID ${item.product._id} not found`);
+        return res.status(404).json({ message: `Product with ID ${item.product._id} not found` });
+      }
+
+      if (product.quantity < item.quantity) {
+        console.error(`Insufficient quantity for product ID ${item.product._id}`);
+        return res.status(400).json({
+          message: `Insufficient stock for product: ${product.name}. Only ${product.quantity} left.`,
+        });
+      }
+    }
 
     // Create a new order
     const newOrder = new Order({
@@ -178,7 +193,7 @@ const salesperMonth = async (req, res) => {
 };
 
 const sendOrderVerifyCode = async (req, res) => {
-  const { cart, address, paymentMethod, contactNumber, emailAddress } = req.body;
+  const { cart, address, paymentMethod, contactNumber, emailAddress , totalPrice} = req.body;
 
   if (!emailAddress) {
     return res.status(400).json({ message: 'Email or contact number is required.' });
@@ -196,6 +211,7 @@ const sendOrderVerifyCode = async (req, res) => {
       paymentMethod,
       contactNumber,
       verificationCode,
+      totalPrice,
     };
     console.log(pendingOrders)
 
@@ -247,12 +263,7 @@ const enterOrderVerifyCode = async (req, res) => {
       console.log('Existing user found:', user);
     }
 
-    const totalAmount = pendingOrder.cart.reduce((sum, item) => {
-      console.log('Cart Item:', item);
-      return sum + item.quantity * item.product.price;
-    }, 0);
-
-    // Create a new order using the mapped product structure
+    const totalAmount = pendingOrder.totalPrice;
     const newOrder = new Order({
       user: user._id,
       products: pendingOrder.cart.map((item) => ({

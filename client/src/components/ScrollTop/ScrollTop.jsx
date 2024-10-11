@@ -1,8 +1,8 @@
-// ScrollToTop.jsx
+// src/components/ScrollTop/ScrollToTop.jsx
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const ScrollTop = () => {
+const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -12,4 +12,4 @@ const ScrollTop = () => {
   return null;
 };
 
-export default ScrollTop;
+export default ScrollToTop;

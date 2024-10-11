@@ -6,9 +6,11 @@ import '../../css/checkout.css'; // Import the CSS file for styling
 import { useUserContext } from '../../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import { Input } from 'antd';
-
+import { useLocation } from 'react-router-dom';
 const Checkout = () => {
-    const { cart } = useCart(); // Fetch cartItems from CartContext
+    const { cart } = useCart();
+    const location = useLocation();
+    const { productDetails } = location.state || {};
     const { placeOrder, orderError } = useOrder(); // Fetch placeOrder from OrderContext
     const [deliveryCharges, setDeliveryCharges] = useState(250);
     const [emailAddress, setEmailAddress] = useState('');
@@ -24,7 +26,21 @@ const Checkout = () => {
         }
     }, [user]);
 
-    const subtotal = cart.reduce((total, item) => {
+    const tempCart = productDetails ? [{
+        product: {
+            _id: productDetails._id,
+            images: Array.isArray(productDetails.images) ? productDetails.images : [productDetails.images], 
+            name: productDetails.name,
+            price: productDetails.price,
+            company: productDetails.company,
+        },
+        quantity: 1 
+    }
+    ]: cart;
+
+    console.log(cart);
+    console.log(tempCart);
+    const subtotal = tempCart.reduce((total, item) => {
         return total + (item.product.price || 0) * (item.quantity || 0);
     }, 0);
 
@@ -93,10 +109,9 @@ const Checkout = () => {
 
     const handleSubmitOrder = (e) => {
         e.preventDefault();
-
         const formattedContactNumber = `+92${contactNumber}`;
         setbtnLoading(true);
-        placeOrder(cart, address, paymentMethod, formattedContactNumber, emailAddress)
+       placeOrder(tempCart, address, paymentMethod, formattedContactNumber, emailAddress, totalPrice);
             .then(() => {
                 setbtnLoading(false);
                 if (user) {
@@ -124,8 +139,8 @@ const Checkout = () => {
                     <h3 style={{ fontWeight: '500' }}>Cart Summary</h3>
                     <h1>PKR {totalPrice.toFixed(2)}</h1>
                     <div className="checkout-items-list">
-                        {cart.map((item, index) => (
-                            <div className="checkout-items" key={`${item.product._id}-${index}`}>
+                        {tempCart.map((item, index) => (
+                            <div className="checkout-items" key={`${item.product._id}-${index}`}> {/* Add key prop here */}
                                 <div className="checkout-item-details">
                                     <img
                                         src={`http://localhost:8080/${(item.product.images && item.product.images.length > 0) ? item.product.images[0] : 'uploads/productImages/default-placeholder.png'}`}
@@ -173,6 +188,7 @@ const Checkout = () => {
                                 onChange={handleChange}
                                 required
                                 className="checkout-input-field"
+
                                 disabled={!!user}
                             />
                         </label>

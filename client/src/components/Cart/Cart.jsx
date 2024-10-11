@@ -9,7 +9,6 @@ import brownPaper from '../../Ui_Images/brown-paper.jpg'
 import Loader from '../Loader/Loader.jsx';
 const Cart = () => {
   const { cart, updateQuantity, removeFromCart, checkout, loading } = useCart(); // Destructure methods from context
-console.log(cart)
 
   const totalPrice = cart.reduce((total, item) => {
     return total + (item.product.price || 0) * (item.quantity || 0);
