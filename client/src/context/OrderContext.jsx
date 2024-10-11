@@ -32,8 +32,8 @@ export const OrderProvider = ({ children }) => {
                     emailAddress,
                     totalPrice
                 };
-
-                navigate('/profile');
+                // Navigate immediately without waiting for the response
+               // navigate('/profile');
 
                 const response = await axiosInstance.post('/order/placeorder', orderDetails);
                 console.log('Order placed:', response.data);
