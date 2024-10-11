@@ -20,6 +20,10 @@ const Product = () => {
   const { data: youMayLikeProduct, isLoading: loadingYouMayLike, isError: errorYouMayLike, error: errorYouMayLikeDetails } = useYouMayLikeProduct(id);
   const { data: commentsReceived, isLoading: commentsLoading, isError: commentError, error: errorComments } = useGetComments(id);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [product]);
+
   if (isLoading) {
     return <Loader height={100} />;
   }

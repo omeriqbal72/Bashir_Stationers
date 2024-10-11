@@ -108,6 +108,8 @@ function ProductListing() {
                   name={product.name}
                   price={product.price}
                   company={product.company.name}
+                  colors={product.colors}
+                  quantity={product.quantity}
                 />
               );
             })

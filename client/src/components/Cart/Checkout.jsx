@@ -1,24 +1,41 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext.jsx';
 import { useOrder } from '../../context/OrderContext.jsx';
 import '../../css/checkout.css'; // Import the CSS file for styling
 import { useUserContext } from '../../context/UserContext.jsx';
+import { useLocation } from 'react-router-dom';
 const Checkout = () => {
-    const { cart } = useCart(); // Fetch cartItems from CartContext
+    const { cart } = useCart();
+    const location = useLocation();
+    const { productDetails } = location.state || {};
     const { placeOrder, orderError } = useOrder(); // Fetch placeOrder from OrderContext
     const [deliveryCharges, setDeliveryChatges] = useState(250);
-    const [emailAddress, setEmailAddress] = useState(''); 
-    const [contactNumber, setContactNumber] = useState(''); 
+    const [emailAddress, setEmailAddress] = useState('');
+    const [contactNumber, setContactNumber] = useState('');
     const { user } = useUserContext();
 
-     // Set emailAddress to the user's email if logged in
-     useEffect(() => {
+    // Set emailAddress to the user's email if logged in
+    useEffect(() => {
         if (user) {
             setEmailAddress(user.email); // Assuming user has an 'email' property
         }
     }, [user]);
 
-    const subtotal = cart.reduce((total, item) => {
+    const tempCart = productDetails ? [{
+        product: {
+            _id: productDetails._id,
+            images: Array.isArray(productDetails.images) ? productDetails.images : [productDetails.images], // Ensure images is always an array
+            name: productDetails.name,
+            price: productDetails.price,
+            company: productDetails.company,
+        },
+        quantity: 1 // Single product, default quantity to 1
+    }
+    ]: cart;
+
+    console.log(cart);
+    console.log(tempCart);
+    const subtotal = tempCart.reduce((total, item) => {
         return total + (item.product.price || 0) * (item.quantity || 0);
     }, 0);
 
@@ -47,7 +64,7 @@ const Checkout = () => {
 
     const handleSubmitOrder = (e) => {
         e.preventDefault();
-        placeOrder(cart, address, paymentMethod, contactNumber, emailAddress);
+        placeOrder(tempCart, address, paymentMethod, contactNumber, emailAddress, totalPrice);
     };
 
     if (orderError) {
@@ -66,7 +83,7 @@ const Checkout = () => {
                     <h1>PKR {totalPrice.toFixed(2)}</h1>
                     <div className="checkout-items-list">
 
-                        {cart.map((item,index) => (
+                        {tempCart.map((item, index) => (
                             <div className="checkout-items" key={`${item.product._id}-${index}`}> {/* Add key prop here */}
                                 <div className="checkout-item-details">
                                     <img
@@ -112,7 +129,7 @@ const Checkout = () => {
                 <div className="order-summary-right">
                     <h2>Shipping Information</h2>
                     <form onSubmit={handleSubmitOrder} className="order-form">
-                    <label>
+                        <label>
                             Email:
                             <input
                                 type="text"
@@ -121,7 +138,7 @@ const Checkout = () => {
                                 onChange={handleChange}
                                 required
                                 className="input-field"
-                                disabled={!!user} 
+                                disabled={!!user}
                             />
                         </label>
                         <label>

@@ -19,7 +19,7 @@ export const OrderProvider = ({ children }) => {
     const [singleOrder, setSingleOrder] = useState(null);
     const { user } = useUserContext();
 
-    const placeOrder = async (cart, address, paymentMethod, contactNumber, emailAddress) => {
+    const placeOrder = async (cart, address, paymentMethod, contactNumber, emailAddress , totalPrice) => {
         setLoading(true); // Set loading to true before the process starts
         setOrderError(null); // Reset any previous errors
         if (user) {
@@ -30,19 +30,18 @@ export const OrderProvider = ({ children }) => {
                     paymentMethod,
                     contactNumber,
                     emailAddress,
+                    totalPrice
                 };
 
-                // Navigate immediately without waiting for the response
                 navigate('/profile');
 
-                // Perform the order request asynchronously
                 const response = await axiosInstance.post('/order/placeorder', orderDetails);
                 console.log('Order placed:', response.data);
             } catch (err) {
                 console.error('Error placing order:', err);
                 setOrderError('Failed to place order.');
             } finally {
-                setLoading(false); // Set loading to false after completion
+                setLoading(false); 
             }
         } else {
             try {
@@ -55,13 +54,14 @@ export const OrderProvider = ({ children }) => {
                     paymentMethod,
                     contactNumber,
                     emailAddress,
+                    totalPrice
                 });
-                console.log('Verification code sent:', response.data);
+                
             } catch (err) {
                 console.error('Error sending verification code:', err);
                 setOrderError('Failed to send verification code.');
             } finally {
-                setLoading(false); // Set loading to false after completion
+                setLoading(false);
             }
         }
     };

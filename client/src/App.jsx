@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Home from './components/Home/Home.jsx';
@@ -50,6 +51,11 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  useEffect(() => {
+    window.onbeforeunload = function () {
+      window.scrollTo(0, 0); 
+    };
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
