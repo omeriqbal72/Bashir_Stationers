@@ -21,7 +21,7 @@ const Orders = () => {
     };
 
     if (loading) {
-        return <Loader />;
+        return <Loader height={100}/>;
     }
 
     if (orderError) {
@@ -38,7 +38,7 @@ const Orders = () => {
 
                 <div className='user-orders-container'>
                     {orders.map((order, index) => (
-                        <div className='user-orders-card'>
+                        <div className='user-orders-card' key={`${order._id}-${index}`}>
                             <div className='user-orders-card-id'>
                                 <Avatar size={64} style={{ backgroundColor: '#fde3cf', color: '#f56a00' }}>
                                     {index + 1}

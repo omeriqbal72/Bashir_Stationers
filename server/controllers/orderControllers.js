@@ -119,7 +119,6 @@ const placeOrder = async (req, res) => {
 
     // Send Order Confirmation Email
     await sendOrderConfirmationEmail(user.email, savedOrder);
-    console.log('Order confirmation email sent');  // Debugging
 
     res.status(201).json(savedOrder);
   } catch (error) {

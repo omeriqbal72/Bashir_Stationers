@@ -14,8 +14,11 @@ const AddReviewTab = () => {
     const fetchProductsToReview = async () => {
       try {
         const response = await axios.get('/get-unreviewed-products');
-        setProducts(response.data.unreviewedProducts);
-
+        if (response.data.unreviewedProducts) {
+          setProducts(response.data.unreviewedProducts);
+        } else {
+          setError('No products to review.');
+        }
       } catch (error) {
         console.error('Error fetching products to review:', error);
         setError('Failed to fetch products.'); 
@@ -27,11 +30,10 @@ const AddReviewTab = () => {
     fetchProductsToReview();
   }, []);
 
-  const handleAddReview = async (product) => {
+  const handleAddReview = (product) => {
     navigate('/add-review', { state: { product } });
-    
   };
-  //console.log(products)
+
   if (loading) {
     return <Loader height={60} />;
   }
@@ -44,22 +46,30 @@ const AddReviewTab = () => {
     <div className="add-review-tab">
       <h2>Products to Review</h2>
       <div className="add-review-tab-products-list">
-        {products.length > 0 ? (
-          products.map((product) => (
-            <div key={product._id} className="add-review-tab-product-card">
-              <img
-                src={`http://localhost:8080/${(product.product.images && product.product.images.length > 0) ? product.product.images[0] : 'uploads/productImages/default-placeholder.png'}`}
-                alt={product.name}
-              />
-              <span style={{ fontWeight: '700', fontSize: '16px' }}>{product.product.name}</span>
-              <button
-                className="add-review-tab-btn"
-                onClick={() => handleAddReview(product.product)} 
-              >
-                Add Review
-              </button>
-            </div>
-          ))
+        {products && products.length > 0 ? (
+          products.map((productItem) => {
+            const product = productItem.product || {};
+            const productImages = product.images || [];
+            const defaultImage = 'uploads/productImages/default-placeholder.png';
+
+            return (
+              <div key={product._id} className="add-review-tab-product-card">
+                <img
+                  src={`http://localhost:8080/${productImages.length > 0 ? productImages[0] : defaultImage}`}
+                  alt={product.name || 'Unnamed Product'}
+                />
+                <span style={{ fontWeight: '700', fontSize: '16px' }}>
+                  {product.name || 'Unknown Product'}
+                </span>
+                <button
+                  className="add-review-tab-btn"
+                  onClick={() => handleAddReview(product)} 
+                >
+                  Add Review
+                </button>
+              </div>
+            );
+          })
         ) : (
           <p>No products to review.</p>
         )}
