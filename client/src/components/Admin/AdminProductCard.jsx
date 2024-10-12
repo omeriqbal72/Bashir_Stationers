@@ -36,9 +36,9 @@ const AdminProductCard = ({ product, onDelete }) => {
 
             <div className="admin-product-actions-buttons">
                 <Link to={`/edit-product/${product._id}`}>
-                    <button>Edit</button>
+                    <button className="admin-product-actions-buttons-btn">Edit</button>
                 </Link>
-                <button onClick={() => onDelete(product)}>Delete</button>
+                <button className="admin-product-actions-buttons-btn" onClick={() => onDelete(product)}>Delete</button>
             </div>
         </div>
     );

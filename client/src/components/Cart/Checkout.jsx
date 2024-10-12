@@ -29,14 +29,15 @@ const Checkout = () => {
     const tempCart = productDetails ? [{
         product: {
             _id: productDetails._id,
-            images: Array.isArray(productDetails.images) ? productDetails.images : [productDetails.images], 
+            images: Array.isArray(productDetails.images) ? productDetails.images : [productDetails.images],
             name: productDetails.name,
             price: productDetails.price,
             company: productDetails.company,
+            quantity:productDetails.quantity
         },
-        quantity: 1 
+        quantity: 1
     }
-    ]: cart;
+    ] : cart;
 
     console.log(cart);
     console.log(tempCart);
@@ -96,8 +97,8 @@ const Checkout = () => {
                         key="my-orders"
                         type="primary"
                         onClick={() => {
-                            Modal.destroyAll(); // Close the modal
-                            navigate('/profile'); // Navigate to My Orders
+                            Modal.destroyAll();
+                            navigate('/profile'); 
                         }}
                     >
                         See Order
@@ -111,161 +112,161 @@ const Checkout = () => {
         e.preventDefault();
         const formattedContactNumber = `+92${contactNumber}`;
         setbtnLoading(true);
-       placeOrder(tempCart, address, paymentMethod, formattedContactNumber, emailAddress, totalPrice);
+        placeOrder(tempCart, address, paymentMethod, formattedContactNumber, emailAddress, totalPrice)
             .then(() => {
-                setbtnLoading(false);
-                if (user) {
-                    showSuccessModal();
-                } // Show success modal after placing the order
-            })
-            .catch((err) => {
-                setbtnLoading(false);
-                console.error('Order submission failed:', err);
-            });
+            setbtnLoading(false);
+            if (user) {
+                showSuccessModal();
+            }
+        })
+    .catch((err) => {
+        setbtnLoading(false);
+        console.error('Order submission failed:', err);
+    });
     };
 
-    if (orderError) {
-        return <div className="error-message">{orderError}</div>;
-    }
+if (orderError) {
+    return <div className="error-message">{orderError}</div>;
+}
 
-    return (
-        <>
-            <div style={{ textAlign: 'center' }}>
-                <h1>Rasheed Stationers</h1>
-            </div>
+return (
+    <>
+        <div style={{ textAlign: 'center' }}>
+            <h1>Rasheed Stationers</h1>
+        </div>
 
-            <div className="order-summary-container">
-                <div className="order-summary-left">
-                    <h3 style={{ fontWeight: '500' }}>Cart Summary</h3>
-                    <h1>PKR {totalPrice.toFixed(2)}</h1>
-                    <div className="checkout-items-list">
-                        {tempCart.map((item, index) => (
-                            <div className="checkout-items" key={`${item.product._id}-${index}`}> {/* Add key prop here */}
-                                <div className="checkout-item-details">
-                                    <img
-                                        src={`http://localhost:8080/${(item.product.images && item.product.images.length > 0) ? item.product.images[0] : 'uploads/productImages/default-placeholder.png'}`}
-                                        alt={item.name}
-                                    />
-                                    <div className="checkout-item-name-quantity">
-                                        <span style={{ fontWeight: '500' }}>{item.product.name}</span>
-                                        <span style={{ fontWeight: '200' }}>Qty: {item.quantity}</span>
-                                    </div>
-                                </div>
-                                <div className="checkout-item-price">
-                                    {`Rs. ${(item.product.price || 0).toFixed(2)}`}
+        <div className="order-summary-container">
+            <div className="order-summary-left">
+                <h3 style={{ fontWeight: '500' }}>Cart Summary</h3>
+                <h1>PKR {totalPrice.toFixed(2)}</h1>
+                <div className="checkout-items-list">
+                    {tempCart.map((item, index) => (
+                        <div className="checkout-items" key={`${item.product._id}-${index}`}> {/* Add key prop here */}
+                            <div className="checkout-item-details">
+                                <img
+                                    src={`http://localhost:8080/${(item.product.images && item.product.images.length > 0) ? item.product.images[0] : 'uploads/productImages/default-placeholder.png'}`}
+                                    alt={item.name}
+                                />
+                                <div className="checkout-item-name-quantity">
+                                    <span style={{ fontWeight: '500' }}>{item.product.name}</span>
+                                    <span style={{ fontWeight: '200' }}>Qty: {item.quantity}</span>
                                 </div>
                             </div>
-                        ))}
+                            <div className="checkout-item-price">
+                                {`Rs. ${(item.product.price || 0).toFixed(2)}`}
+                            </div>
+                        </div>
+                    ))}
 
-                        <div className="checkout-total-price">
-                            <div className="checkout-subtotal">
-                                <span className="checkout-total-price-labels">Subtotal</span>
-                                <span>Rs. {subtotal}</span>
+                    <div className="checkout-total-price">
+                        <div className="checkout-subtotal">
+                            <span className="checkout-total-price-labels">Subtotal</span>
+                            <span>Rs. {subtotal}</span>
+                        </div>
+                        <div className="checkout-delivery-charges">
+                            <div className="checkout-delivery-charges-subcol">
+                                <span className="checkout-total-price-labels">Delivery charges</span>
                             </div>
-                            <div className="checkout-delivery-charges">
-                                <div className="checkout-delivery-charges-subcol">
-                                    <span className="checkout-total-price-labels">Delivery charges</span>
-                                </div>
-                                <span>Rs. {deliveryCharges}</span>
-                            </div>
-                            <div className="checkout-total">
-                                <span className="checkout-total-price-labels">Total Due</span>
-                                <span>Rs. {totalPrice}</span>
-                            </div>
+                            <span>Rs. {deliveryCharges}</span>
+                        </div>
+                        <div className="checkout-total">
+                            <span className="checkout-total-price-labels">Total Due</span>
+                            <span>Rs. {totalPrice}</span>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div className="order-summary-right">
-                    <h2>Delivery Information</h2>
-                    <form onSubmit={handleSubmitOrder} className="checkout-form">
+            <div className="order-summary-right">
+                <h2>Delivery Information</h2>
+                <form onSubmit={handleSubmitOrder} className="checkout-form">
+                    <label>
+                        Email:
+                        <Input
+                            type="text"
+                            name="emailaddress"
+                            value={emailAddress}
+                            onChange={handleChange}
+                            required
+                            className="checkout-input-field"
+
+                            disabled={!!user}
+                        />
+                    </label>
+                    <label>
+                        Contact Number:
+                        <Input addonBefore="+92"
+                            min={3000000000}
+                            max={3999999999}
+                            type='number'
+                            name="contactNumber"
+                            value={contactNumber}
+                            onChange={handleChange}
+                            required
+                            className="checkout-input-field-contact"
+                        />
+                    </label>
+                    <label>
+                        Street:
+                        <Input
+                            type="text"
+                            name="street"
+                            value={address.street}
+                            onChange={handleAddressChange}
+                            required
+                            className="checkout-input-field"
+                        />
+                    </label>
+                    <div className='checkout-state-country'>
                         <label>
-                            Email:
+                            City:
                             <Input
                                 type="text"
-                                name="emailaddress"
-                                value={emailAddress}
-                                onChange={handleChange}
-                                required
-                                className="checkout-input-field"
-
-                                disabled={!!user}
-                            />
-                        </label>
-                        <label>
-                            Contact Number:
-                            <Input addonBefore="+92"
-                                min={3000000000}
-                                max={3999999999}
-                                type='number'
-                                name="contactNumber"
-                                value={contactNumber}
-                                onChange={handleChange}
-                                required
-                                className="checkout-input-field-contact"
-                            />
-                        </label>
-                        <label>
-                            Street:
-                            <Input
-                                type="text"
-                                name="street"
-                                value={address.street}
+                                name="city"
+                                value={address.city}
                                 onChange={handleAddressChange}
                                 required
                                 className="checkout-input-field"
                             />
                         </label>
-                        <div className='checkout-state-country'>
-                            <label>
-                                City:
-                                <Input
-                                    type="text"
-                                    name="city"
-                                    value={address.city}
-                                    onChange={handleAddressChange}
-                                    required
-                                    className="checkout-input-field"
-                                />
-                            </label>
-                            <label>
-                                State:
-                                <Input
-                                    type="text"
-                                    name="state"
-                                    value={address.state}
-                                    onChange={handleAddressChange}
-                                    required
-                                    className="checkout-input-field"
-                                />
-                            </label>
-                        </div>
                         <label>
-                            Zip Code:
+                            State:
                             <Input
-                                type="number"
-                                name="zipCode"
-                                value={address.zipCode}
+                                type="text"
+                                name="state"
+                                value={address.state}
                                 onChange={handleAddressChange}
                                 required
                                 className="checkout-input-field"
                             />
                         </label>
+                    </div>
+                    <label>
+                        Zip Code:
+                        <Input
+                            type="number"
+                            name="zipCode"
+                            value={address.zipCode}
+                            onChange={handleAddressChange}
+                            required
+                            className="checkout-input-field"
+                        />
+                    </label>
 
-                        <div>
-                            <h2>Payment Method</h2>
-                            <div className="payment-methods">
-                                <label>
-                                    <input
-                                        type="radio"
-                                        name="paymentMethod"
-                                        value="cash-on-delivery"
-                                        checked={paymentMethod === 'cash-on-delivery'}
-                                        onChange={() => setPaymentMethod('cash-on-delivery')}
-                                    />
-                                    Cash on Delivery
-                                </label>
-                                {/* <label>
+                    <div>
+                        <h2>Payment Method</h2>
+                        <div className="payment-methods">
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value="cash-on-delivery"
+                                    checked={paymentMethod === 'cash-on-delivery'}
+                                    onChange={() => setPaymentMethod('cash-on-delivery')}
+                                />
+                                Cash on Delivery
+                            </label>
+                            {/* <label>
                                     <input
                                         type="radio"
                                         name="paymentMethod"
@@ -275,21 +276,21 @@ const Checkout = () => {
                                     />
                                     Online Payment
                                 </label> */}
-                            </div>
                         </div>
+                    </div>
 
 
-                        <div className='checkout-checkout-btn'>
-                            <Button type='none' htmlType="submit" size='large' className="checkout-checkoutbtn" loading={btnLoading}>
-                                Complete Order
-                            </Button>
+                    <div className='checkout-checkout-btn'>
+                        <Button type='none' htmlType="submit" size='large' className="checkout-checkoutbtn" loading={btnLoading}>
+                            Complete Order
+                        </Button>
 
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
-        </>
-    );
+        </div>
+    </>
+);
 };
 
 export default Checkout;
