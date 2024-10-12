@@ -99,7 +99,7 @@ const getCart = async (req, res) => {
         if (!cart) {
             return res.status(404).json({ message: 'Cart not found' });
         }
-
+        console.log(cart.items)
         res.status(200).json({ cart });
     } catch (error) {
         console.error('Error fetching cart:', error);

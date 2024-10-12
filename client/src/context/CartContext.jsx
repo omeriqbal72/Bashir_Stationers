@@ -28,7 +28,7 @@ export const CartProvider = ({ children }) => {
 
           if (cartData && Array.isArray(cartData.items)) {
             const formattedCart = cartData.items
-              .filter(item => item.product !== null) // Filter out null products
+              .filter(item => item.product !== null)
               .map(item => ({
                 product: filterProductData(item.product), 
                 quantity: item.quantity,
@@ -62,8 +62,8 @@ export const CartProvider = ({ children }) => {
     if (!product) {
       return null; // Return null if product is deleted
     }
-    const { _id, name, price, images } = product; // Only these fields will be stored
-    return { _id, name, price, images };
+    const { _id, name, price, images , quantity } = product; // Only these fields will be stored
+    return { _id, name, price, images , quantity };
   };
 
   const persistCartToLocalStorage = (cart) => {
