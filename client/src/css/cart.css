@@ -42,8 +42,14 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding: 10px 0;
+  
+}
+
+.cart-item-top{
+  display: flex;
+  flex-direction: column;
   border-bottom: 1px solid #ddd;
+  padding: 10px 0;
 }
 
 .cart-items-info{
@@ -186,7 +192,26 @@
   transition: .2s ease-in-out;
 
 }
-
 .cart-checkout-btn:hover{
   background-color: #9de947;
+}
+
+.out-of-stock-msg {
+  display: flex;
+  color: red;
+  font-size: 12px;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: end;
+  font-style: italic;
+}
+
+.disabled-item img {
+  filter: grayscale(100%); /* Grayscale for image */
+}
+
+
+.disabled-item .item-price,
+.disabled-item .product-quantity {
+  color: #999; /* Lighten the text color */
 }

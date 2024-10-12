@@ -17,8 +17,12 @@ const getOrderbyId = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate('user').populate({
       path: 'products.product',
-      model: 'Product'
-    });;
+      model: 'Product',
+      populate: {
+        path: 'company', 
+        model: 'Company' 
+      }
+    });
     if (!order) return res.status(404).json({ message: 'Order not found' });
     res.json(order);
   } catch (error) {
@@ -41,7 +45,7 @@ const getUserOrders = async (req, res) => {
     const userId = req.user.userId;
 
     const orders = await Order.find({ user: userId });
-      
+
 
     if (!orders.length) {
       return res.status(404).json({ message: 'No orders found for this user.' });
@@ -55,10 +59,10 @@ const getUserOrders = async (req, res) => {
 
 const placeOrder = async (req, res) => {
   try {
-    const { cart, address, paymentMethod, contactNumber , totalPrice  } = req.body;
+    const { cart, address, paymentMethod, contactNumber, totalPrice } = req.body;
     const userId = req.user.userId;
 
-    console.log('Starting placeOrder...');  
+    console.log('Starting placeOrder...');
 
     let user = await User.findById(userId);
     if (!user) {
@@ -121,13 +125,13 @@ const placeOrder = async (req, res) => {
           console.error(`Product with ID ${item.product._id} not found`);
           throw new Error(`Product with ID ${item.product._id} not found`);
         }
-    
+
         await Product.findOneAndUpdate(
           { _id: item.product._id },
-          { $inc: { quantity: -item.quantity } }, 
+          { $inc: { quantity: -item.quantity } },
           { new: true, useFindAndModify: false }
         );
-    
+
         console.log(`Updated quantity for product ID ${item.product._id}`);
       })
     );
@@ -193,7 +197,7 @@ const salesperMonth = async (req, res) => {
 };
 
 const sendOrderVerifyCode = async (req, res) => {
-  const { cart, address, paymentMethod, contactNumber, emailAddress , totalPrice} = req.body;
+  const { cart, address, paymentMethod, contactNumber, emailAddress, totalPrice } = req.body;
 
   if (!emailAddress) {
     return res.status(400).json({ message: 'Email or contact number is required.' });

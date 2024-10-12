@@ -1,76 +1,93 @@
-/* src/components/Admin/ManageOrders.css */
-.admin-manage-orders-container{
-    padding: 1rem;
-    box-sizing: border-box;
+.admin-manage-orders-container {
+  background-color: #ffffff;
+  padding: 2rem 1rem 1rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
-.manage-orders {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .manage-orders h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .manage-orders h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: #555;
-  }
-  
-  .manage-orders p {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 10px;
-  }
-  
-  .manage-orders ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 20px;
-  }
-  
-  .manage-orders li {
-    background-color: #fff;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
-  
-  .manage-orders select {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 100%;
-    margin-bottom: 20px;
-    font-size: 16px;
-    color: #333;
-  }
-  
-  .manage-orders button {
-    background-color: #28a745;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .manage-orders button:hover {
-    background-color: #218838;
-  }
-  
-  .manage-orders .loading {
-    text-align: center;
-    font-size: 18px;
-    color: #777;
-  }
-  
+
+.admin-manage-orders-layout {
+  display: flex;
+  flex-direction: row;
+  height: 85vh; 
+}
+
+.admin-order-details {
+  display: flex;
+  flex-direction: column;
+  width: 65%;
+  gap: 1rem;
+  padding: 1rem;
+  border-right: 1px solid #e0e0e0;
+  box-sizing: border-box;
+}
+
+.admin-manage-order-details-top{
+  display: flex;
+ gap: 1rem;
+}
+.admin-manage-order-details-top-left{
+  flex: 1;
+  padding: 1rem;
+  background-color: var(--blue-shade);
+  border-radius: 1rem;
+}
+
+.admin-manage-order-details-top-right{
+  flex: 1;
+  background-color: var(--green-shade);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.admin-order-details select{
+  width: 100%;
+  border: none;
+  height: 2rem;
+}
+
+.admin-manage-order-product-slider {
+  display: flex;
+  width: 35%;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.admin-manage-order-slider {
+  display: flex;
+  flex-direction: column; 
+  max-height: 100%; 
+}
+
+.admin-manage-order-product-card {
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 10px;
+  transition: box-shadow 0.3s;
+}
+
+.admin-manage-order-product-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.admin-manage-orders-container h1, h2, h3, h4 {
+  color: #333;
+}
+
+.admin-order-details button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.admin-order-details button:hover {
+  background-color: #45a049;
+}
