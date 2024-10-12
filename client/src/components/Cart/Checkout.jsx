@@ -7,6 +7,7 @@ import { useUserContext } from '../../context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import { Input } from 'antd';
 import { useLocation } from 'react-router-dom';
+
 const Checkout = () => {
     const { cart } = useCart();
     const location = useLocation();
@@ -17,6 +18,7 @@ const Checkout = () => {
     const [contactNumber, setContactNumber] = useState('');
     const { user } = useUserContext();
     const [btnLoading, setbtnLoading] = useState(false);
+    const [orderAttempted, setOrderAttempted] = useState(false); // New flag to track order submission attempt
     const navigate = useNavigate(); // Initialize useNavigate
 
     // Set emailAddress to the user's email if logged in
@@ -26,20 +28,19 @@ const Checkout = () => {
         }
     }, [user]);
 
-    const tempCart = productDetails ? [{
-        product: {
-            _id: productDetails._id,
-            images: Array.isArray(productDetails.images) ? productDetails.images : [productDetails.images], 
-            name: productDetails.name,
-            price: productDetails.price,
-            company: productDetails.company,
-        },
-        quantity: 1 
-    }
-    ]: cart;
+    const tempCart = productDetails
+        ? [{
+            product: {
+                _id: productDetails._id,
+                images: Array.isArray(productDetails.images) ? productDetails.images : [productDetails.images],
+                name: productDetails.name,
+                price: productDetails.price,
+                company: productDetails.company,
+            },
+            quantity: 1
+        }]
+        : cart;
 
-    console.log(cart);
-    console.log(tempCart);
     const subtotal = tempCart.reduce((total, item) => {
         return total + (item.product.price || 0) * (item.quantity || 0);
     }, 0);
@@ -65,9 +66,7 @@ const Checkout = () => {
         } else if (name === 'contactNumber') {
             if (value.length <= 10) {
                 setContactNumber(value);
-                //console.log(contactNumber) // Update contactNumber state
             }
-            //setContactNumber(value);
         }
     };
 
@@ -107,26 +106,64 @@ const Checkout = () => {
         });
     };
 
+    const showVerifyModal = () => {
+        Modal.confirm({
+            title: 'Email Verification',
+            content: 'We sent an order email verification code to your given email address. Enter the code to proceed with the order placement.',
+            centered: true,
+            width: 500,
+            okButtonProps: { style: { display: 'none' } }, // Hide default OK button
+            footer: [
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0.5rem', gap: '0.5rem' }}>
+                    <Input
+                        type='text'
+                        // onClick={() => {
+                        //     Modal.destroyAll(); // Close the modal
+                        //     navigate('/'); // Navigate to Home
+                        // }}
+                    />
+                    <Button
+                        key="my-orders"
+                        type="primary"
+                        // onClick={() => {
+                        //     Modal.destroyAll(); // Close the modal
+                        //     navigate('/profile'); // Navigate to My Orders
+                        // }}
+                    >
+                        Verify Email
+                    </Button>
+                </div>
+            ],
+        });
+    };
+
     const handleSubmitOrder = (e) => {
         e.preventDefault();
         const formattedContactNumber = `+92${contactNumber}`;
         setbtnLoading(true);
-       placeOrder(tempCart, address, paymentMethod, formattedContactNumber, emailAddress, totalPrice);
-            .then(() => {
-                setbtnLoading(false);
-                if (user) {
-                    showSuccessModal();
-                } // Show success modal after placing the order
-            })
-            .catch((err) => {
-                setbtnLoading(false);
-                console.error('Order submission failed:', err);
-            });
+        setOrderAttempted(true); // Set orderAttempted to true when submitting
+        showVerifyModal();
+        // placeOrder(tempCart, address, paymentMethod, formattedContactNumber, emailAddress, totalPrice)
+        //     .finally(() => {
+        //         setbtnLoading(false); // Stop the button loading state when the promise is resolved (either success or failure)
+        //     });
     };
 
-    if (orderError) {
-        return <div className="error-message">{orderError}</div>;
-    }
+    // useEffect to handle changes in `orderError`
+    useEffect(() => {
+        if (orderAttempted && !orderError && !btnLoading && user) {
+            showSuccessModal(); // Show success modal if there's no error and the loading is done
+        } else if(orderAttempted && !orderError && !btnLoading && !user){
+                showVerifyModal();
+        }else if (orderAttempted && orderError) {
+            // Handle order error (e.g., show a notification or message)
+            console.error('Order failed:', orderError);
+            Modal.error({
+                title: 'Order Failed!',
+                content: 'There was an error placing your order. Please try again later.',
+            });
+        }
+    }, [orderError, btnLoading, orderAttempted]); // Trigger when `orderError`, `btnLoading`, or `orderAttempted` changes
 
     return (
         <>

@@ -186,3 +186,7 @@
   transition: .2s ease-in-out;
 
 }
+
+.cart-checkout-btn:hover{
+  background-color: #9de947;
+}
