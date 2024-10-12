@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useOrder } from '../../context/OrderContext.jsx';
 import Loader from '../Loader/Loader.jsx';
 import '../../css/orders/orderinformation.css';
-import { message } from 'antd';
+import {Popover} from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,6 +11,11 @@ const OrderInformation = () => {
     const location = useLocation();
     const { orderId } = location.state || {};
     const { getSingleOrderById, singleOrder, loading, orderError } = useOrder();
+    const [popoveropen, setPopoverOpen] = useState(false);
+ 
+    const handleOpenPopoverChange = (newOpen) => {
+        setPopoverOpen(newOpen);
+    };
 
     useEffect(() => {
         if (orderId) {
@@ -33,14 +38,10 @@ const OrderInformation = () => {
 
     const copyToClipboard = () => {
         if (displayOrder.trackingId) {
-            navigator.clipboard.writeText(displayOrder.trackingId)
-                .then(() => {
-                    message.success('Tracking ID copied to clipboard!');
-                })
-                .catch(err => {
-                    console.error('Failed to copy: ', err);
-                });
+            navigator.clipboard.writeText(displayOrder.trackingId);
+
         } else {
+            setPopoverOpen(false);
             alert("No Tracking ID available to copy.");
         }
     };
@@ -52,9 +53,19 @@ const OrderInformation = () => {
                 <div className="order-info-header">
                     <div className='order-info-header-order-id'>
                         <span style={{ fontWeight: '700', fontSize: '28px' }}>Order ID: <span style={{ fontWeight: '400', fontSize: '24px' }}>{displayOrder._id}</span></span>
-                        <button onClick={copyToClipboard}>
-                            <FontAwesomeIcon icon={faCopy} style={{ color: "#ffffff", }} />
-                            Tracking ID: {displayOrder.trackingId || 'N/A'}</button>
+  
+                        <Popover
+                            title="Tracking ID copied!"
+                            trigger="click"
+                            open={popoveropen}
+                            onOpenChange={handleOpenPopoverChange}
+                        >
+                            <button onClick={copyToClipboard}>
+                                <FontAwesomeIcon icon={faCopy} style={{ color: "#ffffff", }} />
+                                Tracking ID: {displayOrder.trackingId || 'N/A'}
+                            </button>
+                        </Popover>
+
                     </div>
                     <div className='order-info-header-order-status'>
                         <div>
@@ -87,26 +98,26 @@ const OrderInformation = () => {
                             {displayOrder.products
                                 .filter(product => product && product.product) // Filter out null or undefined products
                                 .map((product, index) => (
-                                <div key={index} className="ordered-products-items">
-                                    <div className="ordered-products-item-details">
-                                        <img
-                                            src={`http://localhost:8080/${product.product && product.product.images && product.product.images.length > 0
+                                    <div key={index} className="ordered-products-items">
+                                        <div className="ordered-products-item-details">
+                                            <img
+                                                src={`http://localhost:8080/${product.product && product.product.images && product.product.images.length > 0
                                                     ? product.product.images[0]
                                                     : 'uploads/productImages/default-placeholder.png'
-                                                }`}
-                                            alt={product.product ? product.product.name : 'Unknown Product'}
-                                        />
-                                        <span style={{ fontWeight: '500' }}>{product.product.name}</span>
+                                                    }`}
+                                                alt={product.product ? product.product.name : 'Unknown Product'}
+                                            />
+                                            <span style={{ fontWeight: '500' }}>{product.product.name}</span>
+                                        </div>
+
+                                        <div className='ordered-products-item-price-quantity'>
+                                            <span className='ordered-products-item-price'>Rs. {(product.product.price || 0).toFixed(2)}</span>
+                                            <span style={{ fontWeight: '200' }}>Qty: {product.quantity}</span>
+                                        </div>
+
+
                                     </div>
-
-                                    <div className='ordered-products-item-price-quantity'>
-                                        <span className='ordered-products-item-price'>Rs. {(product.product.price || 0).toFixed(2)}</span>
-                                        <span style={{ fontWeight: '200' }}>Qty: {product.quantity}</span>
-                                    </div>
-
-
-                                </div>
-                            ))}
+                                ))}
                         </div>
                     ) : (
                         <p>No products found in this order.</p>
