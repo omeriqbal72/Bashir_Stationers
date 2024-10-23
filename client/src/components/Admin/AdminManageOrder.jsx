@@ -4,8 +4,7 @@ import axios from 'axios';
 import '../../css/admin/adminmanageorder.css';
 import Loader from '../Loader/Loader';
 
-const AdminManageOrders = () => {
-    const { id } = useParams();
+const AdminManageOrders = ({id}) => {
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(true);
     const [status, setStatus] = useState('');
@@ -15,6 +14,7 @@ const AdminManageOrders = () => {
 
     useEffect(() => {
         const fetchOrder = async () => {
+            console.log(id);
             try {
                 const response = await axios.get(`/getorder/${id}`);
                 setOrder(response.data);
@@ -58,7 +58,7 @@ const AdminManageOrders = () => {
                 <div className="admin-order-details">
                     <div className="admin-manage-order-details-top">
                         <div className="admin-manage-order-details-top-left"> 
-                            <h2>Manage Order - ID: {order._id}</h2>
+                            <p><strong>Manage Order - ID:</strong> {order._id}</p>
                             <h3>Order Details</h3>
                             <p><strong>Order Date:</strong> {new Date(order.orderDate).toLocaleDateString()}</p>
                             <p><strong>Total Amount:</strong> Rs.{order.totalAmount}</p>

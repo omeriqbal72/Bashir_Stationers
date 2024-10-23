@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Rate, Button, Upload } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { useLocation } from 'react-router-dom';
 import '../../css/reviews/addreview.css';
 import Loader from '../Loader/Loader';
@@ -91,6 +91,35 @@ const AddReview = () => {
 
     return (
         <div className="add-review-container">
+            <div className="add-review-right">
+                <h2>Product Details</h2>
+
+                <div className="add-review-product-info">
+                    <div className="add-review-right-img">
+                        {product?.images?.length > 0 ? (
+                            <img
+                                src={`http://localhost:8080/${product.images[0]}`}
+                                alt={product.name || 'Unknown Product'}
+                            />
+                        ) : (
+                            <p>No images available</p>
+                        )}
+                    </div>
+
+
+
+                </div>
+
+                <div className='add-review-details'>
+                    <p><strong>Name:</strong> {product.name}</p>
+                    <p><strong>Price: </strong>RS.{product.price}</p>
+
+                </div>
+
+                <div className='add-review-rate-product'>
+                    <Rate value={product.averageRating || 5} disabled />
+                </div>
+            </div>
             <div className="add-review-left">
                 <h1>Add a Review</h1>
                 <form onSubmit={handleCommentSubmit}>
@@ -115,8 +144,19 @@ const AddReview = () => {
                             listType='picture'
                             onChange={handleImageChange}
                         >
-                            <Button icon={<UploadOutlined />}>Select Images (Max 2)</Button>
+                            <Button
+                                style={{
+                                    height: '3rem',
+                                 
+                                    borderRadius:'0px'
+                                }}
+                                icon={<UploadOutlined style={{ fontSize: '2rem' , color:'gray'  }} />}
+                            > 
+                            
+                            Select Images (Max 2)</Button>
+                           
                         </Upload>
+                        
                     </div>
                     <div className="add-review-submit">
                         <button type="submit">Publish Review</button>
@@ -125,31 +165,7 @@ const AddReview = () => {
                     {errorMsg && <p className="add-review-error">{errorMsg}</p>}
                 </form>
             </div>
-            <div className="add-review-right">
-                <h2>Product Details</h2>
 
-                <div className="add-review-product-info">
-                <div className="add-review-right-img">
-                        {product?.images?.length > 0 ? (
-                            <img
-                                src={`http://localhost:8080/${product.images[0]}`}
-                                alt={product.name || 'Unknown Product'}
-                            />
-                        ) : (
-                            <p>No images available</p>
-                        )}
-                    </div>
-
-                    <p><strong>Name:</strong> {product.name}</p>
-                    <p><strong>Price: </strong>RS.{product.price}</p>
-
-
-                </div>
-
-                <div>
-                    <Rate value={product.averageRating || 5} disabled />
-                </div>
-            </div>
         </div>
     );
 };

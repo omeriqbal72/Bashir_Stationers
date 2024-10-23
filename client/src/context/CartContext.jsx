@@ -2,11 +2,13 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import axiosInstance from '../utils/axiosInstance';
 import { useUserContext } from './UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useNotification } from './NotificationContext';
 
 const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
+  const { openNotification } = useNotification();
   const { user } = useUserContext();
   const [cart, setCart] = useState(() => {
     const storedCart = localStorage.getItem('cart');
@@ -80,7 +82,7 @@ export const CartProvider = ({ children }) => {
         try {
           setLoading(true); 
           if (action === 'add') {
-            console.log(selectedColor)
+           
             let response = await axiosInstance.post('/cart/add', { productId: product._id, quantity , selectedColor });
             if (response.status === 400) {
               // Set error for insufficient stock
@@ -91,11 +93,9 @@ export const CartProvider = ({ children }) => {
               
             }
           } else if (action === 'update') {
-            console.log(selectedColor)
-            console.log(quantity)
+            
             await axiosInstance.put('/cart/update', { productId: product._id, quantity , selectedColor });
           } else if (action === 'remove') {
-            console.log(selectedColor)
             await axiosInstance.post('/cart/remove', { productId: product._id , selectedColor});
           }
         } catch (error) {
@@ -124,8 +124,6 @@ export const CartProvider = ({ children }) => {
   };
 
   const addToCart = (product, quantity, selectedColor, navigateToCart) => {
-
-  
     if (quantity > product.quantity) {
       setError("Qunatity not avaialable in Stock");
       setTimeout(() => setError(null), 3000);
@@ -170,6 +168,9 @@ export const CartProvider = ({ children }) => {
     if (existingProductIndex < 0 || (existingProductIndex >= 0 && updatedCart)) {
       if (navigateToCart) {
         navigateToCart();
+      }
+      else{
+        openNotification('success', 'Added to Cart', `${product.name} has been added to your cart.` , navigate);
       }
     }
   };

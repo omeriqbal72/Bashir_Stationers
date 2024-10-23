@@ -8,18 +8,16 @@ const AdminSideBar = () => {
     const [showOrders, setShowOrders] = useState(false);
     const [showCustomers, setShowCustomers] = useState(false);
 
-    const { logout } = useUserContext();// Access logout function from context
+    const { logout } = useUserContext();
     const navigate = useNavigate();
 
     const toggleProducts = () => {
         setShowProducts(!showProducts);
-        setShowOrders(false);
         setShowCustomers(false);
     };
 
     const toggleOrders = () => {
         setShowOrders(!showOrders);
-        setShowProducts(false);
         setShowCustomers(false);
     };
 
@@ -54,7 +52,7 @@ const AdminSideBar = () => {
                     {showOrders && (
                         <ul>
                             <li><Link to="/admin/view-orders">View Orders</Link></li>
-                            <li><a href="#">Process Orders</a></li>
+                            <li><Link to="/admin/orders-division">Manage Orders</Link></li>
                         </ul>
                     )}
                 </li>

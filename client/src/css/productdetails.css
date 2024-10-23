@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  box-sizing: border-box;
 
 }
 
@@ -141,4 +142,12 @@
   opacity: 1; 
   visibility: visible;
   transform: scale(1); /* Grow to normal size */
+}
+
+@media (max-width: 768px) {
+  .product-name{
+    font-size: 34px;
+    margin-bottom: 1rem;
+  }
+
 }

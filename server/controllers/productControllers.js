@@ -124,18 +124,16 @@ const getProductsByCompanyName = async (req, res) => {
         const { page = 1, limit = 12 } = req.query;
         const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
         const limitInt = parseInt(limit, 10);
-        // Find the company by name to get its ID
         const company = await Company.findOne({ name: companyname }).exec();
 
         if (!company) {
             return res.status(404).json({ message: 'Company not found' });
         }
 
-        // Fetch products by company ID and populate the company field
         const products = await Product.find({ company: company._id })
             .skip(skip)
             .limit(limitInt)
-            .populate('company')  // Populate the company field with the company document
+            .populate('company')
             .exec();
 
         // Count total products by matching company
@@ -406,6 +404,21 @@ const getYouMayAlsoLike = async (req, res) => {
     }
 };
 
+const getSubCategoriesWithTypes = async (req , res) => {
+    try {
+        const subCategories = await SubCategory.find()
+        .populate({
+            path: 'types',
+            select: 'name', 
+        })
+        .limit(8);
+        res.status(200).json(subCategories);
+    } catch (error) {
+        console.error('Error fetching subcategories:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+}
+
 
 module.exports = {
     getallProducts,
@@ -419,5 +432,6 @@ module.exports = {
     SearchbyIcon,
     checkImagesExist,
     getFeaturedProducts,
-    getYouMayAlsoLike
+    getYouMayAlsoLike,
+    getSubCategoriesWithTypes
 };

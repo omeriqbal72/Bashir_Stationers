@@ -28,7 +28,7 @@ function HomeProductsSection() {
   }, []);
 
   if (isLoading) {
-    return <Loader />;
+    return <Loader height={100} />;
   }
 
   // Handling error state
@@ -49,10 +49,23 @@ function HomeProductsSection() {
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, Autoplay, A11y]}
           spaceBetween={25}
-          slidesPerView={4}
           autoplay={{ delay: 1000 }}
           loop
           navigation
+          breakpoints={{
+            640: {
+              slidesPerView: 2,
+            },
+            768: {
+              slidesPerView: 3,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
+            1280: {
+              slidesPerView: 4,
+            },
+          }}
         >
           {data.map((product) => (
             <SwiperSlide key={product.id}>
@@ -64,6 +77,7 @@ function HomeProductsSection() {
                 price={product.price}
                 company={product.company.name}
                 quantity={product.quantity}
+                averageRating={product.averageRating}
               />
             </SwiperSlide>
           ))}

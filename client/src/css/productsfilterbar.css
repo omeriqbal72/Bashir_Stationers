@@ -7,13 +7,15 @@
     padding: 1rem 2rem;
     box-sizing: border-box;
     justify-content: space-between;
+    position: -webkit-sticky;
+   
   }
 
-  .product-search-results h3{
+  .product-search-results h3 {
     font-size: 24px;
   }
 
-  .product-search-results span{
+  .product-search-results span {
     font-size: 13px;
     font-weight: 300;
   }
@@ -22,4 +24,12 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .filter-bar {
+      flex-direction: column;
+      align-items: start;
+    }
+
   }

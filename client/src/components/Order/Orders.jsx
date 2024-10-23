@@ -5,6 +5,7 @@ import { useOrder } from '../../context/OrderContext.jsx';
 import Loader from '../Loader/Loader.jsx';
 import '../../css/orders/orders.css';
 import { Avatar } from 'antd';
+import ErrorPage from '../Error/ErrorPage.jsx';
 
 
 const Orders = () => {
@@ -25,7 +26,7 @@ const Orders = () => {
     }
 
     if (orderError) {
-        return <p>Error: {orderError}</p>;
+        return <ErrorPage message={orderError} />;
     }
 
     return (
@@ -39,7 +40,7 @@ const Orders = () => {
                 <div className='user-orders-container'>
                     {orders.map((order, index) => (
                         <div className='user-orders-card' key={`${order._id}-${index}`}>
-                            <div className='user-orders-card-id'>
+                            <div className='user-orders-card-num'>
                                 <Avatar size={64} style={{ backgroundColor: '#fde3cf', color: '#f56a00' }}>
                                     {index + 1}
                                 </Avatar>

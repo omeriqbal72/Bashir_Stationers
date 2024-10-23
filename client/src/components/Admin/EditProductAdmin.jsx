@@ -6,6 +6,7 @@ import TextEditor from './TextEditor'
 import { useGetProductDetails } from '../../Functions/GetAPI.js';
 import ColorSelector from './ColorSelector.jsx';
 import axiosInstance from '../../utils/axiosInstance.js';
+import Loader from '../Loader/Loader.jsx';
 
 const categoryData = {
     'Writing Tools': {
@@ -170,7 +171,7 @@ const EditProductPage = () => {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>; // Display loading state
+        return <Loader height={100} /> ;
     }
 
     if (isError) {

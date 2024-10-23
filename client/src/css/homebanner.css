@@ -1,80 +1,86 @@
-
-.home-banner-container{
+.home-banner-container {
     display: flex;
     width: 100%;
     padding: 2rem;
-    flex-wrap: wrap;
     gap: 1rem;
     background-color: var(--background-color);
-    
+    box-sizing: border-box;
+    height: 80vh;
+    overflow: hidden;
 }
 
-
-.home-banner-img1{
+.home-banner-up {
+    display: flex;
     flex: 2;
-    background-image: url('../Ui_Images/home-banner-img1.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 400px;
-    
+    height: 100%;
+    gap: 1rem;
 }
 
-.home-banner-img1-div{
+.home-banner-img1 {
+    flex: 2;
+}
+
+.home-banner-img1-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.home-banner-img2-image img {
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+}
+
+.home-banner-img2 {
+    flex: 1.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* .home-banner-img1-div{
     display: flex;
     align-items: flex-start;
     justify-content: flex-end;
     padding: 1.4rem;
-}
+} */
 
-.home-banner-img2{
-    flex: 1.5;
-    background-image: url('../Ui_Images/home-banner-img2.jpg');
-    background-size: cover;
-    background-position: center;
-    height: 400px;
-    
+/* .home-banner-img2-div{
     display: flex;
     align-items: center;
     justify-content: center;
-}
+} */
 
-.home-banner-img2-div{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.home-banner-img2-div button{
+.home-banner-img2-div button {
     color: black;
     border: 1px solid rgb(0, 0, 0);
 
 }
 
-.home-banner-inside-container{
+.home-banner-inside-container {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     gap: 1rem;
-    width: 100%;
-    flex: 2;
+    flex: 1;
+    height: 100%;
 }
 
-.home-banner-img3, .home-banner-img4 {
+.home-banner-img3,
+.home-banner-img4 {
     display: flex;
     flex: 1;
+    overflow: hidden;
+}
+
+.home-banner-img3 img,
+.home-banner-img4 img {
     width: 100%;
-    height: 100%; /* Ensure the div takes up the correct height */
-    overflow: hidden; /* Hide any overflow */
+    object-fit: cover;
 }
 
-.home-banner-img3 img, .home-banner-img4 img {
-    min-width: 85%;
-    height: 100%;
-    height: 12rem;
-    object-fit: cover; /* Ensure the image covers the div without distorting */
-}
-
-.home-banner-btn{
+.home-banner-btn {
     color: white;
     background-color: transparent;
     border: 1px solid white;
@@ -82,10 +88,76 @@
     border-radius: 4rem;
 }
 
-.home-banner-btn:hover{
+.home-banner-btn:hover {
     color: black;
     background-color: white;
 }
 
+.home-banner-img1-image,
+.home-banner-img2-image,
+.home-banner-img3,
+.home-banner-img4 {
+    height: 100%;
+}
 
+@media (max-width: 1024px) {
+    .home-banner-container {
+        flex-direction: column;
+        height: auto;
+    }
 
+    .home-banner-img3 img, .home-banner-img4 img {
+        width: 100%;
+        object-fit: fill; 
+    }
+
+    .home-banner-inside-container {
+        flex-direction: row;
+    }
+    /* .home-banner-img3, .home-banner-img4 {
+        flex: 2;
+    }
+
+    .home-banner-img2{
+        flex: 3;
+    }
+
+    .home-banner-img1{
+        flex: ;
+    } */
+}
+
+@media (max-width: 768px) {
+    
+    .home-banner-inside-container {
+        flex-direction: column;
+    }
+     .home-banner-img3 img{
+        width: 100%;
+        height: 20rem;
+     }
+      .home-banner-img4 img{
+        width: 100%;
+        height: 20rem;
+    }
+
+    /*
+    .home-banner-img2{
+        flex: 3;
+    }
+
+    .home-banner-img1{
+        flex: ;
+    } */
+}
+
+@media (max-width: 500px) {
+    .home-banner-img3 img{
+        width: 100%;
+        height: 12rem;
+     }
+      .home-banner-img4 img{
+        width: 100%;
+        height: 12rem;
+    }
+}

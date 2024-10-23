@@ -1,16 +1,27 @@
 .dropdown-container {
-  position: relative;
-  display: inline-block;
+  
+  display: flex;
+  gap: .5rem;
+  align-items: center;
   cursor: pointer;
 }
 
 .dropdown-button {
   background-color: transparent;
-  padding: 10px 20px;
+ 
   font-size: 16px;
   border: none;
   cursor: pointer;
   border-radius: 5px;
   font-weight: bold;
 }
+
+@media (max-width: 768px) {
+  .dropdown-button {
+   
+    font-size: 12px;
+    
+  }
+}
+
 

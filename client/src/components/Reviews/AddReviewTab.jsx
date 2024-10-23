@@ -7,8 +7,8 @@ import '../../css/reviews/addreviewtab.css';
 const AddReviewTab = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); 
-  const navigate = useNavigate(); 
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProductsToReview = async () => {
@@ -21,7 +21,7 @@ const AddReviewTab = () => {
         }
       } catch (error) {
         console.error('Error fetching products to review:', error);
-        setError('Failed to fetch products.'); 
+        setError('Failed to fetch products.');
       } finally {
         setLoading(false);
       }
@@ -59,11 +59,14 @@ const AddReviewTab = () => {
                   alt={product.name || 'Unnamed Product'}
                 />
                 <span style={{ fontWeight: '700', fontSize: '16px' }}>
-                  {product.name || 'Unknown Product'}
+                  <div>
+                    {product.name || 'Unknown Product'}
+                  </div>
+
                 </span>
                 <button
                   className="add-review-tab-btn"
-                  onClick={() => handleAddReview(product)} 
+                  onClick={() => handleAddReview(product)}
                 >
                   Add Review
                 </button>

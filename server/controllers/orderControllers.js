@@ -1,7 +1,9 @@
 const Order = require('../models/order');
 const Product = require('../models/products');
 const User = require('../models/user');
-const { sendOrderConfirmationEmail, generateVerificationCode, sendOrderVerificationEmail } = require('../middlewares/jwt.js');
+const { sendOrderConfirmationEmail, generateVerificationCode, sendOrderVerificationEmail , sendTrackingIdEmail } = require('../middlewares/jwt.js');
+const bcrypt = require('bcryptjs');
+
 
 const pendingOrders = {};
 const getAllOrders = async (req, res) => {
@@ -12,6 +14,20 @@ const getAllOrders = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 }
+
+const getOrdersBytheirStatus = async (req, res) => {
+  const { status } = req.query;
+
+  try {
+  
+      const orders = await Order.find({ orderStatus: status }).populate('user');
+      res.json(orders);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+
 
 const getOrderbyId = async (req, res) => {
   try {
@@ -32,26 +48,35 @@ const getOrderbyId = async (req, res) => {
 
 const updateOrderStatus = async (req, res) => {
   try {
+    const existingOrder = await Order.findById(req.params.id).populate('user');
+    if (!existingOrder) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    const trackingIdUpdated = existingOrder.trackingId !== req.body.trackingId;
     const order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    if (trackingIdUpdated && req.body.trackingId) {
+      await sendTrackingIdEmail(existingOrder, req.body.trackingId); 
+    }
+
     res.json(order);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
+
 
 const getUserOrders = async (req, res) => {
   try {
     const userId = req.user.userId;
 
     const orders = await Order.find({ user: userId });
-
-
     if (!orders.length) {
       return res.status(404).json({ message: 'No orders found for this user.' });
     }
 
-    res.status(200).json(orders); // Send the orders back to the user
+    res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving orders', error });
   }
@@ -76,7 +101,6 @@ const placeOrder = async (req, res) => {
       await user.save();
     }
 
-    // Calculate the total amount
     const totalAmount = totalPrice;
 
     for (let item of cart) {
@@ -95,7 +119,6 @@ const placeOrder = async (req, res) => {
       }
     }
 
-    // Create a new order
     const newOrder = new Order({
       user: userId,
       products: cart.map((item) => ({
@@ -117,7 +140,6 @@ const placeOrder = async (req, res) => {
     const savedOrder = await newOrder.save();
     console.log('Order saved:', savedOrder._id);  // Debugging
 
-    // Update the product quantities
     await Promise.all(
       cart.map(async (item) => {
         const product = await Product.findById(item.product._id);
@@ -136,12 +158,11 @@ const placeOrder = async (req, res) => {
       })
     );
 
-    // Send Order Confirmation Email
     await sendOrderConfirmationEmail(user.email, savedOrder);
 
     res.status(201).json(savedOrder);
   } catch (error) {
-    console.error('Error placing order:', error);  // Log the error for debugging
+    console.error('Error placing order:', error); 
     res.status(500).json({ message: 'Error placing order', error: error.message });
   }
 };
@@ -175,9 +196,9 @@ const salesperMonth = async (req, res) => {
     const salesPerMonth = await Order.aggregate([
       {
         $group: {
-          _id: { month: { $month: '$orderDate' }, year: { $year: '$orderDate' } }, // Group by month and year
-          monthlySales: { $sum: '$totalAmount' }, // Sum totalAmount for each month
-          orderCount: { $sum: 1 }, // Count the number of orders for each month
+          _id: { month: { $month: '$orderDate' }, year: { $year: '$orderDate' } }, 
+          monthlySales: { $sum: '$totalAmount' }, 
+          orderCount: { $sum: 1 }, 
         },
       },
       { $sort: { '_id.year': 1, '_id.month': 1 } }, // Sort by year, then month
@@ -187,7 +208,7 @@ const salesperMonth = async (req, res) => {
       month: sale._id.month,
       year: sale._id.year,
       totalSales: sale.monthlySales,
-      numberOfOrders: sale.orderCount, // Add the order count to the response
+      numberOfOrders: sale.orderCount,
     }));
 
     res.json(formattedSales);
@@ -206,7 +227,6 @@ const sendOrderVerifyCode = async (req, res) => {
   const verificationCode = generateVerificationCode();
 
   try {
-    // Send verification email
     await sendOrderVerificationEmail(emailAddress, verificationCode);
 
     pendingOrders[emailAddress] = {
@@ -229,14 +249,12 @@ const sendOrderVerifyCode = async (req, res) => {
 const enterOrderVerifyCode = async (req, res) => {
   const { email, verificationCode } = req.body;
 
-  // Check if a pending order exists for the provided email address
   const pendingOrder = pendingOrders[email];
   if (!pendingOrder) {
     console.error(`No pending order found for email: ${email}`);
     return res.status(400).json({ message: 'No pending order found for this email.' });
   }
 
-  // Log the verification process
   console.log('Pending Order Verification Code:', pendingOrder.verificationCode);
   console.log('Received Verification Code:', verificationCode);
 
@@ -246,7 +264,6 @@ const enterOrderVerifyCode = async (req, res) => {
   }
 
   try {
-    // Check if guest user exists or create a new guest user
     let user = await User.findOne({ email });
 
     if (!user) {
@@ -287,7 +304,6 @@ const enterOrderVerifyCode = async (req, res) => {
     });
 
     const savedOrder = await newOrder.save();
-    console.log('Order saved successfully:', savedOrder);
 
     await Promise.all(
       pendingOrder.cart.map(async (item) => {
@@ -296,11 +312,12 @@ const enterOrderVerifyCode = async (req, res) => {
           console.error(`Product with ID ${item.product._id} not found`);  // Log error
           throw new Error(`Product with ID ${item.product._id} not found`);
         }
-        product.quantity -= item.quantity; // Subtract ordered quantity
-        if (product.quantity < 0) {
-          product.quantity = 0;  // Ensure quantity doesn't go negative
-        }
-        await product.save();
+        await Product.findOneAndUpdate(
+          { _id: item.product._id },
+          { $inc: { quantity: -item.quantity } },
+          { new: true, useFindAndModify: false }
+        );
+
         console.log(`Updated quantity for product ID ${product._id}`);  // Debugging
       })
     );
@@ -329,7 +346,6 @@ function generateRandomPassword() {
 
 const orderStatusStats = async (req, res) => {
   try {
-    // Aggregate count of orders by status
     const completedOrders = await Order.countDocuments({ orderStatus: 'Completed' });
     const canceledOrders = await Order.countDocuments({ orderStatus: 'Cancelled' });
     const pendingOrders = await Order.countDocuments({ orderStatus: 'Pending' });
@@ -347,13 +363,12 @@ const orderStatusStats = async (req, res) => {
 
 const getSingleOrderbyId = async (req, res) => {
   try {
-    // Find the order by ID and populate the user and product details
     const order = await Order.findById(req.params.id)
-      .populate('user', 'firstName lastName email') // Populate user details
+      .populate('user', 'firstName lastName email') 
       .populate({
-        path: 'products.product', // Populate the products array
-        model: 'Product', // Specify the model to populate
-        select: 'name price images', // Select specific fields from Product model
+        path: 'products.product', 
+        model: 'Product',
+        select: 'name price images', 
       });
 
     if (!order) {
@@ -379,5 +394,6 @@ module.exports = {
   orderStatusStats,
   enterOrderVerifyCode,
   sendOrderVerifyCode,
-  getSingleOrderbyId
+  getSingleOrderbyId,
+  getOrdersBytheirStatus
 }

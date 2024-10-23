@@ -6,6 +6,7 @@ import { useGetAllProducts } from '../../Functions/GetAPI.js';
 import { useInView } from 'react-intersection-observer';
 import Loader from '../Loader/Loader.jsx';
 import '../../css/productlisting.css';
+import ErrorPage from '../Error/ErrorPage.jsx';
 
 function ProductListing() {
   const location = useLocation();
@@ -53,7 +54,11 @@ function ProductListing() {
   }, [inView, hasNextPage, fetchNextPage]);
 
   if (isLoading) return <Loader height={100} />;
-  if (isError) return <h1>Something Went Wrong: {error.message}</h1>;
+  if (isError) {
+    return <ErrorPage message={error.message} />;
+  }
+
+
 
   let totalProducts = data?.pages?.flatMap(page => page.totalProducts) || [0];
   totalProducts = totalProducts[0];
@@ -80,8 +85,6 @@ function ProductListing() {
           }
         }
       }
-
-
       return true;
     });
   };
@@ -92,9 +95,27 @@ function ProductListing() {
     <>
       <div className="product-list">
 
-        <div className='product-filter-section'>
+        <div className="product-filter-section">
           <ProductsFilterBar total={totalProducts} length={products.length} onBrandChange={setBrandFilter}
             onPriceChange={setPriceFilter} />
+        </div>
+
+        <div className="product-param-info">
+          {category && <div className="param-item">
+            <h2>{category}</h2>
+          </div>}
+          {company && <div className="param-item">
+            <h2>{company} Supplies</h2>
+          </div>}
+          {type && <div className="param-item">
+            <h2>{type}</h2>
+          </div>}
+          {subcategory && <div className="param-item">
+            <h2>{subcategory}</h2>
+          </div>}
+          {product && <div className="param-item">
+            <h2>{product}</h2>
+          </div>}
         </div>
 
         <div className="product-grid">
@@ -110,6 +131,7 @@ function ProductListing() {
                   company={product.company.name}
                   colors={product.colors}
                   quantity={product.quantity}
+                  averageRating={product.averageRating}
                 />
               );
             })

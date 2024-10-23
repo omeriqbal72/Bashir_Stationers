@@ -19,7 +19,7 @@ export const OrderProvider = ({ children }) => {
     const [singleOrder, setSingleOrder] = useState(null);
     const { user } = useUserContext();
 
-    const placeOrder = async (cart, address, paymentMethod, contactNumber, emailAddress , totalPrice) => {
+    const placeOrder = async (cart, address, paymentMethod, contactNumber, email , totalPrice) => {
         setLoading(true); // Set loading to true before the process starts
         setOrderError(null); // Reset any previous errors
         if (user) {
@@ -29,7 +29,7 @@ export const OrderProvider = ({ children }) => {
                     address,
                     paymentMethod,
                     contactNumber,
-                    emailAddress,
+                    emailAddress: email,
                     totalPrice
                 };
                 // Navigate immediately without waiting for the response
@@ -45,15 +45,12 @@ export const OrderProvider = ({ children }) => {
             }
         } else {
             try {
-                // Navigate to the verification code input page
-                navigate('/enter-order-code', { state: { emailAddress } });
-
                 const response = await publicAxiosInstance.post('/order/verify', {
                     cart,
                     address,
                     paymentMethod,
                     contactNumber,
-                    emailAddress,
+                    emailAddress: email,
                     totalPrice
                 });
                 

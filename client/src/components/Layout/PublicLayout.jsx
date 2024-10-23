@@ -17,7 +17,7 @@ const PublicLayout = () => {
       {!hideHeaderFooter && <Header className="header" />}
       {!hideHeaderFooter && <WhatsappLink />}
       <main>
-        <Outlet /> {/* This is where the public routes will be rendered */}
+        <Outlet /> 
       </main>
       {!hideHeaderFooter && <Footer className="footer" />}
     </div>

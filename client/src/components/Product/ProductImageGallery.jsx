@@ -23,7 +23,26 @@ const ProductImageGallery = ({ images = [] }) => {
 
   return (
     <div className="image-gallery">
-      <div className="thumbnails">
+      <div className="thumbnails-side">
+        {images.length > 0 ? (
+          images.map((img, index) => (
+            <img 
+              key={index} 
+              src={`http://localhost:8080/${img}`} // Use images from server
+              alt={`Thumbnail ${index + 1}`} 
+              loading="lazy" // Lazy loading for better performance
+              onClick={() => setMainImage(`http://localhost:8080/${img}`)}
+              className={mainImage === `http://localhost:8080/${img}` ? 'active-side' : ''}
+            />
+          ))
+        ) : (
+          <p>No images available</p> // Handle if no images
+        )}
+      </div>
+      <div className="main-image">
+        <img src={mainImage} alt="Main Product" />
+      </div>
+      <div className="thumbnails-down">
         {images.length > 0 ? (
           images.map((img, index) => (
             <img 
@@ -38,9 +57,6 @@ const ProductImageGallery = ({ images = [] }) => {
         ) : (
           <p>No images available</p> // Handle if no images
         )}
-      </div>
-      <div className="main-image">
-        <img src={mainImage} alt="Main Product" />
       </div>
     </div>
   );

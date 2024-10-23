@@ -8,6 +8,7 @@ import { faCartPlus, faCreditCard, faStar, faPencil, faLayerGroup } from '@forta
 import { Rate } from 'antd'
 import axios from 'axios'
 import { useUserContext } from '../../context/UserContext.jsx';
+import Loader from '../Loader/Loader.jsx';
 
 const ProductDetails = ({ data, rating }) => {
   const [productDetails, setProductDetails] = useState(null);
@@ -30,10 +31,8 @@ const ProductDetails = ({ data, rating }) => {
     }
   }, [data, rating]);
 
-  console.log(productDetails)
-
   if (!productDetails) {
-    return <div>Loading product details...</div>;
+    return <Loader height={100} />;
   }
 
   const handleAddToCart = async () => {
@@ -41,7 +40,7 @@ const ProductDetails = ({ data, rating }) => {
   };
   
   const handleBuynowClick = () => {
-    navigate('/order-summary', { state: { productDetails } });
+    navigate('/order-summary', { state: { productDetails , quantity } });
   }
 
   const isOutOfStock = productDetails.quantity <= 0;

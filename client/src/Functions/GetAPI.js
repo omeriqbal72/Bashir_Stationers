@@ -8,9 +8,19 @@ const fetchProductDetails = async ({ queryKey }) => {
   return data;
 };
 
+const fetchHomeSpeciality = async () => {
+  try {
+    const { data } = await axios.get('/get-home-specialities');
+    return data;
+  } catch (error) {
+    console.error('API call failed:', error); // Log the error
+    throw new Error('Failed to fetch home specialities');
+  }
+};
+
 
 const fetchProducts = async ({ queryKey, pageParam = 1 }) => {
-  const url = queryKey[1]; // Extract the URL from queryKey
+  const url = queryKey[1];
   const { data } = await axios.get(`${url}?page=${pageParam}&limit=12`);
 
   return data;
@@ -96,6 +106,17 @@ export const useGetComments = (id) => {
     queryKey: ['product-comments', id], // Changed query key
     queryFn: fetchproductComments,
     enabled: !!id, 
+    staleTime: 1000 * 60 * 5, 
+    cacheTime: 1000 * 60 * 10,
+    retry: 2, 
+    refetchOnWindowFocus: false, 
+  });
+};
+
+export const useHomeSpecialities = () => {
+  return useQuery({
+    queryKey: ['home-specialities'],
+    queryFn: fetchHomeSpeciality,
     staleTime: 1000 * 60 * 5, 
     cacheTime: 1000 * 60 * 10,
     retry: 2, 

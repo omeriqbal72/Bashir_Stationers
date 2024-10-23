@@ -65,7 +65,7 @@ const AdminViewOrders = () => {
 
                 <td>{order.orderStatus}</td>
                 <td>
-                  <Link to={`/admin/manage-orders/${order._id}`}>
+                  <Link to={`/admin/orders-division/${order._id}`}>
                     <button>Process</button>
                   </Link>
 
