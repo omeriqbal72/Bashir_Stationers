@@ -5,26 +5,29 @@
     color: var(--text-color);
     display: flex;
     width: 100%;
-    padding: 1rem;
     flex-direction: column;
     z-index: 10;
     box-sizing: border-box;
-    gap: 1em;
+
 }
 
 .header-main-section-1 {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+    padding: 1rem;
+    box-sizing: border-box;
+    background-color: var(--secondary-color);
 }
 
 .header-main-section-2 {
+    padding: 1rem;
     display: flex;
     width: 100%;
-    align-items: center;
-    background-color:  var(--secondary-color);
     justify-content: space-evenly;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 .header-register-btn{
@@ -41,37 +44,60 @@
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 1rem;
+    justify-content: space-evenly;
 }
 
 .header-main-section2-dropdown{
     display: flex;
+}
+
+.header-main-section2-nav-1{
+    display: flex;
+    
+}
+.header-main-section2-nav-2{
+    display: none;
+    
+}
+
+.header-main-section2-nav-1 nav{
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+.header-main-section2-nav-1 nav{
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+
+.header-main-section2-nav-1 nav ul {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 0;
+}
+.header-main-section2-nav-2 nav ul{
+    display: flex;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 0;
+}
+
+.header-main-section2-nav-1 nav ul li {
+    cursor: pointer;
+    text-decoration: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: .4em;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    flex: 1.7;
 }
 
-.header-main-section2-nav{
-    display: flex;
-    width: 100%;
-    flex: 3;
-}
-
-.header-main-section2-nav nav{
-    margin: 0;
-    padding: 0;
-}
-
-
-.header-main-section2-nav nav ul {
-    display: flex;
-    gap: 2rem;
-    padding: 0;
-    margin: 0;
-}
-
-.header-main-section2-nav nav ul li {
+.header-main-section2-nav-2 nav ul li {
     cursor: pointer;
     text-decoration: none;
     list-style: none;
@@ -85,3 +111,91 @@
 .header-main-section-2 nav ul li:hover {
     text-decoration: underline;
 }
+
+.dropdown-column{
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+}
+.dropdown-menu{
+    display: flex;
+    height: auto;
+}
+
+.home-dropdown-option{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: .5rem;
+}
+
+.home-dropdown-option span{
+    color: gray;
+    font-size: .9rem;
+}
+
+.hamburger-menu{
+    display: none;
+}
+
+.mobile-nav{
+    display: none;
+}
+
+
+@media (max-width: 768px) {
+    .header-logo h1{
+        font-size: 1.3rem;
+    }
+    .header-main-section2-nav-1 {
+      display: none; 
+    }
+    .header-main-section2-nav-2{
+        display: flex;
+        
+    }
+
+    .header-main-section2-nav-2 nav ul li {
+        font-size: 12px;
+    }
+    
+    .hamburger-menu {
+      display: flex;
+      cursor: pointer;
+      font-size: 17px;
+    }
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85); 
+      z-index: 9999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+  
+    .mobile-nav.active {
+      display: flex;
+    }
+  
+    .mobile-nav ul {
+      list-style: none;
+      padding: 0;
+    }
+  
+    .mobile-nav ul li {
+      margin: 1.5rem 0;
+    }
+  
+    .mobile-nav ul li a {
+      font-size: 1.5rem;
+      color: white;
+      text-decoration: none;
+    }
+  }
+  

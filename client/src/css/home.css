@@ -1,49 +1,122 @@
 .home-main {
     width: 100%;
-    background-color: var(--secondary-color);
     height: auto;
     overflow: hidden;
 }
 
-.home-main-intro{
+.home-main-intro {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.home-main-intro-description{
+.home-main-intro-description {
     display: flex;
     flex-direction: column;
     width: 100%;
     justify-content: flex-start;
     align-items: flex-start;
     flex: 2;
-    padding: 3rem;
+    padding: 3rem 0 3rem 3rem;
+    box-sizing: border-box;
 }
 
-.home-main-intro-description h2{
+.home-main-intro-description h2 {
     font-size: 64px;
     font-weight: 600;
 }
 
-.home-main-intro-description-tagline{
+.home-main-intro-description-tagline {
     font-size: 24px;
     font-weight: 400;
     font-style: italic;
-    line-height: 0;
 }
 
-.home-main-intro-description-p{
-    margin-top: 2em;
-}
-
-.home-main-illustration{
+.home-main-illustration {
     width: 100%;
     height: 30rem;
-    background-image: url('../Ui_Images/home-main-illustration.png');
-    background-size: contain;
-    background-repeat: no-repeat ;
     display: flex;
+    padding: 0 0 0 10rem;
     flex: 1.4;
+    box-sizing: border-box;
+}
+
+.home-main-illustration-2 {
+    display: none;
+}
+
+.home-main-illustration img {
+    object-fit: contain;
+}
+
+@media (max-width: 1024px) {
+    .home-main-illustration {
+        padding: 0;
+    }
+
+    .home-main-intro-description h2 {
+        font-size: 55px;
+    }
+}
+
+@media (max-width: 768px) {
+    .home-main-intro-description h2 {
+        font-size: 45px;
+    }
+
+    .home-main-intro-description-tagline {
+        font-size: 20px;
+    }
+
+    .home-main-intro-description-p {
+        font-size: 13px;
+    }
+
+    .home-main-illustration {
+        flex: 1.4;
+    }
+
+    .home-main-intro-description {
+        flex: 1;
+        padding: 2rem 0 2rem 2rem;
+    }
+
+    .home-main-illustration img {
+        width: 110%;
+    }
+
+
+}
+
+@media (max-width: 656px) {
+    .home-main-intro {
+        flex-direction: column;
+        
+    }
+
+    .home-main-illustration {
+        display: none;
+    }
+
+    .home-main-illustration-2 {
+        display: flex;
+        position: relative;
+        width: 100%;
+        height: 10rem;
+        overflow: hidden;
+    }
+
+    .home-main-illustration-2 img {
+        position: absolute;
+        left: -20px;
+        width: 120%;
+        height: auto;
+        object-fit: cover;
+       
+    }
+
+    .home-main-intro-description {
+        padding: 3rem 2rem 0 2rem;
+    }
 }

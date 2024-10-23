@@ -7,10 +7,12 @@ import { toast, ToastContainer } from 'react-toastify';
 import AdminSearchbar from './AdminSearchbar';
 import { useGetAllProducts } from '../../Functions/GetAPI.js';
 import axiosInstance from '../../utils/axiosInstance.js';
+import Loader from '../Loader/Loader.jsx';
 
 const AdminManageProduct = () => {
     const [searchParams, setSearchParams] = useState({});
-    const [searchUrl, setSearchUrl] = useState('/products/all-products'); // Default URL
+    const [searchUrl, setSearchUrl] = useState('/products/all-products');
+    
 
     const getSearchUrl = () => {
         const { category, subcategory, company, search, product } = searchParams;
@@ -92,7 +94,7 @@ const AdminManageProduct = () => {
 
                 <div className="admin-manage-product-bottom-products">
                     {isLoading ? (
-                        <p>Loading products...</p>
+                        <Loader height={100} />
                     ) : isError ? (
                         <p>Failed to fetch products</p>
                     ) : (

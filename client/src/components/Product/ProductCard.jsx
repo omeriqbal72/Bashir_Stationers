@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../../css/productcard.css';
-import { Skeleton } from 'antd';
+import { Skeleton, Rate } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 
-function ProductCard({ id, images, name, price, company, colors, quantity }) {
+function ProductCard({ id, images, name, price, company, colors, quantity, averageRating }) {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { addToCart, error } = useCart();
@@ -59,7 +59,15 @@ function ProductCard({ id, images, name, price, company, colors, quantity }) {
             <div className='product-company'>
               <p className='product-company-name' style={{ backgroundColor: randomColor }}>{company}</p>
             </div>
-            <p className='product-price'>Rs.{price}</p>
+
+            <div className="product-card-price-rating">
+              <div className='product-card-price'>
+                <p className='product-price'>Rs.{price}</p>
+              </div>
+              <div className='product-card-rating'>
+                <Rate value={averageRating || 5} disabled />
+              </div>
+            </div>
 
             <div className="product-card-purchase-btns">
               {quantity > 0 ? (

@@ -1,0 +1,26 @@
+.offer-slider {
+    width: 100%;              /* Full width */
+    background-color: #f6f6f6; /* Light background color */
+    padding: 5px 0;           /* Small padding to adjust height */
+    overflow: hidden;         /* Hide overflow for smooth effect */
+  }
+  
+  .offer-text {
+    display: block;
+    text-align: center;
+    font-size: 16px;          /* Text size */
+    color: #ff4d4f;           /* Highlighted offer text */
+    font-weight: bold;
+    white-space: nowrap;      /* Prevent text wrapping */
+    animation: move 10s linear infinite; /* Smooth infinite scroll effect */
+  }
+  
+  @keyframes move {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  

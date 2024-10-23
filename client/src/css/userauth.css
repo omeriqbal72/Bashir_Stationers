@@ -40,6 +40,7 @@
   .login-left {
     padding: 2rem;
     background-color: rgba(0, 0, 0, 0.9);
+    box-sizing: border-box;
   }
  
   .login-left h1 {
@@ -50,8 +51,8 @@
   .login-form {
     display: flex;
     flex-direction: column;
+    max-width: 88%;
     width: 100%;
-    max-width: 75%;
     gap: 1.25rem;
   }
   
@@ -117,4 +118,37 @@
     line-height: 1.1;
   }
   
- 
+  @media (max-width: 1024px) {
+    
+    .login-left {
+      padding: 1rem;
+    }
+
+
+
+    .login-sub-container{
+      width: 85%;
+    }
+
+    .login-container img{
+      height: 100%;
+      width: 100%;
+  
+    }
+  }
+
+  @media (max-width: 770px) {
+  
+    .login-left {
+      padding: 2rem;
+    }
+    .login-sub-container{
+      flex-direction: column;
+    }
+
+    .login-container{
+      padding: 3rem 0;
+    }
+
+  
+  }

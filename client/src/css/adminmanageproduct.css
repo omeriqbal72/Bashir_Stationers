@@ -32,13 +32,17 @@
     position: sticky;
     height: 8vh;
     top: 0;
-    background-color: lightgray; /* Match your design */
+    background-color: black; /* Match your design */
     z-index: 10; /* Ensure it's above other content */
     border-bottom: 1px solid #ddd; /* Optional border */
     display: flex;
     justify-content: space-between; 
     justify-content: space-between;
     padding: 1rem 0 0 2rem ;
+   
+}
+.admin-manage-product-bottoms-headings h3{
+    color: white;
 }
 
 .admin-manage-product-bottom-products {

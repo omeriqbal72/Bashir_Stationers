@@ -1,7 +1,6 @@
 .brand-logo-section {
     text-align: center;
     padding: 2rem 0;
-    background-color: white;
   }
   
   .brand-logo-section h2 {
@@ -32,8 +31,9 @@
   }
   
   .home-brand-slider-item img {
-    width: 5rem;
+    width: 70%;
     object-fit: cover;
     object-position: center;
+    mix-blend-mode: screen;
    
   }

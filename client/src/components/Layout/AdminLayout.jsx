@@ -12,7 +12,7 @@ const AdminLayout = () => {
       </div>
 
       <main className="admin-content">
-        <Outlet /> {/* This is where the admin routes will be rendered */}
+        <Outlet />
       </main>
     </div>
   );

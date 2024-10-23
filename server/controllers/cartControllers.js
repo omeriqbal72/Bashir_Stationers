@@ -71,7 +71,6 @@ const removeFromCart = async (req, res) => {
       item => item.product.toString() !== productId || item.selectedColor !== selectedColor
     );
 
-    // Save the updated cart
     await cart.save();
 
     res.status(200).json({ message: 'Item removed from cart successfully', cart });
@@ -85,7 +84,6 @@ const getCart = async (req, res) => {
     try {
         const userId = req.user.userId; 
         const role = req.user.role;
-        console.log('User ID:', userId);
         if(role === "admin"){
             return res.status(200).json({ message: 'No Cart' });
         } 
@@ -99,7 +97,6 @@ const getCart = async (req, res) => {
         if (!cart) {
             return res.status(404).json({ message: 'Cart not found' });
         }
-        console.log(cart.items)
         res.status(200).json({ cart });
     } catch (error) {
         console.error('Error fetching cart:', error);

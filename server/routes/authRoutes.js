@@ -3,14 +3,14 @@ const router = express.Router();
 const { getProducts, addProduct, editProduct, deleteProduct, getProductById } = require('../controllers/adminControllers.js');
 const { getAllCategories, getProductsByCategoryName, getProductsBySubCategoryName, SearchProducts,
     getProductsByCompanyName, getProductsByProductTypeName, SearchbyIcon, getProductsByName,
-    checkImagesExist, getallProducts,getYouMayAlsoLike,getFeaturedProducts } = require('../controllers/productControllers.js');
-const { getCart, addToCart, removeFromCart, updateCart } = require('../controllers/cartControllers.js');
+    checkImagesExist, getallProducts,getYouMayAlsoLike,getFeaturedProducts , getSubCategoriesWithTypes } = require('../controllers/productControllers.js');
+const { getCart, addToCart, removeFromCart, updateCart  } = require('../controllers/cartControllers.js');
 const { register, verifyEmail, login, refreshToken, logout, requestNewCode, getMe, resetPassword, forgotPassword, verifyResetCode } = require('../controllers/authControllers.js');
 const { verifyToken } = require('../middlewares/jwt.js');
 const { placeOrder, getUserOrders, getAllOrders, getOrderbyId, updateOrderStatus, orderStats, salesperMonth , orderStatusStats ,
-     enterOrderVerifyCode , sendOrderVerifyCode , getSingleOrderbyId} = require('../controllers/orderControllers.js')
+     enterOrderVerifyCode , sendOrderVerifyCode , getSingleOrderbyId , getOrdersBytheirStatus} = require('../controllers/orderControllers.js')
 const { getComments ,postComment , getUnreviewedProducts} = require ('../controllers/commentControllers.js')
-
+const { getCategoriesWithLatestProducts } = require ('../controllers/categoryControllers.js')
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -67,6 +67,7 @@ router.get('/you-may-also-like/:id', getYouMayAlsoLike);
 router.get('/featured-products', getFeaturedProducts);
 
 router.get('/get-categories', getAllCategories);
+router.get('/get-subCategories' , getSubCategoriesWithTypes);
 router.get('/get-search-products', SearchProducts);
 router.get('/products/search/:searched', SearchbyIcon);
 router.get('/products/product/:productname', getProductsByName);
@@ -93,7 +94,7 @@ router.post('/cart/add', verifyToken, addToCart);
 router.post('/cart/remove', verifyToken, removeFromCart);
 router.put('/cart/update', verifyToken, updateCart);
 
-
+router.get('/get-orders-by-status', getOrdersBytheirStatus);
 router.get('/order/myorders', verifyToken, getUserOrders);
 router.post('/order/placeorder', verifyToken, placeOrder);
 router.get('/getorders', getAllOrders);
@@ -109,4 +110,6 @@ router.get('/get-unreviewed-products' , verifyToken, getUnreviewedProducts)
 
 router.post('/products/:productId/comments' ,verifyToken, upload, postComment)
 router.get('/get-comments-products/:id', getComments)
+
+router.get('/get-home-specialities' , getCategoriesWithLatestProducts)
 module.exports = router;

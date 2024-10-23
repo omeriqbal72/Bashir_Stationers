@@ -6,6 +6,7 @@ import '../../css/orders/orderinformation.css';
 import {Popover} from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
+import ErrorPage from '../Error/ErrorPage.jsx';
 
 const OrderInformation = () => {
     const location = useLocation();
@@ -28,7 +29,7 @@ const OrderInformation = () => {
     }
 
     if (orderError) {
-        return <p>Error: {orderError}</p>;
+        return <ErrorPage message={orderError} />;
     }
 
     const displayOrder = singleOrder;

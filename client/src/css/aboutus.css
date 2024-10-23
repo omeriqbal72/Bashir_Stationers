@@ -13,7 +13,6 @@
     width: 100%;
     background-image: url('../Ui_Images/education-background-with-pencil.png');
     background-size: cover;
-    height: 90vh;
     background-position: bottom;
 
 
@@ -21,7 +20,7 @@
 
 .about-first-right {
     width: 100%;
-    margin: 10rem 0 0 5rem;
+    margin: 10rem 0 10rem 5rem;
     display: flex;
     gap: 1rem;
     align-items: start;
@@ -35,13 +34,13 @@
 }
 
 .about-first-heading {
-    width: 40%;
+    width: 50%;
     text-align: right;
 
 }
 
 .about-first-paragraph {
-    width: 40%;
+    width: 50%;
     text-align: right;
     line-height: 2;
 }
@@ -162,48 +161,53 @@
     font-size: 18px;
 }
 
-.about-third-specialities{
+.about-third-specialities {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     padding: 5rem 10rem 5rem 10rem;
 
 }
-.about-third-speciality{
+
+.about-third-speciality {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.about-third-speciality-info{
-    width: 30%;
+
+.about-third-speciality-info {
+    width: 20%;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
-.about-third-speciality-info-h h1{
+
+.about-third-speciality-info-h h1 {
     font-size: 56px;
     font-weight: 1000;
     font-style: italic;
 }
-.about-third-speciality-info-p p{
+
+.about-third-speciality-info-p p {
     text-align: start;
     text-justify: inter-word;
     line-height: 1.5;
     font-size: 18px;
 
 }
-.about-third-speciality-img{
+
+.about-third-speciality-img {
     width: 50%;
-   
+
 }
 
-.about-third-speciality-img img{
+.about-third-speciality-img img {
     width: 100%;
     background-size: cover;
     background-position: center;
 }
 
-.about-fourth-section{
+.about-fourth-section {
     display: flex;
     width: 100%;
     box-sizing: border-box;
@@ -213,18 +217,19 @@
     align-items: center;
 }
 
-.about-fourth-section h1{
+.about-fourth-section h1 {
     font-size: 56px;
 }
 
-.about-fourth-cards{
+.about-fourth-cards {
     display: flex;
     width: 100%;
-    
+
     gap: 2rem;
 }
 
-.about-fourth-card-big , .about-fourth-card-small{
+.about-fourth-card-big,
+.about-fourth-card-small {
     width: 33%;
     padding: 3rem 0 3rem 0;
     display: flex;
@@ -235,13 +240,14 @@
     gap: 1.5rem;
 }
 
-.about-fourth-card-big img{
+.about-fourth-card-big img {
     background-size: cover;
     background-position: center;
     width: 50%;
     border-radius: 50%;
 }
-.about-fourth-card-info{
+
+.about-fourth-card-info {
     display: flex;
     flex-direction: column;
     width: 80%;
@@ -249,18 +255,18 @@
     gap: 1rem;
 }
 
-.about-fourth-card-info p{
+.about-fourth-card-info p {
     text-align: start;
     text-justify: inter-word;
     line-height: 1.5;
     font-size: 18px;
 }
 
-.about-fourth-card-info h2{
+.about-fourth-card-info h2 {
     font-style: italic;
 }
 
-.about-fourth-card-small img{
+.about-fourth-card-small img {
     background-size: cover;
     background-position: center;
     width: 30%;
@@ -268,4 +274,124 @@
 }
 
 
+@media (max-width: 1024px) {
+    
+    .about-first-heading h1 {
+        font-size: 60px;
+        font-weight: 100px;
+    }
 
+    .about-first-paragraph p {
+        font-size: 16px;
+    }
+
+    .about-second-section {
+
+        padding: 6rem 5rem 6rem 5rem;
+    }
+
+    .about-third-head,
+    .about-third-specialities {
+        padding: 4rem 5rem;
+    }
+
+    .about-third-head-middle h1 {
+        font-size: 50px;
+
+    }
+
+    .about-third-speciality h1 {
+        font-size: 55px;
+
+    }
+
+    .about-third-head-middle h3 {
+        font-size: 30px;
+
+    }
+
+    .about-third-head-middle p {
+        font-size: 16px;
+
+    }
+
+    .about-third-speciality {
+        justify-content: space-between;
+    }
+
+    .about-third-speciality-info {
+        width: 40%;
+    }
+
+}
+
+@media (max-width: 700px) {
+    .about-first-heading h1 {
+        font-size: 40px;
+        font-weight: 50px;
+    }
+
+    .about-first-paragraph p {
+        font-size: 13px;
+    }
+
+    .about-first-right {
+        margin: 5rem 0 10rem 3rem;
+    }
+
+    .about-first-section {
+        width: 100%;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        
+    }
+
+
+    .about-second-section {
+
+        padding: 6rem 2rem 6rem 2rem;
+    }
+
+    .about-second-header h1 {
+        font-size: 26px;
+    }
+
+    .about-third-head-middle h1 {
+        font-size: 45px;
+    }
+
+    .about-third-specialities h1 {
+        font-size: 40px;
+    }
+
+    .about-second-paragraph p {
+        font-size: 13px;
+    }
+
+    .about-third-head-middle p {
+        font-size: 13px;
+    }
+
+    .about-third-specialities p {
+        font-size: 13px;
+    }
+
+    .about-third-head-middle {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .about-third-specialities {
+        padding: 4rem 3rem;
+    }
+
+    .about-third-head-middle-right {
+        width: 100%;
+    }
+
+    .about-third-speciality-info {
+        width: 50%;
+    }
+
+}

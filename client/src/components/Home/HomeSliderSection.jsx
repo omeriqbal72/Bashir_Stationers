@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import "../../css/homeslidersection.css";
 import SliderImg1 from '../../Ui_Images/home-slider-pens.jpg'
 import SliderImg2 from '../../Ui_Images/home-slider-notebook.jpg'
@@ -11,6 +12,16 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 const HomeSliderSection = () => {
+
+  const slidesData = [
+    { imgSrc: SliderImg1, category: "Writing Tools", altText: "Writing Tools" },
+    { imgSrc: SliderImg2, category: "Art Tools", altText: "Art Tools" },
+    { imgSrc: SliderImg3, category: "Binding Tools", altText: "Binding Tools" },
+    { imgSrc: SliderImg1, category: "Writing Tools", altText: "Writing Tools" },
+    { imgSrc: SliderImg3, category: "Binding Tools", altText: "Binding Tools" },
+    { imgSrc: SliderImg2, category: "Art Tools", altText: "Art Tools" },
+  ];
+
   return (
     <div className="slider-section">
       <h2>Shop By Categories</h2>
@@ -26,46 +37,36 @@ const HomeSliderSection = () => {
     return (
       <Swiper modules={[Navigation, Pagination, Scrollbar, Autoplay, A11y]}
         spaceBetween={10}
-        slidesPerView={4}
-        autoplay={{ delay: 1000, disableOnInteraction: false }} 
-        loop={true}>
-        <SwiperSlide>
-          <div className="slider-item">
-            <img src={SliderImg1} alt="Books & Stationery" />
-            <div className="slider-text">Pens</div>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="slider-item">
-            <img src={SliderImg2} alt="Books & Stationery" />
-            <div className="slider-text">Books & Stationery</div>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="slider-item">
-            <img src={SliderImg3} alt="Staplers" />
-            <div className="slider-text">Staplers</div>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="slider-item">
-            <img src={SliderImg2} alt="Books & Stationery" />
-            <div className="slider-text">Books & Stationery</div>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="slider-item">
-            <img src={SliderImg1} alt="Books & Stationery" />
-            <div className="slider-text">Books & Stationery</div>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className="slider-item">
-            <img src={SliderImg3} alt="Books & Stationery" />
-            <div className="slider-text">Books & Stationery</div>
-          </div>
-        </SwiperSlide>
-        {/* Add more slides as needed */}
+        autoplay={{ delay: 1000, disableOnInteraction: false }}
+        loop={true}
+        navigation
+        breakpoints={{
+          640: {
+            slidesPerView: 2,
+          },
+          768: {
+            slidesPerView: 3,
+          },
+          1024: {
+            slidesPerView: 3,
+          },
+          1280: {
+            slidesPerView: 4,
+          },
+        }}
+
+      >
+        {slidesData.map((slide, index) => (
+          <SwiperSlide key={index}>
+            <Link to={`/products?category=${encodeURIComponent(slide.category)}`}>
+              <div className="slider-item">
+                <img src={slide.imgSrc} alt={slide.altText} />
+                <div className="slider-text">{slide.category}</div>
+              </div>
+            </Link>
+          </SwiperSlide>
+        ))}
+        
       </Swiper>
     );
   }
